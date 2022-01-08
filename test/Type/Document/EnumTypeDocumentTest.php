@@ -15,8 +15,8 @@ final class EnumTypeDocumentTest extends TestCase
     {
         $document = new EnumTypeDocument(
             ['fiz', 'biz'],
-            true,
             'ref',
+            true,
             'description',
             'deprecated',
         );

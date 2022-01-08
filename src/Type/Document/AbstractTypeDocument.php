@@ -8,26 +8,59 @@ namespace LessDocumentor\Type\Document;
  */
 abstract class AbstractTypeDocument implements TypeDocument
 {
+    /**
+     * @param class-string $reference
+     * @param bool $required
+     * @param string|null $description
+     * @param string|null $deprecated
+     */
     public function __construct(
-        private bool $required,
-        private ?string $reference = null,
+        private string $reference,
+        private bool $required = true,
         private ?string $description = null,
         private ?string $deprecated = null,
     ) {}
+
+    /**
+     * @return class-string
+     */
+    public function getReference(): string
+    {
+        return $this->reference;
+    }
+
+    public function withRequired(bool $required): TypeDocument
+    {
+        $clone = clone $this;
+        $clone->required = $required;
+
+        return $clone;
+    }
 
     public function isRequired(): bool
     {
         return $this->required;
     }
 
-    public function getReference(): ?string
+    public function withDescription(string $description): TypeDocument
     {
-        return $this->reference;
+        $clone = clone $this;
+        $clone->description = $description;
+
+        return $clone;
     }
 
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function withDeprecated(string $deprecated): TypeDocument
+    {
+        $clone = clone $this;
+        $clone->deprecated = $deprecated;
+
+        return $clone;
     }
 
     public function getDeprecated(): ?string

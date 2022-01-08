@@ -10,18 +10,18 @@ final class EnumTypeDocument extends AbstractTypeDocument
 {
     /**
      * @param array<string> $cases
+     * @param class-string $reference
      * @param bool $required
-     * @param string|null $reference
      * @param string|null $description
      * @param string|null $deprecated
      */
     public function __construct(
         public array $cases,
-        bool $required,
-        ?string $reference = null,
+        string $reference,
+        bool $required = true,
         ?string $description = null,
         ?string $deprecated = null,
     ) {
-        parent::__construct($required, $reference, $description, $deprecated);
+        parent::__construct($reference, $required, $description, $deprecated);
     }
 }

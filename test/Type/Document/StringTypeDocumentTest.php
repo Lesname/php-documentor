@@ -18,8 +18,8 @@ final class StringTypeDocumentTest extends TestCase
 
         $document = new StringTypeDocument(
             $length,
-            true,
             'ref',
+            true,
             'description',
             'deprecated',
         );

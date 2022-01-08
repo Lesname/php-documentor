@@ -19,8 +19,8 @@ final class CompositeTypeDocumentTest extends TestCase
 
         $document = new CompositeTypeDocument(
             new ArrayIterator(['fiz' => $fiz]),
-            true,
             'ref',
+            true,
             'description',
             'deprecated',
         );

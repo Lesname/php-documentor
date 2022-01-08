@@ -21,8 +21,8 @@ final class CollectionTypeDocumentTest extends TestCase
         $document = new CollectionTypeDocument(
             $item,
             $length,
-            true,
             'ref',
+            true,
             'description',
             'deprecated',
         );

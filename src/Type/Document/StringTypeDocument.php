@@ -8,13 +8,16 @@ namespace LessDocumentor\Type\Document;
  */
 final class StringTypeDocument extends AbstractTypeDocument
 {
+    /**
+     * @param class-string $reference
+     */
     public function __construct(
         public Property\Length $length,
-        bool $required,
-        ?string $reference = null,
+        string $reference,
+        bool $required = true,
         ?string $description = null,
         ?string $deprecated = null,
     ) {
-        parent::__construct($required, $reference, $description, $deprecated);
+        parent::__construct($reference, $required, $description, $deprecated);
     }
 }

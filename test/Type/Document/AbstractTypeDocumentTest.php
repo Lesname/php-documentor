@@ -16,16 +16,55 @@ final class AbstractTypeDocumentTest extends TestCase
         $document = $this->getMockForAbstractClass(
             AbstractTypeDocument::class,
             [
-                true,
                 'ref',
+                true,
                 'description',
                 'deprecated',
             ],
         );
 
-        self::assertTrue($document->isRequired());
         self::assertSame('ref', $document->getReference());
-        self::assertSame('description', $document->getDescription());
-        self::assertSame('deprecated', $document->getDeprecated());
+    }
+
+    public function testWithRequired(): void
+    {
+        $document = $this->getMockForAbstractClass(
+            AbstractTypeDocument::class,
+            ['ref'],
+        );
+
+        $clone = $document->withRequired(false);
+
+        self::assertTrue($document->isRequired());
+        self::assertNotSame($clone, $document);
+        self::assertFalse($clone->isRequired());
+    }
+
+    public function testWithDescription(): void
+    {
+        $document = $this->getMockForAbstractClass(
+            AbstractTypeDocument::class,
+            ['ref'],
+        );
+
+        $clone = $document->withDescription('fiz');
+
+        self::assertNull($document->getDescription());
+        self::assertNotSame($clone, $document);
+        self::assertSame('fiz', $clone->getDescription());
+    }
+
+    public function testWithDeprecated(): void
+    {
+        $document = $this->getMockForAbstractClass(
+            AbstractTypeDocument::class,
+            ['ref'],
+        );
+
+        $clone = $document->withDeprecated('fiz');
+
+        self::assertNull($document->getDeprecated());
+        self::assertNotSame($clone, $document);
+        self::assertSame('fiz', $clone->getDeprecated());
     }
 }

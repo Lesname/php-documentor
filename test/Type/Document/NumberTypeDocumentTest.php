@@ -21,8 +21,8 @@ final class NumberTypeDocumentTest extends TestCase
         $document = new NumberTypeDocument(
             $range,
             $precision,
-            true,
             'ref',
+            true,
             'description',
             'deprecated',
         );

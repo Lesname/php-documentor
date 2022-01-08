@@ -8,11 +8,20 @@ namespace LessDocumentor\Type\Document;
  */
 interface TypeDocument
 {
+    /**
+     * @return class-string
+     */
+    public function getReference(): string;
+
+    public function withRequired(bool $required): TypeDocument;
+
     public function isRequired(): bool;
 
-    public function getReference(): ?string;
+    public function withDescription(string $description): TypeDocument;
 
     public function getDescription(): ?string;
+
+    public function withDeprecated(string $deprecated): TypeDocument;
 
     public function getDeprecated(): ?string;
 }
