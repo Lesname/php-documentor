@@ -37,10 +37,10 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
             assert($type instanceof ReflectionNamedType, new RuntimeException());
             assert($type->isBuiltin() === false, new RuntimeException());
 
-            $class = $type->getName();
-            assert(class_exists($class), new RuntimeException());
+            $typeClass = $type->getName();
+            assert(class_exists($typeClass), new RuntimeException());
 
-            $propDocument = $this->document($class);
+            $propDocument = $this->document($typeClass);
             $properties[$property->getName()] = $type->allowsNull()
                 ? $propDocument->withRequired(false)
                 : $propDocument;

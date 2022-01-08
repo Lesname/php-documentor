@@ -5,7 +5,6 @@ namespace LessDocumentorTest\Type;
 
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
-use LessValueObject\Composite\AbstractCompositeValueObject;
 use LessValueObject\Number\Int\Paginate\PerPage;
 use PHPUnit\Framework\TestCase;
 
@@ -14,12 +13,12 @@ use PHPUnit\Framework\TestCase;
  */
 final class ObjectOutputTypeDocumentorTest extends TestCase
 {
-    public function testCompositeValueObject(): void
+    public function testObject(): void
     {
         $perPage = new PerPage(12);
         $stub = EnumStub::from('fiz');
 
-        $composite = new class ($perPage, $stub, 1) extends AbstractCompositeValueObject {
+        $composite = new class ($perPage, $stub, 1) {
             public function __construct(
                 public PerPage $perPage,
                 public ?EnumStub $stub,
@@ -32,7 +31,7 @@ final class ObjectOutputTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(CompositeTypeDocument::class, $document);
         self::assertTrue($document->isRequired());
-        self::assertSame(EnumStub::class, $document->getReference());
+        self::assertSame($composite::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
 
