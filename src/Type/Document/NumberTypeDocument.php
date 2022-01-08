@@ -14,9 +14,9 @@ final class NumberTypeDocument extends AbstractTypeDocument
         public Property\Range $range,
         public PositiveInt $precision,
         bool $required,
-        ?string $reference,
-        ?string $description,
-        ?string $deprecated,
+        ?string $reference = null,
+        ?string $description = null,
+        ?string $deprecated = null,
     ) {
         parent::__construct($required, $reference, $description, $deprecated);
     }

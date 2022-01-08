@@ -10,9 +10,9 @@ abstract class AbstractTypeDocument implements TypeDocument
 {
     public function __construct(
         private bool $required,
-        private ?string $reference,
-        private ?string $description,
-        private ?string $deprecated,
+        private ?string $reference = null,
+        private ?string $description = null,
+        private ?string $deprecated = null,
     ) {}
 
     public function isRequired(): bool

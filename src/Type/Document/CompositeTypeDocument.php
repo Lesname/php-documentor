@@ -21,9 +21,9 @@ final class CompositeTypeDocument extends AbstractTypeDocument
     public function __construct(
         iterable $properties,
         bool $required,
-        ?string $reference,
-        ?string $description,
-        ?string $deprecated,
+        ?string $reference = null,
+        ?string $description = null,
+        ?string $deprecated = null,
     ) {
         parent::__construct($required, $reference, $description, $deprecated);
 
