@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Response\Document\Property;
+namespace LessDocumentor\Route\Document\Property;
 
 use LessValueObject\Number\Int\AbstractIntValueObject;
 
 /**
  * @psalm-immutable
  */
-final class Code extends AbstractIntValueObject
+final class ResponseCode extends AbstractIntValueObject
 {
     /**
      * @psalm-pure
