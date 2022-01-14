@@ -27,7 +27,7 @@ final class PostRouteDocumentTest extends TestCase
             'path',
             'resource',
             $deprecated,
-            $input,
+            ['fiz' => $input],
             [$response],
         );
 
@@ -35,7 +35,7 @@ final class PostRouteDocumentTest extends TestCase
         self::assertSame('path', $doc->getPath());
         self::assertSame('resource', $doc->getResource());
         self::assertSame($deprecated, $doc->getDeprecated());
-        self::assertSame($input, $doc->getInput());
+        self::assertSame(['fiz' => $input], $doc->getInput());
         self::assertSame([$response], $doc->getRespones());
     }
 }

@@ -20,7 +20,10 @@ interface RouteDocument
 
     public function getDeprecated(): ?Deprecated;
 
-    public function getInput(): TypeDocument;
+    /**
+     * @return array<string, TypeDocument>
+     */
+    public function getInput(): array;
 
     /**
      * @return array<Property\Response>

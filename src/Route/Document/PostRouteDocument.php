@@ -13,13 +13,14 @@ use LessDocumentor\Type\Document\TypeDocument;
 final class PostRouteDocument implements RouteDocument
 {
     /**
-     * @param array<Property\Response> $responses
+     * @param array<string, TypeDocument> $input
+     * @param array<int, Property\Response> $responses
      */
     public function __construct(
         private string $path,
         private string $resource,
         private ?Deprecated $deprecated,
-        private TypeDocument $input,
+        private array $input,
         private array $responses,
     ) {}
 
@@ -43,7 +44,10 @@ final class PostRouteDocument implements RouteDocument
         return $this->deprecated;
     }
 
-    public function getInput(): TypeDocument
+    /**
+     * @return array<string, TypeDocument>
+     */
+    public function getInput(): array
     {
         return $this->input;
     }
