@@ -122,7 +122,8 @@ final class MezzioRouteDocumentorTest extends TestCase
         $handler = new
             #[DocHttpResponse(Content::class, 201)]
             #[DocInputProvided(['id', 'on'])]
-            class {};
+        class {
+        };
 
         $id = new Id('35670141-bda3-460a-aa2b-3a1f868da8e0');
         $page = new Page(1);

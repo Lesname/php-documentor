@@ -18,6 +18,7 @@ use LessValueObject\Number\Exception\PrecisionOutBounds;
 use LessValueObject\Number\Int\PositiveInt;
 use LessValueObject\Number\NumberValueObject;
 use LessValueObject\String\StringValueObject;
+use LessValueObject\ValueObject;
 
 abstract class AbstractObjectTypeDocumentor
 {
@@ -40,7 +41,7 @@ abstract class AbstractObjectTypeDocumentor
     }
 
     /**
-     * @param class-string<CollectionValueObject> $class
+     * @param class-string<CollectionValueObject<ValueObject>> $class
      *
      * @throws PrecisionOutBounds
      * @throws MaxOutBounds

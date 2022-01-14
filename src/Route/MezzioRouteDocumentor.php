@@ -30,6 +30,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     /**
      * @param array<mixed> $route
      *
+     * @throws MissingAttribute
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
@@ -71,6 +72,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
      *
      * @return array<string, TypeDocument>
      *
+     * @throws MissingAttribute
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
@@ -137,6 +139,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
      *
      * @return array<int, Response>
      *
+     * @throws MissingAttribute
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
@@ -193,7 +196,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     }
 
     /**
-     * @param ReflectionClass $reflector
+     * @param ReflectionClass<object> $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
@@ -209,12 +212,14 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     }
 
     /**
-     * @param ReflectionClass $reflector
+     * @param ReflectionClass<object> $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
      *
      * @return T
+     *
+     * @throws MissingAttribute
      */
     private function getAttribute(ReflectionClass $reflector, string $nameAttribute)
     {
@@ -225,6 +230,10 @@ final class MezzioRouteDocumentor implements RouteDocumentor
         throw new MissingAttribute((string)$reflector, $nameAttribute);
     }
 
+    /**
+     * @param ReflectionClass<object> $reflector
+     * @param class-string $nameAttribute
+     */
     private function hasAttribute(ReflectionClass $reflector, string $nameAttribute): bool
     {
         return count($reflector->getAttributes($nameAttribute)) > 0;

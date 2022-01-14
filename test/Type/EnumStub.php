@@ -5,6 +5,9 @@ namespace LessDocumentorTest\Type;
 
 use LessValueObject\Enum\AbstractEnumValueObject;
 
+/**
+ * @psalm-immutable
+ */
 final class EnumStub extends AbstractEnumValueObject
 {
     public static function cases(): array

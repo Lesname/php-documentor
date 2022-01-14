@@ -7,6 +7,8 @@ use Exception;
 
 /**
  * @psalm-immutable
+ *
+ * @psalm-suppress MutableDependency
  */
 abstract class AbstractException extends Exception
 {
