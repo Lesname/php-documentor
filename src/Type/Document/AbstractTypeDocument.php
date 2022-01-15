@@ -9,22 +9,22 @@ namespace LessDocumentor\Type\Document;
 abstract class AbstractTypeDocument implements TypeDocument
 {
     /**
-     * @param class-string $reference
+     * @param class-string|null $reference
      * @param bool $required
      * @param string|null $description
      * @param string|null $deprecated
      */
     public function __construct(
-        private string $reference,
+        private ?string $reference,
         private bool $required = true,
         private ?string $description = null,
         private ?string $deprecated = null,
     ) {}
 
     /**
-     * @return class-string
+     * @return class-string|null
      */
-    public function getReference(): string
+    public function getReference(): ?string
     {
         return $this->reference;
     }
