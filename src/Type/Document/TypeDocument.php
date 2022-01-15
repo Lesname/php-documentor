@@ -9,9 +9,9 @@ namespace LessDocumentor\Type\Document;
 interface TypeDocument
 {
     /**
-     * @return class-string
+     * @return class-string|null
      */
-    public function getReference(): string;
+    public function getReference(): ?string;
 
     public function withRequired(bool $required): TypeDocument;
 

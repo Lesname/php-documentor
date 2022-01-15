@@ -16,7 +16,7 @@ final class NumberTypeDocument extends AbstractTypeDocument
     public function __construct(
         public Property\Range $range,
         public PositiveInt $precision,
-        string $reference,
+        ?string $reference,
         bool $required = true,
         ?string $description = null,
         ?string $deprecated = null,

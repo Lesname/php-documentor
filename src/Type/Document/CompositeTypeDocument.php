@@ -20,7 +20,7 @@ final class CompositeTypeDocument extends AbstractTypeDocument
      */
     public function __construct(
         iterable $properties,
-        string $reference,
+        ?string $reference,
         bool $required = true,
         ?string $description = null,
         ?string $deprecated = null,
