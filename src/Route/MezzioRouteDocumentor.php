@@ -44,17 +44,15 @@ final class MezzioRouteDocumentor implements RouteDocumentor
         assert(isset($route['allowed_methods']) && is_array($route['allowed_methods']));
         assert($route['allowed_methods'] === ['POST'], 'Currently only post methods supported');
 
-        assert(isset($route['options']) && is_array($route['options']));
-
         $deprecated = null;
 
-        if (isset($route['options']['alternate']) || isset($route['options']['deprecated'])) {
-            assert(!isset($route['options']['deprecated']) || is_string($route['options']['deprecated']));
-            assert(!isset($route['options']['alternate']) || is_string($route['options']['alternate']));
+        if (isset($route['alternate']) || isset($route['deprecated'])) {
+            assert(!isset($route['deprecated']) || is_string($route['deprecated']));
+            assert(!isset($route['alternate']) || is_string($route['alternate']));
 
             $deprecated = new Deprecated(
-                $route['options']['alternate'] ?? null,
-                $route['options']['deprecated'] ?? null,
+                $route['alternate'] ?? null,
+                $route['deprecated'] ?? null,
             );
         }
 
@@ -81,24 +79,23 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     private function documentInput(array $route): array
     {
         assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
-        assert(isset($route['options']) && is_array($route['options']));
 
         $handler = new ReflectionClass($route['middleware']);
 
         $objInputDocumentor = new ObjectInputTypeDocumentor();
         $input = [];
 
-        if (isset($route['options']['event'])) {
-            assert(is_string($route['options']['event']) && class_exists($route['options']['event']));
+        if (isset($route['event'])) {
+            assert(is_string($route['event']) && class_exists($route['event']));
 
-            $document = $objInputDocumentor->document($route['options']['event']);
+            $document = $objInputDocumentor->document($route['event']);
             assert($document instanceof CompositeTypeDocument);
 
             $input = $document->properties;
         } else {
-            if (isset($route['options']['proxy'])) {
-                assert(is_array($route['options']['proxy']));
-                $proxy = $route['options']['proxy'];
+            if (isset($route['proxy'])) {
+                assert(is_array($route['proxy']));
+                $proxy = $route['proxy'];
 
                 assert(is_string($proxy['class']) && class_exists($proxy['class']));
                 assert(is_string($proxy['method']));
@@ -148,7 +145,6 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     private function documentResponses(array $route): array
     {
         assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
-        assert(isset($route['options']) && is_array($route['options']));
 
         $objInputDocumentor = new ObjectOutputTypeDocumentor();
 
@@ -167,9 +163,9 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             ];
         }
 
-        if (isset($route['options']['proxy'])) {
-            assert(is_array($route['options']['proxy']));
-            $proxy = $route['options']['proxy'];
+        if (isset($route['proxy'])) {
+            assert(is_array($route['proxy']));
+            $proxy = $route['proxy'];
 
             assert(is_string($proxy['class']) && class_exists($proxy['class']));
             assert(is_string($proxy['method']));

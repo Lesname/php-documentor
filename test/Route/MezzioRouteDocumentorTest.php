@@ -41,9 +41,7 @@ final class MezzioRouteDocumentorTest extends TestCase
                 'resource' => 'bar',
                 'allowed_methods' => ['POST'],
                 'middleware' => $handler::class,
-                'options' => [
-                    'deprecated' => 'test',
-                ],
+                'deprecated' => 'test',
             ],
         );
 
@@ -83,13 +81,11 @@ final class MezzioRouteDocumentorTest extends TestCase
                 'resource' => 'bar',
                 'allowed_methods' => ['POST'],
                 'middleware' => $handler::class,
-                'options' => [
-                    'proxy' => [
-                        'class' => ClassProxyStub::class,
-                        'method' => 'foo',
-                    ],
-                    'alternate' => 'test',
+                'proxy' => [
+                    'class' => ClassProxyStub::class,
+                    'method' => 'foo',
                 ],
+                'alternate' => 'test',
             ],
         );
 
@@ -144,9 +140,7 @@ final class MezzioRouteDocumentorTest extends TestCase
                 'resource' => 'bar',
                 'allowed_methods' => ['POST'],
                 'middleware' => $handler::class,
-                'options' => [
-                    'event' => $event::class,
-                ],
+                'event' => $event::class,
             ],
         );
 
@@ -184,7 +178,6 @@ final class MezzioRouteDocumentorTest extends TestCase
                 'resource' => 'bar',
                 'allowed_methods' => ['POST'],
                 'middleware' => $handler::class,
-                'options' => [],
             ],
         );
     }
