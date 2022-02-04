@@ -12,8 +12,8 @@ final class CollectionTypeDocument extends AbstractTypeDocument
      * @param class-string $reference
      */
     public function __construct(
-        public TypeDocument $item,
-        public Property\Length $length,
+        public readonly TypeDocument $item,
+        public readonly Property\Length $length,
         ?string $reference,
         bool $required = true,
         ?string $description = null,

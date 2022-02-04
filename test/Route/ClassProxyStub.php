@@ -5,7 +5,7 @@ namespace LessDocumentorTest\Route;
 
 use LessValueObject\Number\Int\Date\Timestamp;
 use LessValueObject\Number\Int\Paginate\Page;
-use LessValueObject\String\Format\Reference\Type;
+use LessValueObject\String\Format\Resource\Type;
 
 final class ClassProxyStub
 {

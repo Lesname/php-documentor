@@ -14,6 +14,6 @@ final class DocInputProvided
     /**
      * @param array<string> $keys
      */
-    public function __construct(public array $keys)
+    public function __construct(public readonly array $keys)
     {}
 }

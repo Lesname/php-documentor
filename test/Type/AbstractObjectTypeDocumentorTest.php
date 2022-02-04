@@ -10,7 +10,7 @@ use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessValueObject\Collection\AbstractCollectionValueObject;
 use LessValueObject\Number\AbstractNumberValueObject;
-use LessValueObject\Number\Int\PositiveInt;
+use LessValueObject\Number\Int\Unsigned;
 use LessValueObject\String\AbstractStringValueObject;
 use PHPUnit\Framework\TestCase;
 
@@ -72,7 +72,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertSame(1, $document->range->minimal);
         self::assertSame(5.43, $document->range->maximal);
-        self::assertEquals(new PositiveInt(3), $document->precision);
+        self::assertEquals(new Unsigned(3), $document->precision);
         self::assertTrue($document->isRequired());
         self::assertSame($valueObject::class, $document->getReference());
         self::assertNull($document->getDescription());
@@ -86,7 +86,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(EnumTypeDocument::class, $document);
 
-        self::assertSame(['foo', 'fiz'], $document->cases);
+        self::assertSame(EnumStub::cases(), $document->cases);
         self::assertTrue($document->isRequired());
         self::assertSame(EnumStub::class, $document->getReference());
         self::assertNull($document->getDescription());
@@ -106,7 +106,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
                 return 5;
             }
 
-            public static function getItem(): string
+            public static function getItemType(): string
             {
                 return EnumStub::class;
             }
@@ -129,7 +129,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(EnumTypeDocument::class, $item);
 
-        self::assertSame(['foo', 'fiz'], $item->cases);
+        self::assertSame(EnumStub::cases(), $item->cases);
         self::assertTrue($item->isRequired());
         self::assertSame(EnumStub::class, $item->getReference());
     }

@@ -16,7 +16,7 @@ final class ObjectOutputTypeDocumentorTest extends TestCase
     public function testObject(): void
     {
         $perPage = new PerPage(12);
-        $stub = EnumStub::from('fiz');
+        $stub = EnumStub::Fiz;
 
         $composite = new class ($perPage, $stub, 1) {
             public function __construct(
@@ -46,7 +46,7 @@ final class ObjectOutputTypeDocumentorTest extends TestCase
         self::assertNull($perPage->getDeprecated());
 
         $stub = $document->properties['stub'];
-        self::assertSame(['foo', 'fiz'], $stub->cases);
+        self::assertSame(EnumStub::cases(), $stub->cases);
         self::assertFalse($stub->isRequired());
         self::assertSame(EnumStub::class, $stub->getReference());
         self::assertNull($stub->getDescription());

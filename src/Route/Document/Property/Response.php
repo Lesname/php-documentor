@@ -12,7 +12,7 @@ use LessValueObject\Composite\AbstractCompositeValueObject;
 final class Response extends AbstractCompositeValueObject
 {
     public function __construct(
-        public ResponseCode $code,
-        public ?TypeDocument $output,
+        public readonly ResponseCode $code,
+        public readonly ?TypeDocument $output,
     ) {}
 }

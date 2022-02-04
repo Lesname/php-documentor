@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type\Document;
 
-use LessValueObject\Number\Int\PositiveInt;
+use LessValueObject\Number\Int\Unsigned;
 
 /**
  * @psalm-immutable
@@ -14,8 +14,8 @@ final class NumberTypeDocument extends AbstractTypeDocument
      * @param class-string $reference
      */
     public function __construct(
-        public Property\Range $range,
-        public PositiveInt $precision,
+        public readonly Property\Range $range,
+        public readonly Unsigned $precision,
         ?string $reference,
         bool $required = true,
         ?string $description = null,

@@ -11,7 +11,7 @@ use LessValueObject\Composite\AbstractCompositeValueObject;
 final class Range extends AbstractCompositeValueObject
 {
     public function __construct(
-        public float|int $minimal,
-        public float|int $maximal,
+        public readonly float|int $minimal,
+        public readonly float|int $maximal,
     ) {}
 }

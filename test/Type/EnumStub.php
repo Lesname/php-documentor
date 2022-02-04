@@ -1,20 +1,21 @@
 <?php
+// phpcs:ignoreFile enum
 declare(strict_types=1);
 
 namespace LessDocumentorTest\Type;
 
-use LessValueObject\Enum\AbstractEnumValueObject;
+use LessValueObject\Enum\EnumValueObject;
 
 /**
  * @psalm-immutable
  */
-final class EnumStub extends AbstractEnumValueObject
+enum EnumStub: string implements EnumValueObject
 {
-    public static function cases(): array
+    case Foo = 'foo';
+    case Fiz = 'Fiz';
+
+    public function jsonSerialize(): mixed
     {
-        return [
-            'foo',
-            'fiz',
-        ];
+        return $this->value;
     }
 }

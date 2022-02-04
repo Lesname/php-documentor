@@ -11,8 +11,8 @@ use LessValueObject\Composite\AbstractCompositeValueObject;
 final class Deprecated extends AbstractCompositeValueObject
 {
     public function __construct(
-        public ?string $alternate,
-        public ?string $reason,
+        public readonly ?string $alternate,
+        public readonly ?string $reason,
     ) {
         assert(is_string($alternate) || is_string($this->reason));
     }

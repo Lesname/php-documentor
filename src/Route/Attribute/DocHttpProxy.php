@@ -13,7 +13,7 @@ final class DocHttpProxy
      * @param string $method
      */
     public function __construct(
-        public string $class,
-        public string $method,
+        public readonly string $class,
+        public readonly string $method,
     ) {}
 }
