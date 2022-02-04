@@ -14,7 +14,7 @@ final class MissingAttribute extends AbstractException
      * @param string $reflecting
      * @param string $attribute
      */
-    public function __construct(public string $reflecting, public string $attribute)
+    public function __construct(public readonly string $reflecting, public readonly string $attribute)
     {
         parent::__construct("{$reflecting} requires attribute {$attribute}");
     }

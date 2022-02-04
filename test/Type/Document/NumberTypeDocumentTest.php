@@ -5,7 +5,7 @@ namespace LessDocumentorTest\Type\Document;
 
 use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\Document\Property\Range;
-use LessValueObject\Number\Int\PositiveInt;
+use LessValueObject\Number\Int\Unsigned;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,7 +16,7 @@ final class NumberTypeDocumentTest extends TestCase
     public function testSetup(): void
     {
         $range = new Range(1, 2);
-        $precision = new PositiveInt(3);
+        $precision = new Unsigned(3);
 
         $document = new NumberTypeDocument(
             $range,

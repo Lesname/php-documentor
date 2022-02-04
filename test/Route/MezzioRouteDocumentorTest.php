@@ -16,8 +16,8 @@ use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessValueObject\Composite\Content;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
 use LessValueObject\Number\Int\Paginate\Page;
-use LessValueObject\String\Format\Reference\Id;
-use LessValueObject\String\Format\Reference\Type;
+use LessValueObject\String\Format\Resource\Id;
+use LessValueObject\String\Format\Resource\Type;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
@@ -45,7 +45,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             ],
         );
 
-        self::assertSame(Method::post(), $document->getMethod());
+        self::assertSame(Method::Post, $document->getMethod());
         self::assertSame('/fiz/bar.foo', $document->getPath());
         self::assertSame('bar', $document->getResource());
         self::assertEquals(
@@ -89,7 +89,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             ],
         );
 
-        self::assertSame(Method::post(), $document->getMethod());
+        self::assertSame(Method::Post, $document->getMethod());
         self::assertSame('/fiz/bar.foo', $document->getPath());
         self::assertSame('bar', $document->getResource());
         self::assertEquals(
@@ -144,7 +144,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             ],
         );
 
-        self::assertSame(Method::post(), $document->getMethod());
+        self::assertSame(Method::Post, $document->getMethod());
         self::assertSame('/fiz/bar.foo', $document->getPath());
         self::assertSame('bar', $document->getResource());
         self::assertNull($document->getDeprecated());

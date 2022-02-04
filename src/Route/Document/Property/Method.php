@@ -1,32 +1,20 @@
 <?php
+// phpcs:ignoreFile enum not supported yet
 declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document\Property;
 
-use LessValueObject\Enum\AbstractEnumValueObject;
+use LessValueObject\Enum\EnumValueObject;
 
 /**
  * @psalm-immutable
  */
-final class Method extends AbstractEnumValueObject
+enum Method:string implements EnumValueObject
 {
-    private const POST = 'post';
+    case Post = 'post';
 
-    /**
-     * @psalm-pure
-     */
-    public static function post(): self
+    public function jsonSerialize(): string
     {
-        return self::from(self::POST);
-    }
-
-    /**
-     * @psalm-pure
-     */
-    public static function cases(): array
-    {
-        return [
-            self::POST,
-        ];
+        return $this->value;
     }
 }

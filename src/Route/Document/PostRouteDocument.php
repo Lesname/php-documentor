@@ -17,16 +17,16 @@ final class PostRouteDocument implements RouteDocument
      * @param array<int, Property\Response> $responses
      */
     public function __construct(
-        private string $path,
-        private string $resource,
-        private ?Deprecated $deprecated,
-        private array $input,
-        private array $responses,
+        private readonly string $path,
+        private readonly string $resource,
+        private readonly ?Deprecated $deprecated,
+        private readonly array $input,
+        private readonly array $responses,
     ) {}
 
     public function getMethod(): Method
     {
-        return Method::post();
+        return Method::Post;
     }
 
     public function getPath(): string

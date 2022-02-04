@@ -11,7 +11,7 @@ use LessValueObject\Composite\AbstractCompositeValueObject;
 final class Length extends AbstractCompositeValueObject
 {
     public function __construct(
-        public int $minimal,
-        public int $maximal,
+        public readonly int $minimal,
+        public readonly int $maximal,
     ) {}
 }

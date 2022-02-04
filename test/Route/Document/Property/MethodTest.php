@@ -13,16 +13,6 @@ final class MethodTest extends TestCase
 {
     public function testPost(): void
     {
-        self::assertSame('post', Method::post()->value);
-    }
-
-    public function testCases(): void
-    {
-        self::assertSame(
-            [
-                'post',
-            ],
-            Method::cases(),
-        );
+        self::assertSame('post', Method::Post->value);
     }
 }

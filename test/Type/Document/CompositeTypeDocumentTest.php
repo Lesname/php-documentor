@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document;
 
-use ArrayIterator;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +17,7 @@ final class CompositeTypeDocumentTest extends TestCase
         $fiz = $this->createMock(TypeDocument::class);
 
         $document = new CompositeTypeDocument(
-            new ArrayIterator(['fiz' => $fiz]),
+            ['fiz' => $fiz],
             'ref',
             true,
             'description',

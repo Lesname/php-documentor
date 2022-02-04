@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use BackedEnum;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
 use LessDocumentor\Type\Document\NumberTypeDocument;
@@ -11,11 +12,10 @@ use LessDocumentor\Type\Document\Property\Range;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessValueObject\Collection\CollectionValueObject;
-use LessValueObject\Enum\EnumValueObject;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
 use LessValueObject\Number\Exception\PrecisionOutBounds;
-use LessValueObject\Number\Int\PositiveInt;
+use LessValueObject\Number\Int\Unsigned;
 use LessValueObject\Number\NumberValueObject;
 use LessValueObject\String\StringValueObject;
 use LessValueObject\ValueObject;
@@ -34,8 +34,8 @@ abstract class AbstractObjectTypeDocumentor
         return match (true) {
             is_subclass_of($class, StringValueObject::class) => $this->documentStringValueObject($class),
             is_subclass_of($class, NumberValueObject::class) => $this->documentNumberValueObject($class),
-            is_subclass_of($class, EnumValueObject::class) => $this->documentEnumValueObject($class),
             is_subclass_of($class, CollectionValueObject::class) => $this->documentCollectionValueObject($class),
+            is_subclass_of($class, BackedEnum::class) => $this->documentEnum($class),
             default => $this->documentObject($class),
         };
     }
@@ -50,16 +50,16 @@ abstract class AbstractObjectTypeDocumentor
     protected function documentCollectionValueObject(string $class): TypeDocument
     {
         return new CollectionTypeDocument(
-            $this->document($class::getItem()),
+            $this->document($class::getItemType()),
             new Length($class::getMinlength(), $class::getMaxLength()),
             $class,
         );
     }
 
     /**
-     * @param class-string<EnumValueObject> $class
+     * @param class-string<BackedEnum> $class
      */
-    protected function documentEnumValueObject(string $class): TypeDocument
+    protected function documentEnum(string $class): TypeDocument
     {
         return new EnumTypeDocument($class::cases(), $class);
     }
@@ -73,7 +73,11 @@ abstract class AbstractObjectTypeDocumentor
      */
     protected function documentNumberValueObject(string $class): TypeDocument
     {
-        return new NumberTypeDocument(new Range($class::getMinValue(), $class::getMaxValue()), new PositiveInt($class::getPrecision()), $class);
+        return new NumberTypeDocument(
+            new Range($class::getMinValue(), $class::getMaxValue()),
+            new Unsigned($class::getPrecision()),
+            $class,
+        );
     }
 
     /**
