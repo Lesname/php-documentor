@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessValueObject\Number\Exception\MaxOutBounds;
@@ -35,7 +36,16 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
             $type = $property->getType();
 
             assert($type instanceof ReflectionNamedType, new RuntimeException());
-            assert($type->isBuiltin() === false, new RuntimeException());
+
+            if ($type->isBuiltin()) {
+                if ($type->getName() === 'bool') {
+                    $properties[$property->getName()] = new BoolTypeDocument(null, $type->allowsNull() === false);
+
+                    continue;
+                }
+
+                throw new RuntimeException();
+            }
 
             $typeClass = $type->getName();
             assert(class_exists($typeClass), new RuntimeException());

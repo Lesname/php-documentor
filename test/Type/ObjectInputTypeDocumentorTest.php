@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type;
 
+use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessValueObject\Number\Int\Paginate\PerPage;
@@ -18,10 +19,11 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         $perPage = new PerPage(12);
         $stub = EnumStub::Fiz;
 
-        $composite = new class ($perPage, $stub) {
+        $composite = new class ($perPage, $stub, true) {
             public function __construct(
                 public PerPage $perPage,
                 private ?EnumStub $stub,
+                private bool $biz,
             ) {}
         };
 
@@ -34,7 +36,7 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
 
-        self::assertSame(2, count($document->properties));
+        self::assertSame(3, count($document->properties));
 
         $perPage = $document->properties['perPage'];
         self::assertSame(0, $perPage->range->minimal);
@@ -50,5 +52,9 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         self::assertSame(EnumStub::class, $stub->getReference());
         self::assertNull($stub->getDescription());
         self::assertNull($stub->getDeprecated());
+
+        $biz = $document->properties['biz'];
+        self::assertInstanceOf(BoolTypeDocument::class, $biz);
+        self::assertTrue($biz->isRequired());
     }
 }

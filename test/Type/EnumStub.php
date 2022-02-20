@@ -14,7 +14,12 @@ enum EnumStub: string implements EnumValueObject
     case Foo = 'foo';
     case Fiz = 'Fiz';
 
-    public function jsonSerialize(): mixed
+    public function jsonSerialize(): string
+    {
+        return $this->value;
+    }
+
+    public function getValue(): string
     {
         return $this->value;
     }

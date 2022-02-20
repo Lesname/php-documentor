@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessValueObject\Number\Exception\MaxOutBounds;
@@ -23,6 +24,8 @@ final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
      * @throws ReflectionException
+     *
+     * @psalm-suppress RedundantCondition Needed for phpstan
      */
     protected function documentObject(string $class): TypeDocument
     {
@@ -30,23 +33,32 @@ final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
         $constructor = $classReflected->getConstructor();
         assert($constructor instanceof ReflectionMethod);
 
-        $properties = [];
+        $parameters = [];
 
         foreach ($constructor->getParameters() as $parameter) {
             $type = $parameter->getType();
 
             assert($type instanceof ReflectionNamedType, new RuntimeException());
-            assert($type->isBuiltin() === false, new RuntimeException());
+
+            if ($type->isBuiltin()) {
+                if ($type->getName() === 'bool') {
+                    $parameters[$parameter->getName()] = new BoolTypeDocument(null, $parameter->allowsNull() === false);
+
+                    continue;
+                }
+
+                throw new RuntimeException();
+            }
 
             $typeClass = $type->getName();
             assert(class_exists($typeClass), new RuntimeException());
 
-            $propDocument = $this->document($typeClass);
-            $properties[$parameter->getName()] = $type->allowsNull()
-                ? $propDocument->withRequired(false)
-                : $propDocument;
+            $paramDocument = $this->document($typeClass);
+            $parameters[$parameter->getName()] = $type->allowsNull()
+                ? $paramDocument->withRequired(false)
+                : $paramDocument;
         }
 
-        return new CompositeTypeDocument($properties, $class);
+        return new CompositeTypeDocument($parameters, $class);
     }
 }
