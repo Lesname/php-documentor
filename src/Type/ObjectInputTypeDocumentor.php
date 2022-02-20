@@ -24,6 +24,8 @@ final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
      * @throws ReflectionException
+     *
+     * @psalm-suppress RedundantCondition Needed for phpstan
      */
     protected function documentObject(string $class): TypeDocument
     {
