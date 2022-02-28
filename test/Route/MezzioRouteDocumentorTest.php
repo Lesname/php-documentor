@@ -19,7 +19,7 @@ use LessValueObject\Composite\Paginate;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
 use LessValueObject\Number\Int\Paginate\Page;
 use LessValueObject\Number\Int\Paginate\PerPage;
-use LessValueObject\String\Format\Resource\Id;
+use LessValueObject\String\Format\Resource\Identifier;
 use LessValueObject\String\Format\Resource\Type;
 use PHPUnit\Framework\TestCase;
 use Throwable;
@@ -124,13 +124,13 @@ final class MezzioRouteDocumentorTest extends TestCase
         class {
         };
 
-        $id = new Id('35670141-bda3-460a-aa2b-3a1f868da8e0');
+        $id = new Identifier('35670141-bda3-460a-aa2b-3a1f868da8e0');
         $page = new Page(1);
         $on = MilliTimestamp::now();
 
         $event = new class ($id, $page, $on) {
             public function __construct(
-                public Id $id,
+                public Identifier $id,
                 Page $page,
                 MilliTimestamp $on,
             ) {}
