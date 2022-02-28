@@ -5,6 +5,7 @@ namespace LessDocumentor\Route;
 
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
+use LessDocumentor\Route\Attribute\DocInput;
 use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Deprecated;
@@ -89,6 +90,12 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert(is_string($route['event']) && class_exists($route['event']));
 
             $document = $objInputDocumentor->document($route['event']);
+            assert($document instanceof CompositeTypeDocument);
+
+            $input = $document->properties;
+        } elseif ($this->hasAttribute($handler, DocInput::class)) {
+            $attribute = $this->getAttribute($handler, DocInput::class);
+            $document = $objInputDocumentor->document($attribute->input);
             assert($document instanceof CompositeTypeDocument);
 
             $input = $document->properties;
