@@ -42,9 +42,6 @@ final class MezzioRouteDocumentor implements RouteDocumentor
         assert(isset($route['path']) && is_string($route['path']));
         assert(isset($route['resource']) && is_string($route['resource']));
 
-        assert(isset($route['allowed_methods']) && is_array($route['allowed_methods']));
-        assert($route['allowed_methods'] === ['POST'], 'Currently only post methods supported');
-
         $deprecated = null;
 
         if (isset($route['alternate']) || isset($route['deprecated'])) {
