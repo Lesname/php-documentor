@@ -83,16 +83,16 @@ final class MezzioRouteDocumentor implements RouteDocumentor
         $objInputDocumentor = new ObjectInputTypeDocumentor();
         $input = [];
 
-        if (isset($route['event'])) {
-            assert(is_string($route['event']) && class_exists($route['event']));
-
-            $document = $objInputDocumentor->document($route['event']);
+        if ($this->hasAttribute($handler, DocInput::class)) {
+            $attribute = $this->getAttribute($handler, DocInput::class);
+            $document = $objInputDocumentor->document($attribute->input);
             assert($document instanceof CompositeTypeDocument);
 
             $input = $document->properties;
-        } elseif ($this->hasAttribute($handler, DocInput::class)) {
-            $attribute = $this->getAttribute($handler, DocInput::class);
-            $document = $objInputDocumentor->document($attribute->input);
+        } elseif (isset($route['event'])) {
+            assert(is_string($route['event']) && class_exists($route['event']));
+
+            $document = $objInputDocumentor->document($route['event']);
             assert($document instanceof CompositeTypeDocument);
 
             $input = $document->properties;
