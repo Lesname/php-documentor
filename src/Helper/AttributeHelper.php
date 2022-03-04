@@ -21,9 +21,9 @@ final class AttributeHelper
      *
      * @template T
      *
-     * @return iterable<T>
+     * @return array<T>
      */
-    public static function getAttributes(ReflectionClass $reflector, string $nameAttribute): iterable
+    public static function getAttributes(ReflectionClass $reflector, string $nameAttribute): array
     {
         return array_map(
             static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),

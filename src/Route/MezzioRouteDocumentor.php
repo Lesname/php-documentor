@@ -3,24 +3,22 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
+use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInput;
-use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
+use LessDocumentor\Route\Input\RouteInputDocumentor;
 use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
 use LessValueObject\Number\Exception\PrecisionOutBounds;
-use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -28,6 +26,8 @@ use ReflectionNamedType;
 
 final class MezzioRouteDocumentor implements RouteDocumentor
 {
+    private ?RouteInputDocumentor $routeInputDocumentor = null;
+
     /**
      * @param array<mixed> $route
      *
@@ -58,81 +58,17 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             $route['path'],
             $route['resource'],
             $deprecated,
-            $this->documentInput($route),
+            $this->getRouteInputDocumentor()->document($route),
             $this->documentResponses($route),
         );
     }
 
     /**
-     * @param array<mixed> $route
-     *
-     * @return array<string, TypeDocument>
-     *
-     * @throws MissingAttribute
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
-     * @throws ReflectionException
+     * @return RouteInputDocumentor
      */
-    private function documentInput(array $route): array
+    public function getRouteInputDocumentor(): RouteInputDocumentor
     {
-        assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
-
-        $handler = new ReflectionClass($route['middleware']);
-
-        $objInputDocumentor = new ObjectInputTypeDocumentor();
-        $input = [];
-
-        if ($this->hasAttribute($handler, DocInput::class)) {
-            $attribute = $this->getAttribute($handler, DocInput::class);
-            $document = $objInputDocumentor->document($attribute->input);
-            assert($document instanceof CompositeTypeDocument);
-
-            $input = $document->properties;
-        } elseif (isset($route['event'])) {
-            assert(is_string($route['event']) && class_exists($route['event']));
-
-            $document = $objInputDocumentor->document($route['event']);
-            assert($document instanceof CompositeTypeDocument);
-
-            $input = $document->properties;
-        } else {
-            if (isset($route['proxy'])) {
-                assert(is_array($route['proxy']));
-                $proxy = $route['proxy'];
-
-                assert(is_string($proxy['class']) && class_exists($proxy['class']));
-                assert(is_string($proxy['method']));
-
-                $method = new ReflectionMethod($proxy['class'], $proxy['method']);
-            } else {
-                $attribute = $this->getAttribute($handler, DocHttpProxy::class);
-                $method = new ReflectionMethod($attribute->class, $attribute->method);
-            }
-
-            foreach ($method->getParameters() as $parameter) {
-                $type = $parameter->getType();
-                assert($type instanceof ReflectionNamedType);
-                assert($type->isBuiltin() === false);
-
-                $class = $type->getName();
-                assert(class_exists($class));
-
-                $input[$parameter->getName()] = $objInputDocumentor
-                    ->document($class)
-                    ->withRequired(!$type->allowsNull());
-            }
-        }
-
-        if ($this->hasAttribute($handler, DocInputProvided::class)) {
-            $attribute = $this->getAttribute($handler, DocInputProvided::class);
-
-            foreach ($attribute->keys as $key) {
-                unset($input[$key]);
-            }
-        }
-
-        return $input;
+        return $this->routeInputDocumentor ??= new MezzioRouteInputDocumentor();
     }
 
     /**
@@ -154,8 +90,8 @@ final class MezzioRouteDocumentor implements RouteDocumentor
 
         $handler = new ReflectionClass($route['middleware']);
 
-        if ($this->hasAttribute($handler, DocHttpResponse::class)) {
-            $response = $this->getAttribute($handler, DocHttpResponse::class);
+        if (AttributeHelper::hasAttribute($handler, DocHttpResponse::class)) {
+            $response = AttributeHelper::getAttribute($handler, DocHttpResponse::class);
 
             return [
                 new Response(
@@ -176,7 +112,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
 
             $method = new ReflectionMethod($proxy['class'], $proxy['method']);
         } else {
-            $attribute = $this->getAttribute($handler, DocHttpProxy::class);
+            $attribute = AttributeHelper::getAttribute($handler, DocHttpProxy::class);
             $method = new ReflectionMethod($attribute->class, $attribute->method);
         }
 
@@ -193,49 +129,5 @@ final class MezzioRouteDocumentor implements RouteDocumentor
                 $objInputDocumentor->document($class),
             ),
         ];
-    }
-
-    /**
-     * @param ReflectionClass<object> $reflector
-     * @param class-string<T> $nameAttribute
-     *
-     * @template T
-     *
-     * @return iterable<T>
-     */
-    private function getAttributes(ReflectionClass $reflector, string $nameAttribute): iterable
-    {
-        return array_map(
-            static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
-            $reflector->getAttributes($nameAttribute)
-        );
-    }
-
-    /**
-     * @param ReflectionClass<object> $reflector
-     * @param class-string<T> $nameAttribute
-     *
-     * @template T
-     *
-     * @return T
-     *
-     * @throws MissingAttribute
-     */
-    private function getAttribute(ReflectionClass $reflector, string $nameAttribute)
-    {
-        foreach ($this->getAttributes($reflector, $nameAttribute) as $attribute) {
-            return $attribute;
-        }
-
-        throw new MissingAttribute((string)$reflector, $nameAttribute);
-    }
-
-    /**
-     * @param ReflectionClass<object> $reflector
-     * @param class-string $nameAttribute
-     */
-    private function hasAttribute(ReflectionClass $reflector, string $nameAttribute): bool
-    {
-        return count($reflector->getAttributes($nameAttribute)) > 0;
     }
 }
