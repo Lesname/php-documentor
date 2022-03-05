@@ -24,36 +24,33 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
     /**
      * @param array<mixed> $route
      *
-     * @return array<string, TypeDocument>
-     *
      * @throws MissingAttribute
      * @throws MaxOutBounds
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
      * @throws ReflectionException
      */
-    public function document(array $route): array
+    public function document(array $route): TypeDocument
     {
         assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
 
         $handler = new ReflectionClass($route['middleware']);
 
         $objInputDocumentor = new ObjectInputTypeDocumentor();
-        $input = [];
 
         if (AttributeHelper::hasAttribute($handler, DocInput::class)) {
             $attribute = AttributeHelper::getAttribute($handler, DocInput::class);
-            $document = $objInputDocumentor->document($attribute->input);
-            assert($document instanceof CompositeTypeDocument);
+            $input = $objInputDocumentor->document($attribute->input);
+            assert($input instanceof CompositeTypeDocument);
 
-            $input = $document->properties;
+            $properties = $input->properties;
         } elseif (isset($route['event'])) {
             assert(is_string($route['event']) && class_exists($route['event']));
 
-            $document = $objInputDocumentor->document($route['event']);
-            assert($document instanceof CompositeTypeDocument);
+            $input = $objInputDocumentor->document($route['event']);
+            assert($input instanceof CompositeTypeDocument);
 
-            $input = $document->properties;
+            $properties = $input->properties;
         } else {
             if (isset($route['proxy'])) {
                 assert(is_array($route['proxy']));
@@ -68,6 +65,8 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
                 $method = new ReflectionMethod($attribute->class, $attribute->method);
             }
 
+            $properties = [];
+
             foreach ($method->getParameters() as $parameter) {
                 $type = $parameter->getType();
                 assert($type instanceof ReflectionNamedType);
@@ -76,7 +75,7 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
                 $class = $type->getName();
                 assert(class_exists($class));
 
-                $input[$parameter->getName()] = $objInputDocumentor
+                $properties[$parameter->getName()] = $objInputDocumentor
                     ->document($class)
                     ->withRequired(!$type->allowsNull());
             }
@@ -86,10 +85,10 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
             $attribute = AttributeHelper::getAttribute($handler, DocInputProvided::class);
 
             foreach ($attribute->keys as $key) {
-                unset($input[$key]);
+                unset($properties[$key]);
             }
         }
 
-        return $input;
+        return new CompositeTypeDocument($properties, null);
     }
 }

@@ -11,6 +11,7 @@ use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\MezzioRouteDocumentor;
+use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessValueObject\Composite\Content;
@@ -53,7 +54,10 @@ final class MezzioRouteDocumentorTest extends TestCase
         );
 
         self::assertEquals(
-            ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+            new CompositeTypeDocument(
+                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+                null,
+            ),
             $document->getInput(),
         );
 
@@ -96,7 +100,10 @@ final class MezzioRouteDocumentorTest extends TestCase
         );
 
         self::assertEquals(
-            ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+            new CompositeTypeDocument(
+                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+                null,
+            ),
             $document->getInput(),
         );
 
@@ -147,7 +154,10 @@ final class MezzioRouteDocumentorTest extends TestCase
         self::assertNull($document->getDeprecated());
 
         self::assertEquals(
-            ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
+            new CompositeTypeDocument(
+                ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
+                null,
+            ),
             $document->getInput(),
         );
 
