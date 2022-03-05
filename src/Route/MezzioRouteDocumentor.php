@@ -107,7 +107,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert(is_array($route['proxy']));
             $proxy = $route['proxy'];
 
-            assert(is_string($proxy['class']) && class_exists($proxy['class']));
+            assert(is_string($proxy['class']) && (interface_exists($proxy['class']) || class_exists($proxy['class'])));
             assert(is_string($proxy['method']));
 
             $method = new ReflectionMethod($proxy['class'], $proxy['method']);
