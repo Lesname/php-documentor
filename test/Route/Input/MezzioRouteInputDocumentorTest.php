@@ -8,6 +8,7 @@ use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInput;
 use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
+use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentorTest\Route\ClassProxyStub;
 use LessValueObject\Composite\Content;
@@ -44,10 +45,13 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         );
 
         self::assertEquals(
-            [
-                'perPage' => (new ObjectInputTypeDocumentor())->document(PerPage::class),
-                'page' => (new ObjectInputTypeDocumentor())->document(Page::class),
-            ],
+            new CompositeTypeDocument(
+                [
+                    'perPage' => (new ObjectInputTypeDocumentor())->document(PerPage::class),
+                    'page' => (new ObjectInputTypeDocumentor())->document(Page::class),
+                ],
+                null,
+            ),
             $input,
         );
     }
@@ -71,7 +75,10 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         );
 
         self::assertEquals(
-            ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+            new CompositeTypeDocument(
+                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+                null,
+            ),
             $input,
         );
     }
@@ -96,7 +103,10 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         );
 
         self::assertEquals(
-            ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+            new CompositeTypeDocument(
+                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
+                null,
+            ),
             $input,
         );
     }
@@ -132,7 +142,10 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         );
 
         self::assertEquals(
-            ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
+            new CompositeTypeDocument(
+                ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
+                null,
+            ),
             $input,
         );
     }

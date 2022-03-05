@@ -20,14 +20,13 @@ final class PostRouteDocumentTest extends TestCase
     {
         $deprecated = new Deprecated('fiz', null);
         $input = $this->createMock(TypeDocument::class);
-
         $response = new Response(new ResponseCode(204), null);
 
         $doc = new PostRouteDocument(
             'path',
             'resource',
             $deprecated,
-            ['fiz' => $input],
+            $input,
             [$response],
         );
 
@@ -35,7 +34,7 @@ final class PostRouteDocumentTest extends TestCase
         self::assertSame('path', $doc->getPath());
         self::assertSame('resource', $doc->getResource());
         self::assertSame($deprecated, $doc->getDeprecated());
-        self::assertSame(['fiz' => $input], $doc->getInput());
+        self::assertSame($input, $doc->getInput());
         self::assertSame([$response], $doc->getRespones());
     }
 }

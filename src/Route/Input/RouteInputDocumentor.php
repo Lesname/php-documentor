@@ -9,8 +9,6 @@ interface RouteInputDocumentor
 {
     /**
      * @param array<mixed> $route
-     *
-     * @return array<string, TypeDocument>
      */
-    public function document(array $route): array;
+    public function document(array $route): TypeDocument;
 }
