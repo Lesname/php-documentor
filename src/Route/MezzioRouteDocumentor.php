@@ -6,6 +6,7 @@ namespace LessDocumentor\Route;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
+use LessDocumentor\Route\Attribute\DocResource;
 use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Response;
@@ -14,11 +15,15 @@ use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
-use LessDocumentor\Type\Document\TypeDocument;
+use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LessDocumentor\Type\Document\Property\Length;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
+use LessResource\Model\ResourceModel;
+use LessResource\Set\ResourceSet;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
 use LessValueObject\Number\Exception\PrecisionOutBounds;
+use LessValueObject\Number\Int\Paginate\PerPage;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -110,24 +115,42 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert(is_string($proxy['class']) && (interface_exists($proxy['class']) || class_exists($proxy['class'])));
             assert(is_string($proxy['method']));
 
-            $method = new ReflectionMethod($proxy['class'], $proxy['method']);
+            $proxyClass = new ReflectionClass($proxy['class']);
+            $proxyMethod = $proxyClass->getMethod($proxy['method']);
+
+            $return = $proxyMethod->getReturnType();
+            assert($return instanceof ReflectionNamedType);
+
+            if ($return->getName() === ResourceSet::class) {
+                $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
+                $output = new CollectionTypeDocument(
+                    $objInputDocumentor->document($attribute->resource),
+                    new Length(0, PerPage::getMaxValue()),
+                    null,
+                );
+            } elseif ($return->getName() === ResourceModel::class) {
+                $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
+                $output = $objInputDocumentor->document($attribute->resource);
+            } else {
+                $resultClass = $return->getName();
+                assert(class_exists($resultClass));
+
+                $output = $objInputDocumentor->document($resultClass);
+            }
         } else {
             $attribute = AttributeHelper::getAttribute($handler, DocHttpProxy::class);
             $method = new ReflectionMethod($attribute->class, $attribute->method);
+
+            $return = $method->getReturnType();
+            assert($return instanceof ReflectionNamedType);
+            assert($return->isBuiltin() === false);
+
+            $class = $return->getName();
+            assert(class_exists($class));
+
+            $output = $objInputDocumentor->document($class);
         }
 
-        $return = $method->getReturnType();
-        assert($return instanceof ReflectionNamedType);
-        assert($return->isBuiltin() === false);
-
-        $class = $return->getName();
-        assert(class_exists($class));
-
-        return [
-            new Response(
-                new ResponseCode(200),
-                $objInputDocumentor->document($class),
-            ),
-        ];
+        return [new Response(new ResponseCode(200), $output)];
     }
 }

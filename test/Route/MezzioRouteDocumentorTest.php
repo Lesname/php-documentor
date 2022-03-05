@@ -11,9 +11,12 @@ use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\MezzioRouteDocumentor;
+use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LessDocumentor\Type\Document\Property\Length;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
+use LessResource\Model\AbstractResourceModel;
 use LessValueObject\Composite\Content;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
 use LessValueObject\Number\Int\Paginate\Page;
@@ -112,6 +115,68 @@ final class MezzioRouteDocumentorTest extends TestCase
                 new Response(
                     new ResponseCode(200),
                     (new ObjectOutputTypeDocumentor())->document(Page::class),
+                ),
+            ],
+            $document->getRespones(),
+        );
+    }
+
+    public function testProxyOptionsResourceModel(): void
+    {
+        $handler = new class {
+        };
+
+        $documentor = new MezzioRouteDocumentor();
+        $document = $documentor->document(
+            [
+                'path' => '/fiz/bar.foo',
+                'resource' => 'bar',
+                'middleware' => $handler::class,
+                'proxy' => [
+                    'class' => ClassProxyStub::class,
+                    'method' => 'bar',
+                ],
+            ],
+        );
+
+        self::assertEquals(
+            [
+                new Response(
+                    new ResponseCode(200),
+                    (new ObjectOutputTypeDocumentor())->document(AbstractResourceModel::class),
+                ),
+            ],
+            $document->getRespones(),
+        );
+    }
+
+    public function testProxyOptionsResourceSet(): void
+    {
+        $handler = new class {
+        };
+
+        $documentor = new MezzioRouteDocumentor();
+        $document = $documentor->document(
+            [
+                'path' => '/fiz/bar.foo',
+                'resource' => 'bar',
+                'middleware' => $handler::class,
+                'proxy' => [
+                    'class' => ClassProxyStub::class,
+                    'method' => 'biz',
+                ],
+            ],
+        );
+
+        self::assertEquals(
+            [
+                new Response(
+                    new ResponseCode(200),
+                    new CollectionTypeDocument(
+                        (new ObjectOutputTypeDocumentor())->document(AbstractResourceModel::class),
+                        new Length(0, 100),
+                        null,
+                    ),
                 ),
             ],
             $document->getRespones(),
