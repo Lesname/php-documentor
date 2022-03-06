@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
+use A;
+use Attribute;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
@@ -17,6 +19,7 @@ use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Property\Length;
+use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessResource\Model\ResourceModel;
 use LessResource\Set\ResourceSet;
@@ -149,6 +152,13 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert(class_exists($class));
 
             $output = $objInputDocumentor->document($class);
+        }
+
+        if (AttributeHelper::hasAttribute($handler, DocTypeWrapper::class)) {
+            $attribute = AttributeHelper::getAttribute($handler, DocTypeWrapper::class);
+            $wrapper = new $attribute->typeWrapper();
+
+            $output = $wrapper->wrap($output);
         }
 
         return [new Response(new ResponseCode(200), $output)];
