@@ -10,6 +10,7 @@ use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocResource;
 use LessDocumentor\Route\Document\PostRouteDocument;
+use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
@@ -49,6 +50,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     {
         assert(isset($route['path']) && is_string($route['path']));
         assert(isset($route['resource']) && is_string($route['resource']));
+        assert(is_string($route['type']));
 
         $deprecated = null;
 
@@ -63,6 +65,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
         }
 
         return new PostRouteDocument(
+            Category::from($route['type']),
             $route['path'],
             $route['resource'],
             $deprecated,
