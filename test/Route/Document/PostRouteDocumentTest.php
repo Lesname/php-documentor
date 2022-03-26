@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LessDocumentorTest\Route\Document;
 
 use LessDocumentor\Route\Document\PostRouteDocument;
+use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Response;
@@ -23,6 +24,7 @@ final class PostRouteDocumentTest extends TestCase
         $response = new Response(new ResponseCode(204), null);
 
         $doc = new PostRouteDocument(
+            Category::Command,
             'path',
             'resource',
             $deprecated,
@@ -31,6 +33,7 @@ final class PostRouteDocumentTest extends TestCase
         );
 
         self::assertSame(Method::Post, $doc->getMethod());
+        self::assertSame(Category::Command, $doc->getCategory());
         self::assertSame('path', $doc->getPath());
         self::assertSame('resource', $doc->getResource());
         self::assertSame($deprecated, $doc->getDeprecated());

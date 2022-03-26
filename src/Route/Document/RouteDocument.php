@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document;
 
+use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Type\Document\TypeDocument;
@@ -13,6 +14,8 @@ use LessDocumentor\Type\Document\TypeDocument;
 interface RouteDocument
 {
     public function getMethod(): Method;
+
+    public function getCategory(): Category;
 
     public function getPath(): string;
 

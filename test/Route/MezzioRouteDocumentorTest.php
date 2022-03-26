@@ -43,6 +43,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             [
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
+                'type' => 'query',
                 'middleware' => $handler::class,
                 'deprecated' => 'test',
             ],
@@ -85,6 +86,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             [
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
+                'type' => 'query',
                 'middleware' => $handler::class,
                 'proxy' => [
                     'class' => ClassProxyStub::class,
@@ -130,6 +132,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
+                'type' => 'query',
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'proxy' => [
@@ -159,6 +162,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
+                'type' => 'query',
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'proxy' => [
@@ -207,6 +211,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
+                'type' => 'query',
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'event' => $event::class,
@@ -247,6 +252,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
+                'type' => 'query',
                 'resource' => 'bar',
                 'middleware' => $handler::class,
             ],
