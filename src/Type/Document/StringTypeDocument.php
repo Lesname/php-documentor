@@ -14,10 +14,9 @@ final class StringTypeDocument extends AbstractTypeDocument
     public function __construct(
         public readonly Property\Length $length,
         ?string $reference,
-        bool $required = true,
         ?string $description = null,
         ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $required, $description, $deprecated);
+        parent::__construct($reference, $description, $deprecated);
     }
 }

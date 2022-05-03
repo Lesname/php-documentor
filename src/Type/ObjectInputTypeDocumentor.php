@@ -42,7 +42,9 @@ final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
 
             if ($type->isBuiltin()) {
                 if ($type->getName() === 'bool') {
-                    $parameters[$parameter->getName()] = new BoolTypeDocument(null, $parameter->allowsNull() === false);
+                    $parameters[$parameter->getName()] = $type->allowsNull()
+                        ? (new BoolTypeDocument())->withNullable()
+                        : new BoolTypeDocument();
 
                     continue;
                 }
@@ -55,7 +57,7 @@ final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
 
             $paramDocument = $this->document($typeClass);
             $parameters[$parameter->getName()] = $type->allowsNull()
-                ? $paramDocument->withRequired(false)
+                ? $paramDocument->withNullable()
                 : $paramDocument;
         }
 

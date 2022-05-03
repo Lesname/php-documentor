@@ -8,15 +8,15 @@ namespace LessDocumentor\Type\Document;
  */
 abstract class AbstractTypeDocument implements TypeDocument
 {
+    private bool $nullable = false;
+
     /**
      * @param class-string|null $reference
-     * @param bool $required
      * @param string|null $description
      * @param string|null $deprecated
      */
     public function __construct(
-        private readonly ?string $reference,
-        private bool $required = true,
+        private readonly ?string $reference = null,
         private ?string $description = null,
         private ?string $deprecated = null,
     ) {}
@@ -29,17 +29,17 @@ abstract class AbstractTypeDocument implements TypeDocument
         return $this->reference;
     }
 
-    public function withRequired(bool $required): TypeDocument
+    public function withNullable(): TypeDocument
     {
         $clone = clone $this;
-        $clone->required = $required;
+        $clone->nullable = true;
 
         return $clone;
     }
 
-    public function isRequired(): bool
+    public function isNullable(): bool
     {
-        return $this->required;
+        return $this->nullable;
     }
 
     public function withDescription(string $description): TypeDocument

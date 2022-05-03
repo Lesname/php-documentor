@@ -22,14 +22,12 @@ final class CollectionTypeDocumentTest extends TestCase
             $item,
             $length,
             'ref',
-            true,
             'description',
             'deprecated',
         );
 
         self::assertSame($item, $document->item);
         self::assertSame($length, $document->length);
-        self::assertTrue($document->isRequired());
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
         self::assertSame('deprecated', $document->getDeprecated());

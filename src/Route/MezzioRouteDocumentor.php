@@ -152,7 +152,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert($return->isBuiltin() === false);
 
             if ($return->getName() === ResourceModel::class) {
-                $class = AttributeHelper::getAttribute($method->getDeclaringClass(), DocResource::class)->resource;
+                $class = AttributeHelper::getAttribute(new ReflectionClass($attribute->class), DocResource::class)->resource;
             } else {
                 $class = $return->getName();
                 assert(class_exists($class));

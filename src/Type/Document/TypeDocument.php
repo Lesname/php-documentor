@@ -13,9 +13,9 @@ interface TypeDocument
      */
     public function getReference(): ?string;
 
-    public function withRequired(bool $required): TypeDocument;
+    public function withNullable(): TypeDocument;
 
-    public function isRequired(): bool;
+    public function isNullable(): bool;
 
     public function withDescription(string $description): TypeDocument;
 

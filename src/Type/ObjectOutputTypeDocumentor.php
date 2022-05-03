@@ -39,7 +39,9 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
 
             if ($type->isBuiltin()) {
                 if ($type->getName() === 'bool') {
-                    $properties[$property->getName()] = new BoolTypeDocument(null, $type->allowsNull() === false);
+                    $properties[$property->getName()] = $type->allowsNull()
+                        ? (new BoolTypeDocument())->withNullable()
+                        : new BoolTypeDocument();
 
                     continue;
                 }
@@ -52,7 +54,7 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
 
             $propDocument = $this->document($typeClass);
             $properties[$property->getName()] = $type->allowsNull()
-                ? $propDocument->withRequired(false)
+                ? $propDocument->withNullable()
                 : $propDocument;
         }
 

@@ -40,7 +40,6 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertSame(1, $document->length->minimal);
         self::assertSame(5, $document->length->maximal);
-        self::assertTrue($document->isRequired());
         self::assertSame($valueObject::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
@@ -73,7 +72,6 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
         self::assertSame(1, $document->range->minimal);
         self::assertSame(5.43, $document->range->maximal);
         self::assertEquals(new Unsigned(3), $document->precision);
-        self::assertTrue($document->isRequired());
         self::assertSame($valueObject::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
@@ -87,7 +85,6 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
         self::assertInstanceOf(EnumTypeDocument::class, $document);
 
         self::assertSame(EnumStub::cases(), $document->cases);
-        self::assertTrue($document->isRequired());
         self::assertSame(EnumStub::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
@@ -120,7 +117,6 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
         self::assertSame(0, $document->length->minimal);
         self::assertSame(5, $document->length->maximal);
 
-        self::assertTrue($document->isRequired());
         self::assertSame($collection::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
@@ -130,7 +126,6 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
         self::assertInstanceOf(EnumTypeDocument::class, $item);
 
         self::assertSame(EnumStub::cases(), $item->cases);
-        self::assertTrue($item->isRequired());
         self::assertSame(EnumStub::class, $item->getReference());
     }
 }

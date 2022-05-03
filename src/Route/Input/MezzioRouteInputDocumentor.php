@@ -75,9 +75,12 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
                 $class = $type->getName();
                 assert(class_exists($class));
 
-                $properties[$parameter->getName()] = $objInputDocumentor
-                    ->document($class)
-                    ->withRequired(!$type->allowsNull());
+                $property = $objInputDocumentor
+                    ->document($class);
+
+                $properties[$parameter->getName()] = $type->allowsNull()
+                    ? $property->withNullable()
+                    : $property;
             }
         }
 
