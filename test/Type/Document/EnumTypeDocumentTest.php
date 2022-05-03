@@ -17,13 +17,11 @@ final class EnumTypeDocumentTest extends TestCase
         $document = new EnumTypeDocument(
             EnumStub::cases(),
             'ref',
-            true,
             'description',
             'deprecated',
         );
 
         self::assertSame(EnumStub::cases(), $document->cases);
-        self::assertTrue($document->isRequired());
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
         self::assertSame('deprecated', $document->getDeprecated());

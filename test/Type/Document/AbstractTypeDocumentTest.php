@@ -26,20 +26,6 @@ final class AbstractTypeDocumentTest extends TestCase
         self::assertSame('ref', $document->getReference());
     }
 
-    public function testWithRequired(): void
-    {
-        $document = $this->getMockForAbstractClass(
-            AbstractTypeDocument::class,
-            ['ref'],
-        );
-
-        $clone = $document->withRequired(false);
-
-        self::assertTrue($document->isRequired());
-        self::assertNotSame($clone, $document);
-        self::assertFalse($clone->isRequired());
-    }
-
     public function testWithDescription(): void
     {
         $document = $this->getMockForAbstractClass(
