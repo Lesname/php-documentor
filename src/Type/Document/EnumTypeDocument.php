@@ -18,7 +18,7 @@ final class EnumTypeDocument extends AbstractTypeDocument
      */
     public function __construct(
         public readonly array $cases,
-        ?string $reference,
+        ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,
     ) {
