@@ -36,10 +36,10 @@ final class ResultsTypeDocumentWrapperTest extends TestCase
                             null,
                         ),
                     ],
-                    null,
+                    ['total'],
                 ),
             ],
-            $result->properties
+            $result->properties,
         );
     }
 }

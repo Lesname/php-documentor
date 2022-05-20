@@ -24,10 +24,10 @@ final class ResultsTypeDocumentWrapper implements TypeDocumentWrapper
                             null,
                         ),
                     ],
-                    null,
+                    ['total'],
                 ),
             ],
-            null,
+            ['results', 'meta'],
         );
     }
 }

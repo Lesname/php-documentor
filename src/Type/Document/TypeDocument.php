@@ -9,6 +9,11 @@ namespace LessDocumentor\Type\Document;
 interface TypeDocument
 {
     /**
+     * @param class-string $reference
+     */
+    public function withReference(string $reference): TypeDocument;
+
+    /**
      * @return class-string|null
      */
     public function getReference(): ?string;

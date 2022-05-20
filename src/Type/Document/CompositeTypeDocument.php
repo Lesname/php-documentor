@@ -10,13 +10,15 @@ final class CompositeTypeDocument extends AbstractTypeDocument
 {
     /**
      * @param array<string, TypeDocument> $properties
+     * @param array<string> $required
      * @param class-string $reference
      * @param string|null $description
      * @param string|null $deprecated
      */
     public function __construct(
         public readonly array $properties,
-        ?string $reference,
+        public readonly array $required,
+        ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,
     ) {
