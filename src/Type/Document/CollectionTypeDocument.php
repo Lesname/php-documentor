@@ -14,7 +14,7 @@ final class CollectionTypeDocument extends AbstractTypeDocument
     public function __construct(
         public readonly TypeDocument $item,
         public readonly Property\Length $length,
-        ?string $reference,
+        ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,
     ) {

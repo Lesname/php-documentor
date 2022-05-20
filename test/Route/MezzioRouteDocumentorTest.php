@@ -60,7 +60,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
-                null,
+                ['type'],
             ),
             $document->getInput(),
         );
@@ -107,7 +107,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
-                null,
+                ['type'],
             ),
             $document->getInput(),
         );
@@ -226,7 +226,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
-                null,
+                ['page'],
             ),
             $document->getInput(),
         );

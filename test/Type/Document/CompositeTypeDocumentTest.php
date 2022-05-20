@@ -18,12 +18,14 @@ final class CompositeTypeDocumentTest extends TestCase
 
         $document = new CompositeTypeDocument(
             ['fiz' => $fiz],
+            ['fiz'],
             'ref',
             'description',
             'deprecated',
         );
 
         self::assertSame(['fiz' => $fiz], $document->properties);
+        self::assertSame(['fiz'], $document->required);
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
         self::assertSame('deprecated', $document->getDeprecated());

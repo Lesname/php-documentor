@@ -16,10 +16,21 @@ abstract class AbstractTypeDocument implements TypeDocument
      * @param string|null $deprecated
      */
     public function __construct(
-        private readonly ?string $reference = null,
+        private ?string $reference = null,
         private ?string $description = null,
         private ?string $deprecated = null,
     ) {}
+
+    /**
+     * @param class-string $reference
+     */
+    public function withReference(string $reference): TypeDocument
+    {
+        $clone = clone $this;
+        $clone->reference = $reference;
+
+        return $clone;
+    }
 
     /**
      * @return class-string|null

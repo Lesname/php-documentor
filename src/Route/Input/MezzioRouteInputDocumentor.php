@@ -10,6 +10,7 @@ use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
+use LessDocumentor\Type\MethodInputTypeDocumentor;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
@@ -36,21 +37,11 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 
         $handler = new ReflectionClass($route['middleware']);
 
-        $objInputDocumentor = new ObjectInputTypeDocumentor();
-
         if (AttributeHelper::hasAttribute($handler, DocInput::class)) {
-            $attribute = AttributeHelper::getAttribute($handler, DocInput::class);
-            $input = $objInputDocumentor->document($attribute->input);
-            assert($input instanceof CompositeTypeDocument);
-
-            $properties = $input->properties;
+            $document = $this->documentDocInput($handler);
         } elseif (isset($route['event'])) {
             assert(is_string($route['event']) && class_exists($route['event']));
-
-            $input = $objInputDocumentor->document($route['event']);
-            assert($input instanceof CompositeTypeDocument);
-
-            $properties = $input->properties;
+            $document = $this->documentEvent($route['event']);
         } else {
             if (isset($route['proxy'])) {
                 assert(is_array($route['proxy']));
@@ -65,33 +56,61 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
                 $method = new ReflectionMethod($attribute->class, $attribute->method);
             }
 
-            $properties = [];
-
-            foreach ($method->getParameters() as $parameter) {
-                $type = $parameter->getType();
-                assert($type instanceof ReflectionNamedType);
-                assert($type->isBuiltin() === false);
-
-                $class = $type->getName();
-                assert(class_exists($class));
-
-                $property = $objInputDocumentor
-                    ->document($class);
-
-                $properties[$parameter->getName()] = $type->allowsNull()
-                    ? $property->withNullable()
-                    : $property;
-            }
+            $document = (new MethodInputTypeDocumentor())
+                ->document($method);
         }
+
+        assert($document instanceof CompositeTypeDocument);
+
+        $properties = $document->properties;
+        $required = $document->required;
 
         if (AttributeHelper::hasAttribute($handler, DocInputProvided::class)) {
             $attribute = AttributeHelper::getAttribute($handler, DocInputProvided::class);
 
             foreach ($attribute->keys as $key) {
+                $required = array_diff($required, [$key]);
                 unset($properties[$key]);
             }
         }
 
-        return new CompositeTypeDocument($properties, null);
+        // array values required to "reset" all keys
+        return new CompositeTypeDocument($properties, array_values($required));
+    }
+
+    /**
+     * @param ReflectionClass<object> $class
+     *
+     * @throws MaxOutBounds
+     * @throws MinOutBounds
+     * @throws MissingAttribute
+     * @throws PrecisionOutBounds
+     */
+    private function documentDocInput(ReflectionClass $class): CompositeTypeDocument
+    {
+        $objInputDocumentor = new ObjectInputTypeDocumentor();
+
+        $attribute = AttributeHelper::getAttribute($class, DocInput::class);
+        $input = $objInputDocumentor->document($attribute->input);
+        assert($input instanceof CompositeTypeDocument);
+
+        return $input;
+    }
+
+    /**
+     * @param class-string $event
+     *
+     * @throws MaxOutBounds
+     * @throws MinOutBounds
+     * @throws PrecisionOutBounds
+     */
+    private function documentEvent(string $event): CompositeTypeDocument
+    {
+        $objInputDocumentor = new ObjectInputTypeDocumentor();
+
+        $document = $objInputDocumentor->document($event);
+        assert($document instanceof CompositeTypeDocument);
+
+        return $document;
     }
 }

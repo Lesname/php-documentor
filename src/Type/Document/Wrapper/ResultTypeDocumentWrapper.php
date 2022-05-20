@@ -12,7 +12,7 @@ final class ResultTypeDocumentWrapper implements TypeDocumentWrapper
     {
         return new CompositeTypeDocument(
             ['result' => $typeDocument],
-            null,
+            ['result'],
         );
     }
 }

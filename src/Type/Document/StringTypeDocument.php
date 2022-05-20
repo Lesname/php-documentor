@@ -13,7 +13,7 @@ final class StringTypeDocument extends AbstractTypeDocument
      */
     public function __construct(
         public readonly Property\Length $length,
-        ?string $reference,
+        ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,
     ) {
