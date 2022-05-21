@@ -111,7 +111,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         );
     }
 
-    public function testEventOption(): void
+    public function testInputOption(): void
     {
         $handler = new
         #[DocHttpResponse(Content::class, 201)]
@@ -137,7 +137,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
                 'middleware' => $handler::class,
-                'event' => $event::class,
+                'input' => $event::class,
             ],
         );
 
