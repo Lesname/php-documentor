@@ -18,7 +18,6 @@ use LessValueObject\Number\Exception\PrecisionOutBounds;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use ReflectionNamedType;
 
 final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 {
@@ -39,9 +38,9 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 
         if (AttributeHelper::hasAttribute($handler, DocInput::class)) {
             $document = $this->documentDocInput($handler);
-        } elseif (isset($route['event'])) {
-            assert(is_string($route['event']) && class_exists($route['event']));
-            $document = $this->documentEvent($route['event']);
+        } elseif (isset($route['input'])) {
+            assert(is_string($route['input']) && class_exists($route['input']));
+            $document = $this->documentValueObject($route['input']);
         } else {
             if (isset($route['proxy'])) {
                 assert(is_array($route['proxy']));
@@ -104,7 +103,7 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
      * @throws MinOutBounds
      * @throws PrecisionOutBounds
      */
-    private function documentEvent(string $event): CompositeTypeDocument
+    private function documentValueObject(string $event): CompositeTypeDocument
     {
         $objInputDocumentor = new ObjectInputTypeDocumentor();
 
