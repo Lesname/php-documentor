@@ -54,14 +54,14 @@ final class MezzioRouteDocumentor implements RouteDocumentor
 
         $deprecated = null;
 
-        if (isset($route['alternate']) || isset($route['deprecated'])) {
-            assert(!isset($route['deprecated']) || is_string($route['deprecated']));
-            assert(!isset($route['alternate']) || is_string($route['alternate']));
+        $routeAlternate = $route['alternate'] ?? null;
+        assert($routeAlternate === null || is_string($routeAlternate));
 
-            $deprecated = new Deprecated(
-                $route['alternate'] ?? null,
-                $route['deprecated'] ?? null,
-            );
+        $routeDeprecated = $route['deprecated'] ?? null;
+        assert($routeDeprecated === null || is_string($routeDeprecated));
+
+        if (is_string($routeAlternate) || is_string($routeDeprecated)) {
+            $deprecated = new Deprecated($routeAlternate, $routeDeprecated);
         }
 
         return new PostRouteDocument(
