@@ -1,25 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route;
+namespace LessDocumentorTest\Route\Stub;
 
 use LessDocumentor\Route\Attribute\DocResource;
-use LessResource\Model\AbstractResourceModel;
-use LessResource\Model\ResourceModel;
-use LessResource\Set\ResourceSet;
 use LessValueObject\Number\Int\Date\Timestamp;
 use LessValueObject\Number\Int\Paginate\Page;
 use LessValueObject\String\Format\Resource\Type;
 
-#[DocResource(AbstractResourceModel::class)]
+#[DocResource(ResourceStub::class)]
 final class ClassProxyStub
 {
     public function foo(Type $type, Timestamp $fiz): Page
     {}
 
-    public function bar(): ResourceModel
+    public function bar(): InterfaceStub
     {}
 
-    public function biz(): ResourceSet
+    public function biz(): TraversableStub
     {}
 }

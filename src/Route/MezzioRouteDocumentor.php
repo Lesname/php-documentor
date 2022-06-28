@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
-use A;
-use Attribute;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
@@ -22,8 +20,6 @@ use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Property\Length;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
-use LessResource\Model\ResourceModel;
-use LessResource\Set\ResourceSet;
 use LessValueObject\Number\Exception\MaxOutBounds;
 use LessValueObject\Number\Exception\MinOutBounds;
 use LessValueObject\Number\Exception\PrecisionOutBounds;
@@ -32,6 +28,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
+use Traversable;
 
 final class MezzioRouteDocumentor implements RouteDocumentor
 {
@@ -127,14 +124,14 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             $return = $proxyMethod->getReturnType();
             assert($return instanceof ReflectionNamedType);
 
-            if ($return->getName() === ResourceSet::class) {
+            if (is_subclass_of($return->getName(), Traversable::class)) {
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
                     new Length(0, PerPage::getMaxValue()),
                     null,
                 );
-            } elseif ($return->getName() === ResourceModel::class) {
+            } elseif (interface_exists($return->getName())) {
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = $objInputDocumentor->document($attribute->resource);
             } else {
@@ -151,8 +148,11 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert($return instanceof ReflectionNamedType);
             assert($return->isBuiltin() === false);
 
-            if ($return->getName() === ResourceModel::class) {
-                $class = AttributeHelper::getAttribute(new ReflectionClass($attribute->class), DocResource::class)->resource;
+            if (interface_exists($return->getName())) {
+                $class = AttributeHelper::getAttribute(
+                    new ReflectionClass($attribute->class),
+                    DocResource::class,
+                )->resource;
             } else {
                 $class = $return->getName();
                 assert(class_exists($class));
