@@ -16,6 +16,8 @@ use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\Property\Length;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
+use LessDocumentorTest\Route\Stub\ClassProxyStub;
+use LessDocumentorTest\Route\Stub\ResourceStub;
 use LessResource\Model\AbstractResourceModel;
 use LessValueObject\Composite\Content;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
@@ -146,7 +148,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             [
                 new Response(
                     new ResponseCode(200),
-                    (new ObjectOutputTypeDocumentor())->document(AbstractResourceModel::class),
+                    (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
                 ),
             ],
             $document->getRespones(),
@@ -177,7 +179,7 @@ final class MezzioRouteDocumentorTest extends TestCase
                 new Response(
                     new ResponseCode(200),
                     new CollectionTypeDocument(
-                        (new ObjectOutputTypeDocumentor())->document(AbstractResourceModel::class),
+                        (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
                         new Length(0, 100),
                         null,
                     ),

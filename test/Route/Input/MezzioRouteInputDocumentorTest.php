@@ -10,7 +10,7 @@ use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
-use LessDocumentorTest\Route\ClassProxyStub;
+use LessDocumentorTest\Route\Stub\ClassProxyStub;
 use LessValueObject\Composite\Content;
 use LessValueObject\Composite\Paginate;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
