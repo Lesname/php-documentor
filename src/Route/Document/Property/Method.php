@@ -9,7 +9,7 @@ use LessValueObject\Enum\Helper\EnumValueHelper;
 /**
  * @psalm-immutable
  */
-enum Method:string implements EnumValueObject
+enum Method: string implements EnumValueObject
 {
     use EnumValueHelper;
 
