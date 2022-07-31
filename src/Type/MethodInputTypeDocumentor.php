@@ -47,6 +47,16 @@ final class MethodInputTypeDocumentor
                     continue;
                 }
 
+                if ($type->getName() === 'array') {
+                    $comp = new CompositeTypeDocument([], [], true);
+
+                    $parameters[$parameter->getName()] = $type->allowsNull()
+                        ? $comp->withNullable()
+                        : $comp;
+
+                    continue;
+                }
+
                 throw new RuntimeException();
             }
 
