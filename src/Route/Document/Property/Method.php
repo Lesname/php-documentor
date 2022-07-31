@@ -1,5 +1,4 @@
 <?php
-// phpcs:ignoreFile enum not supported yet
 declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document\Property;
@@ -10,7 +9,7 @@ use LessValueObject\Enum\Helper\EnumValueHelper;
 /**
  * @psalm-immutable
  */
-enum Method:string implements EnumValueObject
+enum Method: string implements EnumValueObject
 {
     use EnumValueHelper;
 

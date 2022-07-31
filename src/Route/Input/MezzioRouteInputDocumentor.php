@@ -87,13 +87,9 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
      */
     private function documentDocInput(ReflectionClass $class): CompositeTypeDocument
     {
-        $objInputDocumentor = new ObjectInputTypeDocumentor();
-
         $attribute = AttributeHelper::getAttribute($class, DocInput::class);
-        $input = $objInputDocumentor->document($attribute->input);
-        assert($input instanceof CompositeTypeDocument);
 
-        return $input;
+        return $this->documentValueObject($attribute->input);
     }
 
     /**

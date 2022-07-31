@@ -48,6 +48,16 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
                     continue;
                 }
 
+                if ($type->getName() === 'array') {
+                    $comp = new CompositeTypeDocument([], [], true);
+
+                    $properties[$property->getName()] = $type->allowsNull()
+                        ? $comp->withNullable()
+                        : $comp;
+
+                    continue;
+                }
+
                 throw new RuntimeException();
             }
 
@@ -60,6 +70,6 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
                 : $propDocument;
         }
 
-        return new CompositeTypeDocument($properties, $required, $class);
+        return new CompositeTypeDocument($properties, $required, reference: $class);
     }
 }
