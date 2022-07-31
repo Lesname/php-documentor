@@ -47,7 +47,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
     {
         assert(isset($route['path']) && is_string($route['path']));
         assert(isset($route['resource']) && is_string($route['resource']));
-        assert(is_string($route['type']));
+        assert($route['category'] instanceof Category);
 
         $deprecated = null;
 
@@ -62,7 +62,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
         }
 
         return new PostRouteDocument(
-            Category::from($route['type']),
+            $route['category'],
             $route['path'],
             $route['resource'],
             $deprecated,

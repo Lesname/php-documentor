@@ -6,6 +6,7 @@ namespace LessDocumentorTest\Route;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
+use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Response;
@@ -45,7 +46,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             [
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
-                'type' => 'query',
+                'category' => Category::Query,
                 'middleware' => $handler::class,
                 'deprecated' => 'test',
             ],
@@ -88,7 +89,7 @@ final class MezzioRouteDocumentorTest extends TestCase
             [
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
-                'type' => 'query',
+                'category' => Category::Query,
                 'middleware' => $handler::class,
                 'proxy' => [
                     'class' => ClassProxyStub::class,
@@ -134,7 +135,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'type' => 'query',
+                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'proxy' => [
@@ -164,7 +165,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'type' => 'query',
+                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'proxy' => [
@@ -213,7 +214,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'type' => 'query',
+                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'input' => $event::class,
@@ -254,7 +255,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'type' => 'query',
+                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
             ],
