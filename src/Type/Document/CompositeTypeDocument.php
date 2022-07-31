@@ -18,6 +18,7 @@ final class CompositeTypeDocument extends AbstractTypeDocument
     public function __construct(
         public readonly array $properties,
         public readonly array $required,
+        public readonly bool $allowAdditionalProperties = false,
         ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,
