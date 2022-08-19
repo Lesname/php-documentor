@@ -17,7 +17,7 @@ use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use RuntimeException;
 
-final class OpenAPITypeDocumentor
+final class OpenApiTypeDocumentor
 {
     /**
      * @param array<mixed> $schema

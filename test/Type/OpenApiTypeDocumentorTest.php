@@ -13,13 +13,13 @@ use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\Document\ReferenceTypeDocument;
 use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\OpenAPITypeDocumentor;
+use LessDocumentor\Type\OpenApiTypeDocumentor;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\OpenAPITypeDocumentor
+ * @covers \LessDocumentor\Type\OpenApiTypeDocumentor
  */
-final class OpenAPITypeDocumentorTest extends TestCase
+final class OpenApiTypeDocumentorTest extends TestCase
 {
     public function testDocument(): void
     {
@@ -91,7 +91,7 @@ final class OpenAPITypeDocumentorTest extends TestCase
             ],
         ];
 
-        $documentor = new OpenAPITypeDocumentor();
+        $documentor = new OpenApiTypeDocumentor();
 
         self::assertEquals(
             new CompositeTypeDocument(
