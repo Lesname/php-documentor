@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document\Wrapper;
 
+use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
@@ -22,6 +23,6 @@ final class ResultTypeDocumentWrapperTest extends TestCase
         $result = $wrapper->wrap($doc);
 
         self::assertInstanceOf(CompositeTypeDocument::class, $result);
-        self::assertSame(['result' => $doc], $result->properties);
+        self::assertEquals(['result' => new Property($doc)], $result->properties);
     }
 }

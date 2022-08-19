@@ -56,19 +56,17 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
         assert($document instanceof CompositeTypeDocument);
 
         $properties = $document->properties;
-        $required = $document->required;
 
         if (AttributeHelper::hasAttribute($handler, DocInputProvided::class)) {
             $attribute = AttributeHelper::getAttribute($handler, DocInputProvided::class);
 
             foreach ($attribute->keys as $key) {
-                $required = array_diff($required, [$key]);
                 unset($properties[$key]);
             }
         }
 
         // array values required to "reset" all keys
-        return new CompositeTypeDocument($properties, array_values($required));
+        return new CompositeTypeDocument($properties);
     }
 
     /**

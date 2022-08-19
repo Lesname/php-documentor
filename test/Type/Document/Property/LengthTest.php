@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document\Property;
 
-use LessDocumentor\Type\Document\Property\Length;
+use LessDocumentor\Type\Document\String\Length;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\Property\Length
+ * @covers \LessDocumentor\Type\Document\String\Length
  */
 final class LengthTest extends TestCase
 {

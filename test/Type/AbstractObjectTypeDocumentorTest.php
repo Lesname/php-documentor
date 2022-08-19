@@ -113,8 +113,8 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(CollectionTypeDocument::class, $document);
 
-        self::assertSame(0, $document->length->minimal);
-        self::assertSame(5, $document->length->maximal);
+        self::assertSame(0, $document->size->minimal);
+        self::assertSame(5, $document->size->maximal);
 
         self::assertSame($collection::class, $document->getReference());
         self::assertNull($document->getDescription());

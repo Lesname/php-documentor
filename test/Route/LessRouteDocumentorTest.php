@@ -12,9 +12,11 @@ use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\LessRouteDocumentor;
+use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\Property\Length;
+use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessDocumentorTest\Route\Stub\ClassProxyStub;
@@ -61,8 +63,7 @@ final class LessRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
-                ['type'],
+                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
             ),
             $document->getInput(),
         );
@@ -108,8 +109,7 @@ final class LessRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
-                ['type'],
+                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
             ),
             $document->getInput(),
         );
@@ -180,7 +180,7 @@ final class LessRouteDocumentorTest extends TestCase
                     new ResponseCode(200),
                     new CollectionTypeDocument(
                         (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
-                        new Length(0, 100),
+                        new Size(null ,null),
                         null,
                     ),
                 ),
@@ -227,8 +227,7 @@ final class LessRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
-                ['page'],
+                ['page' => new Property((new ObjectInputTypeDocumentor())->document(Page::class))],
             ),
             $document->getInput(),
         );

@@ -12,7 +12,7 @@ final class NumberTypeDocument extends AbstractTypeDocument
      * @param class-string $reference
      */
     public function __construct(
-        public readonly Property\Range $range,
+        public readonly Number\Range $range,
         public readonly int $precision,
         ?string $reference = null,
         ?string $description = null,

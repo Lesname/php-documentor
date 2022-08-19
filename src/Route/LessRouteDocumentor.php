@@ -16,8 +16,9 @@ use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
+use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\Property\Length;
+use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use ReflectionClass;
@@ -115,11 +116,10 @@ final class LessRouteDocumentor implements RouteDocumentor
             assert($return instanceof ReflectionNamedType);
 
             if (is_subclass_of($return->getName(), Traversable::class)) {
-                /** @todo fix maximum for paginate */
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
-                    new Length(0, 100),
+                    new Size(null, null),
                     null,
                 );
             } elseif (interface_exists($return->getName())) {

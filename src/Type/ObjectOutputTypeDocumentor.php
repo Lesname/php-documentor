@@ -25,10 +25,8 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
     {
         $classReflected = new ReflectionClass($class);
         $properties = [];
-        $required = [];
 
         foreach ($classReflected->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            $required[] = $property->getName();
             $type = $property->getType();
 
             assert($type instanceof ReflectionNamedType, new RuntimeException());
@@ -43,7 +41,7 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
                 }
 
                 if ($type->getName() === 'array') {
-                    $comp = new CompositeTypeDocument([], [], true);
+                    $comp = new CompositeTypeDocument([], true);
 
                     $properties[$property->getName()] = $type->allowsNull()
                         ? $comp->withNullable()
@@ -64,6 +62,6 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
                 : $propDocument;
         }
 
-        return new CompositeTypeDocument($properties, $required, reference: $class);
+        return new CompositeTypeDocument($properties, reference: $class);
     }
 }

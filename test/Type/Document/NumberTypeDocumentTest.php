@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document;
 
+use LessDocumentor\Type\Document\Number\Range;
 use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\Property\Range;
 use PHPUnit\Framework\TestCase;
 
 /**

@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use BackedEnum;
+use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
+use LessDocumentor\Type\Document\Number\Range;
 use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\Property\Length;
-use LessDocumentor\Type\Document\Property\Range;
+use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessValueObject\Collection\CollectionValueObject;
@@ -39,7 +40,7 @@ abstract class AbstractObjectTypeDocumentor
     {
         return new CollectionTypeDocument(
             $this->document($class::getItemType()),
-            new Length($class::getMinlength(), $class::getMaxLength()),
+            new Size($class::getMinlength(), $class::getMaxLength()),
             $class,
         );
     }
