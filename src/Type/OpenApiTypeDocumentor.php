@@ -43,7 +43,6 @@ final class OpenApiTypeDocumentor
     {
         if (isset($schema['$ref'])) {
             assert(is_string($schema['$ref']));
-            assert(class_exists($schema['$ref']));
 
             return new ReferenceTypeDocument($schema['$ref']);
         }
@@ -214,7 +213,7 @@ final class OpenApiTypeDocumentor
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
         $multipleOf = $schema['multipleOf'] ?? 1;
-        assert(is_int($multipleOf));
+        assert(is_int($multipleOf) || is_float($multipleOf));
 
         return new NumberTypeDocument(
             new Range($minimum, $maximum),

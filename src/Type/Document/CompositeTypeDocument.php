@@ -10,7 +10,6 @@ final class CompositeTypeDocument extends AbstractTypeDocument
 {
     /**
      * @param array<string, Composite\Property> $properties
-     * @param class-string $reference
      */
     public function __construct(
         public readonly array $properties,

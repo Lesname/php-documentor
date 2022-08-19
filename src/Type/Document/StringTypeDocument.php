@@ -8,9 +8,6 @@ namespace LessDocumentor\Type\Document;
  */
 final class StringTypeDocument extends AbstractTypeDocument
 {
-    /**
-     * @param class-string $reference
-     */
     public function __construct(
         public readonly String\Length $length,
         ?string $reference = null,

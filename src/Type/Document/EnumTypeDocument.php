@@ -12,9 +12,6 @@ final class EnumTypeDocument extends AbstractTypeDocument
 {
     /**
      * @param array<BackedEnum|string> $cases
-     * @param class-string $reference
-     * @param string|null $description
-     * @param string|null $deprecated
      */
     public function __construct(
         public readonly array $cases,

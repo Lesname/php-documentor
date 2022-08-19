@@ -8,9 +8,6 @@ namespace LessDocumentor\Type\Document;
  */
 final class NumberTypeDocument extends AbstractTypeDocument
 {
-    /**
-     * @param class-string $reference
-     */
     public function __construct(
         public readonly Number\Range $range,
         public readonly ?int $precision,
