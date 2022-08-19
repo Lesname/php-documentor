@@ -12,8 +12,6 @@ abstract class AbstractTypeDocument implements TypeDocument
 
     /**
      * @param class-string|null $reference
-     * @param string|null $description
-     * @param string|null $deprecated
      */
     public function __construct(
         private ?string $reference = null,
