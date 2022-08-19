@@ -24,6 +24,8 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
         }
 
         $path = array_key_first($route);
+        assert(is_string($path));
+
         $sub = $route[$path];
 
         assert(is_array($sub));
@@ -34,6 +36,7 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
 
         $method = array_key_first($sub);
         $schema = $sub[$method];
+        assert(is_array($schema));
 
         $deprecated = ($schema['deprecated'] ?? false)
             ? new Deprecated('', '')
@@ -64,8 +67,11 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
 
         $responses = [];
 
+        assert(is_array($schema['responses']));
+
         foreach ($schema['responses'] as $code => $schemaResponse) {
             assert(is_int($code));
+            assert(is_array($schemaResponse));
 
             if (!isset($schemaResponse['content'])) {
                 $responses[] = new Response(
