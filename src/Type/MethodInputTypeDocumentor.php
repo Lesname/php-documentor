@@ -14,9 +14,6 @@ use RuntimeException;
 
 final class MethodInputTypeDocumentor
 {
-    /**
-     * @psalm-suppress RedundantCondition Needed for phpstan
-     */
     public function document(ReflectionMethod $method): TypeDocument
     {
         $parameters = [];
@@ -44,26 +41,21 @@ final class MethodInputTypeDocumentor
 
         assert($type instanceof ReflectionNamedType, new RuntimeException());
 
-        if ($type->isBuiltin()) {
-            if ($type->getName() === 'bool') {
-                return $type->allowsNull()
+        $typename = $type->getName();
+
+        if (!class_exists($typename)) {
+            return match ($typename) {
+                'bool' => $type->allowsNull()
                     ? (new BoolTypeDocument())->withNullable()
-                    : new BoolTypeDocument();
-            }
-
-            if ($type->getName() === 'array') {
-                $comp = new CompositeTypeDocument([], true);
-
-                return $type->allowsNull()
-                    ? $comp->withNullable()
-                    : $comp;
-            }
+                    : new BoolTypeDocument(),
+                'array' => $type->allowsNull()
+                    ? (new CompositeTypeDocument([], true))->withNullable()
+                    : new CompositeTypeDocument([], true),
+                default => throw new RuntimeException($typename),
+            };
         }
 
-        $typeClass = $type->getName();
-        assert(class_exists($typeClass));
-
-        $paramDocument = (new ObjectInputTypeDocumentor())->document($typeClass);
+        $paramDocument = (new ObjectInputTypeDocumentor())->document($typename);
 
         return $type->allowsNull()
             ? $paramDocument->withNullable()

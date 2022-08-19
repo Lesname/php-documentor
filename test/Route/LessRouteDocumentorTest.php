@@ -16,7 +16,6 @@ use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessDocumentorTest\Route\Stub\ClassProxyStub;
@@ -180,7 +179,7 @@ final class LessRouteDocumentorTest extends TestCase
                     new ResponseCode(200),
                     new CollectionTypeDocument(
                         (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
-                        new Size(null ,null),
+                        new Size(null, null),
                         null,
                     ),
                 ),
@@ -206,7 +205,8 @@ final class LessRouteDocumentorTest extends TestCase
                 public Identifier $id,
                 Page $page,
                 MilliTimestamp $on,
-            ) {}
+            ) {
+            }
         };
 
         $documentor = new LessRouteDocumentor();
@@ -247,7 +247,8 @@ final class LessRouteDocumentorTest extends TestCase
     {
         $this->expectException(Throwable::class);
 
-        $handler = new class {};
+        $handler = new class {
+        };
 
         $documentor = new LessRouteDocumentor();
         $documentor->document(
