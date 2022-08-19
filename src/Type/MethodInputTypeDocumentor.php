@@ -6,9 +6,6 @@ namespace LessDocumentor\Type;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use ReflectionMethod;
 use ReflectionNamedType;
 use RuntimeException;
@@ -16,10 +13,6 @@ use RuntimeException;
 final class MethodInputTypeDocumentor
 {
     /**
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
-     *
      * @psalm-suppress RedundantCondition Needed for phpstan
      */
     public function document(ReflectionMethod $method): TypeDocument

@@ -6,9 +6,6 @@ namespace LessDocumentor\Type;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
@@ -22,10 +19,7 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
      *
      * @psalm-suppress RedundantCondition needed for phpstan
      *
-     * @throws PrecisionOutBounds
      * @throws ReflectionException
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      */
     protected function documentObject(string $class): TypeDocument
     {

@@ -20,10 +20,6 @@ use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Property\Length;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
-use LessValueObject\Number\Int\Paginate\PerPage;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -38,9 +34,6 @@ final class MezzioRouteDocumentor implements RouteDocumentor
      * @param array<mixed> $route
      *
      * @throws MissingAttribute
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      * @throws ReflectionException
      */
     public function document(array $route): RouteDocument
@@ -85,9 +78,6 @@ final class MezzioRouteDocumentor implements RouteDocumentor
      * @return array<int, Response>
      *
      * @throws MissingAttribute
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      * @throws ReflectionException
      */
     private function documentResponses(array $route): array
@@ -125,10 +115,11 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             assert($return instanceof ReflectionNamedType);
 
             if (is_subclass_of($return->getName(), Traversable::class)) {
+                /** @todo fix maximum for paginate */
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
-                    new Length(0, PerPage::getMaxValue()),
+                    new Length(0, 100),
                     null,
                 );
             } elseif (interface_exists($return->getName())) {

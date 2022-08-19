@@ -32,7 +32,7 @@ final class ResultsTypeDocumentWrapperTest extends TestCase
                     [
                         'total' => new NumberTypeDocument(
                             new Range(0, PHP_INT_MAX),
-                            new Unsigned(0),
+                            0,
                             null,
                         ),
                     ],
