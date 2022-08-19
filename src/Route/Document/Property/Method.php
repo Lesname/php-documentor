@@ -3,15 +3,10 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document\Property;
 
-use LessValueObject\Enum\EnumValueObject;
-use LessValueObject\Enum\Helper\EnumValueHelper;
-
 /**
  * @psalm-immutable
  */
-enum Method: string implements EnumValueObject
+enum Method: string
 {
-    use EnumValueHelper;
-
     case Post = 'post';
 }

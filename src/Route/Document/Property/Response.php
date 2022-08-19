@@ -4,12 +4,11 @@ declare(strict_types=1);
 namespace LessDocumentor\Route\Document\Property;
 
 use LessDocumentor\Type\Document\TypeDocument;
-use LessValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable
  */
-final class Response extends AbstractCompositeValueObject
+final class Response
 {
     public function __construct(
         public readonly ResponseCode $code,
