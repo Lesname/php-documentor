@@ -168,6 +168,7 @@ final class OpenApiTypeDocumentor
             $properties[$key] = new Property(
                 $this->document($propSchema),
                 in_array($key, $required),
+                deprecated: isset($propSchema['deprecated']) && $propSchema['deprecated'],
             );
         }
 

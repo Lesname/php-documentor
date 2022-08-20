@@ -14,5 +14,6 @@ final class Property
         public readonly TypeDocument $type,
         public readonly bool $required = true,
         public readonly mixed $default = null,
+        public readonly bool $deprecated = false,
     ) {}
 }

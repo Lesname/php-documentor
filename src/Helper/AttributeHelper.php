@@ -6,6 +6,8 @@ namespace LessDocumentor\Helper;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use ReflectionAttribute;
 use ReflectionClass;
+use ReflectionParameter;
+use ReflectionProperty;
 
 /**
  * @internal
@@ -51,10 +53,10 @@ final class AttributeHelper
     }
 
     /**
-     * @param ReflectionClass<object> $reflector
+     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
      * @param class-string $nameAttribute
      */
-    public static function hasAttribute(ReflectionClass $reflector, string $nameAttribute): bool
+    public static function hasAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute): bool
     {
         return count($reflector->getAttributes($nameAttribute)) > 0;
     }

@@ -119,12 +119,14 @@ final class OpenApiTypeDocumentorTest extends TestCase
                             ],
                             true,
                         ))->withNullable()->withDeprecated('deprecated'),
+                        deprecated: true,
                     ),
                     'foo' => new Property(
                         (new ReferenceTypeDocument("#/components/schemas/Occurred"))
                             ->withNullable()
                             ->withDeprecated('deprecated'),
                         false,
+                        deprecated: true,
                     ),
                     'fiz' => new Property(
                         (                        new NumberTypeDocument(
@@ -132,6 +134,7 @@ final class OpenApiTypeDocumentorTest extends TestCase
                             1
                         ))->withDeprecated('deprecated'),
                         false,
+                        deprecated: true,
                     ),
                     'bar' => new Property(
                         new StringTypeDocument(
