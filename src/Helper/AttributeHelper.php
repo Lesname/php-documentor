@@ -56,7 +56,7 @@ final class AttributeHelper
      * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
      * @param class-string $nameAttribute
      */
-    public static function hasAttribute(ReflectionClass $reflector, string $nameAttribute): bool
+    public static function hasAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute): bool
     {
         return count($reflector->getAttributes($nameAttribute)) > 0;
     }
