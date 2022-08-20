@@ -8,12 +8,9 @@ namespace LessDocumentor\Type\Document;
  */
 final class CollectionTypeDocument extends AbstractTypeDocument
 {
-    /**
-     * @param class-string $reference
-     */
     public function __construct(
         public readonly TypeDocument $item,
-        public readonly Property\Length $length,
+        public readonly Collection\Size $size,
         ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,

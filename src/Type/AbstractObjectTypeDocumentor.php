@@ -4,18 +4,15 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use BackedEnum;
+use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
+use LessDocumentor\Type\Document\Number\Range;
 use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\Property\Length;
-use LessDocumentor\Type\Document\Property\Range;
+use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessValueObject\Collection\CollectionValueObject;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
-use LessValueObject\Number\Int\Unsigned;
 use LessValueObject\Number\NumberValueObject;
 use LessValueObject\String\StringValueObject;
 use LessValueObject\ValueObject;
@@ -24,10 +21,6 @@ abstract class AbstractObjectTypeDocumentor
 {
     /**
      * @param class-string $class
-     *
-     * @throws PrecisionOutBounds
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      */
     public function document(string $class): TypeDocument
     {
@@ -42,16 +35,12 @@ abstract class AbstractObjectTypeDocumentor
 
     /**
      * @param class-string<CollectionValueObject<ValueObject>> $class
-     *
-     * @throws PrecisionOutBounds
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      */
     protected function documentCollectionValueObject(string $class): TypeDocument
     {
         return new CollectionTypeDocument(
             $this->document($class::getItemType()),
-            new Length($class::getMinlength(), $class::getMaxLength()),
+            new Size($class::getMinlength(), $class::getMaxLength()),
             $class,
         );
     }
@@ -66,16 +55,12 @@ abstract class AbstractObjectTypeDocumentor
 
     /**
      * @param class-string<NumberValueObject> $class
-     *
-     * @throws PrecisionOutBounds
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      */
     protected function documentNumberValueObject(string $class): TypeDocument
     {
         return new NumberTypeDocument(
             new Range($class::getMinValue(), $class::getMaxValue()),
-            new Unsigned($class::getPrecision()),
+            $class::getPrecision(),
             $class,
         );
     }

@@ -12,9 +12,6 @@ use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\MethodInputTypeDocumentor;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -25,9 +22,6 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
      * @param array<mixed> $route
      *
      * @throws MissingAttribute
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      * @throws ReflectionException
      */
     public function document(array $route): TypeDocument
@@ -62,28 +56,23 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
         assert($document instanceof CompositeTypeDocument);
 
         $properties = $document->properties;
-        $required = $document->required;
 
         if (AttributeHelper::hasAttribute($handler, DocInputProvided::class)) {
             $attribute = AttributeHelper::getAttribute($handler, DocInputProvided::class);
 
             foreach ($attribute->keys as $key) {
-                $required = array_diff($required, [$key]);
                 unset($properties[$key]);
             }
         }
 
         // array values required to "reset" all keys
-        return new CompositeTypeDocument($properties, array_values($required));
+        return new CompositeTypeDocument($properties);
     }
 
     /**
      * @param ReflectionClass<object> $class
      *
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
      * @throws MissingAttribute
-     * @throws PrecisionOutBounds
      */
     private function documentDocInput(ReflectionClass $class): CompositeTypeDocument
     {
@@ -94,10 +83,6 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 
     /**
      * @param class-string $event
-     *
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
      */
     private function documentValueObject(string $event): CompositeTypeDocument
     {

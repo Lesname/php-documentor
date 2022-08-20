@@ -11,10 +11,7 @@ use BackedEnum;
 final class EnumTypeDocument extends AbstractTypeDocument
 {
     /**
-     * @param array<BackedEnum> $cases
-     * @param class-string $reference
-     * @param string|null $description
-     * @param string|null $deprecated
+     * @param array<BackedEnum|string> $cases
      */
     public function __construct(
         public readonly array $cases,

@@ -5,6 +5,7 @@ namespace LessDocumentorTest\Type;
 
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessValueObject\Number\Int\Paginate\PerPage;
 use PHPUnit\Framework\TestCase;
@@ -16,14 +17,11 @@ final class ObjectInputTypeDocumentorTest extends TestCase
 {
     public function testObject(): void
     {
-        $perPage = new PerPage(12);
-        $stub = EnumStub::Fiz;
-
-        $composite = new class ($perPage, $stub, true) {
+        $composite = new class (new PerPage(12), EnumStub::Fiz, true) {
             public function __construct(
                 public PerPage $perPage,
                 private ?EnumStub $stub,
-                private bool $biz,
+                private bool $biz = true,
             ) {}
         };
 
@@ -38,19 +36,21 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         self::assertSame(3, count($document->properties));
 
         $perPage = $document->properties['perPage'];
-        self::assertSame(0, $perPage->range->minimal);
-        self::assertSame(100, $perPage->range->maximal);
-        self::assertSame(PerPage::class, $perPage->getReference());
-        self::assertNull($perPage->getDescription());
-        self::assertNull($perPage->getDeprecated());
+        self::assertInstanceOf(NumberTypeDocument::class, $perPage->type);
+        self::assertSame(0, $perPage->type->range->minimal);
+        self::assertSame(100, $perPage->type->range->maximal);
+        self::assertSame(PerPage::class, $perPage->type->getReference());
+        self::assertNull($perPage->type->getDescription());
+        self::assertNull($perPage->type->getDeprecated());
 
         $stub = $document->properties['stub'];
-        self::assertSame(EnumStub::cases(), $stub->cases);
-        self::assertSame(EnumStub::class, $stub->getReference());
-        self::assertNull($stub->getDescription());
-        self::assertNull($stub->getDeprecated());
+        self::assertSame(EnumStub::cases(), $stub->type->cases);
+        self::assertSame(EnumStub::class, $stub->type->getReference());
+        self::assertNull($stub->type->getDescription());
+        self::assertNull($stub->type->getDeprecated());
 
         $biz = $document->properties['biz'];
-        self::assertInstanceOf(BoolTypeDocument::class, $biz);
+        self::assertInstanceOf(BoolTypeDocument::class, $biz->type);
+        self::assertTrue($biz->default);
     }
 }

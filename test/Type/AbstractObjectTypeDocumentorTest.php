@@ -10,7 +10,6 @@ use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessValueObject\Collection\AbstractCollectionValueObject;
 use LessValueObject\Number\AbstractNumberValueObject;
-use LessValueObject\Number\Int\Unsigned;
 use LessValueObject\String\AbstractStringValueObject;
 use PHPUnit\Framework\TestCase;
 
@@ -71,7 +70,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertSame(1, $document->range->minimal);
         self::assertSame(5.43, $document->range->maximal);
-        self::assertEquals(new Unsigned(3), $document->precision);
+        self::assertEquals(3, $document->precision);
         self::assertSame($valueObject::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
@@ -114,8 +113,8 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(CollectionTypeDocument::class, $document);
 
-        self::assertSame(0, $document->length->minimal);
-        self::assertSame(5, $document->length->maximal);
+        self::assertSame(0, $document->size->minimal);
+        self::assertSame(5, $document->size->maximal);
 
         self::assertSame($collection::class, $document->getReference());
         self::assertNull($document->getDescription());

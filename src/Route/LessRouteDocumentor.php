@@ -27,10 +27,7 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use Traversable;
 
-/**
- * @deprecated use LessRouteDocumentor
- */
-final class MezzioRouteDocumentor implements RouteDocumentor
+final class LessRouteDocumentor implements RouteDocumentor
 {
     private ?RouteInputDocumentor $routeInputDocumentor = null;
 

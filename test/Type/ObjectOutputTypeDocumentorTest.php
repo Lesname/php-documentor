@@ -39,19 +39,19 @@ final class ObjectOutputTypeDocumentorTest extends TestCase
         self::assertSame(3, count($document->properties));
 
         $perPage = $document->properties['perPage'];
-        self::assertSame(0, $perPage->range->minimal);
-        self::assertSame(100, $perPage->range->maximal);
-        self::assertSame(PerPage::class, $perPage->getReference());
-        self::assertNull($perPage->getDescription());
-        self::assertNull($perPage->getDeprecated());
+        self::assertSame(0, $perPage->type->range->minimal);
+        self::assertSame(100, $perPage->type->range->maximal);
+        self::assertSame(PerPage::class, $perPage->type->getReference());
+        self::assertNull($perPage->type->getDescription());
+        self::assertNull($perPage->type->getDeprecated());
 
         $stub = $document->properties['stub'];
-        self::assertSame(EnumStub::cases(), $stub->cases);
-        self::assertSame(EnumStub::class, $stub->getReference());
-        self::assertNull($stub->getDescription());
-        self::assertNull($stub->getDeprecated());
+        self::assertSame(EnumStub::cases(), $stub->type->cases);
+        self::assertSame(EnumStub::class, $stub->type->getReference());
+        self::assertNull($stub->type->getDescription());
+        self::assertNull($stub->type->getDeprecated());
 
         $biz = $document->properties['biz'];
-        self::assertInstanceOf(BoolTypeDocument::class, $biz);
+        self::assertInstanceOf(BoolTypeDocument::class, $biz->type);
     }
 }

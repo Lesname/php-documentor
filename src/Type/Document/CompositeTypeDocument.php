@@ -9,16 +9,11 @@ namespace LessDocumentor\Type\Document;
 final class CompositeTypeDocument extends AbstractTypeDocument
 {
     /**
-     * @param array<string, TypeDocument> $properties
-     * @param array<string> $required
-     * @param class-string $reference
-     * @param string|null $description
-     * @param string|null $deprecated
+     * @param array<string, Composite\Property> $properties
      */
     public function __construct(
         public readonly array $properties,
-        public readonly array $required,
-        public readonly bool $allowAdditionalProperties = false,
+        public readonly bool $allowExtraProperties = false,
         ?string $reference = null,
         ?string $description = null,
         ?string $deprecated = null,

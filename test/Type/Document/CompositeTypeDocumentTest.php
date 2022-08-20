@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document;
 
+use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use PHPUnit\Framework\TestCase;
@@ -15,19 +16,18 @@ final class CompositeTypeDocumentTest extends TestCase
     public function testSetup(): void
     {
         $fiz = $this->createMock(TypeDocument::class);
+        $property = new Property($fiz);
 
         $document = new CompositeTypeDocument(
-            ['fiz' => $fiz],
-            ['fiz'],
+            ['fiz' => $property],
             true,
             'ref',
             'description',
             'deprecated',
         );
 
-        self::assertSame(['fiz' => $fiz], $document->properties);
-        self::assertSame(['fiz'], $document->required);
-        self::assertSame(true, $document->allowAdditionalProperties);
+        self::assertSame(['fiz' => $property], $document->properties);
+        self::assertSame(true, $document->allowExtraProperties);
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
         self::assertSame('deprecated', $document->getDeprecated());

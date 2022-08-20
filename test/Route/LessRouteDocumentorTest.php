@@ -11,15 +11,15 @@ use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
-use LessDocumentor\Route\MezzioRouteDocumentor;
+use LessDocumentor\Route\LessRouteDocumentor;
+use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\Property\Length;
 use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use LessDocumentorTest\Route\Stub\ClassProxyStub;
 use LessDocumentorTest\Route\Stub\ResourceStub;
-use LessResource\Model\AbstractResourceModel;
 use LessValueObject\Composite\Content;
 use LessValueObject\Number\Int\Date\MilliTimestamp;
 use LessValueObject\Number\Int\Paginate\Page;
@@ -29,9 +29,9 @@ use PHPUnit\Framework\TestCase;
 use Throwable;
 
 /**
- * @covers \LessDocumentor\Route\MezzioRouteDocumentor
+ * @covers \LessDocumentor\Route\LessRouteDocumentor
  */
-final class MezzioRouteDocumentorTest extends TestCase
+final class LessRouteDocumentorTest extends TestCase
 {
     public function testProxyAttr(): void
     {
@@ -41,7 +41,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         class {
         };
 
-        $documentor = new MezzioRouteDocumentor();
+        $documentor = new LessRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -62,8 +62,7 @@ final class MezzioRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
-                ['type'],
+                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
             ),
             $document->getInput(),
         );
@@ -84,7 +83,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $handler = new #[DocInputProvided(['fiz'])] class {
         };
 
-        $documentor = new MezzioRouteDocumentor();
+        $documentor = new LessRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -109,8 +108,7 @@ final class MezzioRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => (new ObjectInputTypeDocumentor())->document(Type::class)],
-                ['type'],
+                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
             ),
             $document->getInput(),
         );
@@ -131,7 +129,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $handler = new class {
         };
 
-        $documentor = new MezzioRouteDocumentor();
+        $documentor = new LessRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -161,7 +159,7 @@ final class MezzioRouteDocumentorTest extends TestCase
         $handler = new class {
         };
 
-        $documentor = new MezzioRouteDocumentor();
+        $documentor = new LessRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -181,7 +179,7 @@ final class MezzioRouteDocumentorTest extends TestCase
                     new ResponseCode(200),
                     new CollectionTypeDocument(
                         (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
-                        new Length(0, 100),
+                        new Size(null, null),
                         null,
                     ),
                 ),
@@ -207,10 +205,11 @@ final class MezzioRouteDocumentorTest extends TestCase
                 public Identifier $id,
                 Page $page,
                 MilliTimestamp $on,
-            ) {}
+            ) {
+            }
         };
 
-        $documentor = new MezzioRouteDocumentor();
+        $documentor = new LessRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -228,8 +227,7 @@ final class MezzioRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => (new ObjectInputTypeDocumentor())->document(Page::class)],
-                ['page'],
+                ['page' => new Property((new ObjectInputTypeDocumentor())->document(Page::class))],
             ),
             $document->getInput(),
         );
@@ -249,9 +247,10 @@ final class MezzioRouteDocumentorTest extends TestCase
     {
         $this->expectException(Throwable::class);
 
-        $handler = new class {};
+        $handler = new class {
+        };
 
-        $documentor = new MezzioRouteDocumentor();
+        $documentor = new LessRouteDocumentor();
         $documentor->document(
             [
                 'path' => '/fiz/bar.foo',

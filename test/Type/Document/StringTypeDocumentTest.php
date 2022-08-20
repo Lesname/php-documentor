@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document;
 
-use LessDocumentor\Type\Document\Property\Length;
+use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use PHPUnit\Framework\TestCase;
 

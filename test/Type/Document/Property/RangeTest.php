@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type\Document\Property;
 
-use LessDocumentor\Type\Document\Property\Range;
+use LessDocumentor\Type\Document\Number\Range;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\Property\Range
+ * @covers \LessDocumentor\Type\Document\Number\Range
  */
 final class RangeTest extends TestCase
 {

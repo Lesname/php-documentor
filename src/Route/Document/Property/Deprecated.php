@@ -3,12 +3,10 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document\Property;
 
-use LessValueObject\Composite\AbstractCompositeValueObject;
-
 /**
  * @psalm-immutable
  */
-final class Deprecated extends AbstractCompositeValueObject
+final class Deprecated
 {
     public function __construct(
         public readonly ?string $alternate,

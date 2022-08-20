@@ -4,71 +4,61 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use LessDocumentor\Type\Document\BoolTypeDocument;
+use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
-use LessValueObject\Number\Exception\MaxOutBounds;
-use LessValueObject\Number\Exception\MinOutBounds;
-use LessValueObject\Number\Exception\PrecisionOutBounds;
 use ReflectionMethod;
 use ReflectionNamedType;
+use ReflectionParameter;
 use RuntimeException;
 
 final class MethodInputTypeDocumentor
 {
-    /**
-     * @throws MaxOutBounds
-     * @throws MinOutBounds
-     * @throws PrecisionOutBounds
-     *
-     * @psalm-suppress RedundantCondition Needed for phpstan
-     */
     public function document(ReflectionMethod $method): TypeDocument
     {
         $parameters = [];
-        $required = [];
-
-        $objInputDocumentor = new ObjectInputTypeDocumentor();
 
         foreach ($method->getParameters() as $parameter) {
             $type = $parameter->getType();
 
             assert($type instanceof ReflectionNamedType, new RuntimeException());
 
-            if ($type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false) {
-                $required[] = $parameter->getName();
-            }
-
-            if ($type->isBuiltin()) {
-                if ($type->getName() === 'bool') {
-                    $parameters[$parameter->getName()] = $type->allowsNull()
-                        ? (new BoolTypeDocument())->withNullable()
-                        : new BoolTypeDocument();
-
-                    continue;
-                }
-
-                if ($type->getName() === 'array') {
-                    $comp = new CompositeTypeDocument([], [], true);
-
-                    $parameters[$parameter->getName()] = $type->allowsNull()
-                        ? $comp->withNullable()
-                        : $comp;
-
-                    continue;
-                }
-
-                throw new RuntimeException();
-            }
-
-            $typeClass = $type->getName();
-            assert(class_exists($typeClass));
-
-            $paramDocument = $objInputDocumentor->document($typeClass);
-            $parameters[$parameter->getName()] = $type->allowsNull()
-                ? $paramDocument->withNullable()
-                : $paramDocument;
+            $parameters[$parameter->getName()] = new Property(
+                $this->getParameterType($parameter),
+                $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false,
+                $parameter->isDefaultValueAvailable()
+                    ? $parameter->getDefaultValue()
+                    : null,
+            );
         }
 
-        return new CompositeTypeDocument($parameters, $required);
+        return new CompositeTypeDocument($parameters);
+    }
+
+    private function getParameterType(ReflectionParameter $parameter): TypeDocument
+    {
+        $type = $parameter->getType();
+
+        assert($type instanceof ReflectionNamedType, new RuntimeException());
+
+        $typename = $type->getName();
+
+        if (!class_exists($typename)) {
+            return match ($typename) {
+                'bool' => $type->allowsNull()
+                    ? (new BoolTypeDocument())->withNullable()
+                    : new BoolTypeDocument(),
+                'array' => $type->allowsNull()
+                    ? (new CompositeTypeDocument([], true))->withNullable()
+                    : new CompositeTypeDocument([], true),
+                default => throw new RuntimeException($typename),
+            };
+        }
+
+        $paramDocument = (new ObjectInputTypeDocumentor())->document($typename);
+
+        return $type->allowsNull()
+            ? $paramDocument->withNullable()
+            : $paramDocument;
     }
 }
