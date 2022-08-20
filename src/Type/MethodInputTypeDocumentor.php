@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Type\Attribute\DocDeprecated;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
@@ -29,6 +31,7 @@ final class MethodInputTypeDocumentor
                 $parameter->isDefaultValueAvailable()
                     ? $parameter->getDefaultValue()
                     : null,
+                AttributeHelper::hasAttribute($parameter, DocDeprecated::class),
             );
         }
 
