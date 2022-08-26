@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Document\TypeDocument;
 use ReflectionClass;
 use ReflectionException;
@@ -13,6 +14,7 @@ final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
     /**
      * @param class-string $class
      *
+     * @throws MissingAttribute
      * @throws ReflectionException
      */
     protected function documentObject(string $class): TypeDocument

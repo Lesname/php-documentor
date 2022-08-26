@@ -6,7 +6,7 @@ namespace LessDocumentor\Type\Attribute;
 use Attribute;
 
 /**
- * Mark a property as deprecated
+ * Mark something as deprecated
  *
  * @psalm-immutable
  */

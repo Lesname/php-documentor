@@ -18,14 +18,14 @@ final class AttributeHelper
     {}
 
     /**
-     * @param ReflectionClass<object> $reflector
+     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
      *
      * @return array<T>
      */
-    public static function getAttributes(ReflectionClass $reflector, string $nameAttribute): array
+    public static function getAttributes(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute): array
     {
         return array_map(
             static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
@@ -34,7 +34,7 @@ final class AttributeHelper
     }
 
     /**
-     * @param ReflectionClass<object> $reflector
+     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
@@ -43,7 +43,7 @@ final class AttributeHelper
      *
      * @throws MissingAttribute
      */
-    public static function getAttribute(ReflectionClass $reflector, string $nameAttribute)
+    public static function getAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute)
     {
         foreach ($reflector->getAttributes($nameAttribute) as $attribute) {
             return $attribute->newInstance();
