@@ -5,12 +5,12 @@ namespace LessDocumentor\Type;
 
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Exception\MissingAttribute;
-use LessDocumentor\Type\Attribute\DocDefault;
 use LessDocumentor\Type\Attribute\DocDeprecated;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
+use LessHydrator\Attribute\DefaultValue;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -31,8 +31,8 @@ final class MethodInputTypeDocumentor
             $type = $parameter->getType();
             assert($type instanceof ReflectionNamedType, new RuntimeException());
 
-            if (AttributeHelper::hasAttribute($parameter, DocDefault::class)) {
-                $attribute = AttributeHelper::getAttribute($parameter, DocDefault::class);
+            if (AttributeHelper::hasAttribute($parameter, DefaultValue::class)) {
+                $attribute = AttributeHelper::getAttribute($parameter, DefaultValue::class);
 
                 $default = $attribute->default;
                 $required = false;
