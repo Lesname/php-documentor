@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type\Attribute;
 
+use Attribute;
+
 /**
  * Mark a property as deprecated
  *

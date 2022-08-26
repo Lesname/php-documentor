@@ -20,6 +20,8 @@ final class MethodInputTypeDocumentor
 {
     /**
      * @throws MissingAttribute
+     *
+     * @psalm-suppress MixedAssignment
      */
     public function document(ReflectionMethod $method): TypeDocument
     {
@@ -27,6 +29,7 @@ final class MethodInputTypeDocumentor
 
         foreach ($method->getParameters() as $parameter) {
             $type = $parameter->getType();
+            assert($type instanceof ReflectionNamedType, new RuntimeException());
 
             if (AttributeHelper::hasAttribute($parameter, DocDefault::class)) {
                 $attribute = AttributeHelper::getAttribute($parameter, DocDefault::class);
@@ -39,8 +42,6 @@ final class MethodInputTypeDocumentor
                     ? $parameter->getDefaultValue()
                     : null;
             }
-
-            assert($type instanceof ReflectionNamedType, new RuntimeException());
 
             $parameters[$parameter->getName()] = new Property(
                 $this->getParameterType($parameter),
