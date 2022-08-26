@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Attribute\DocDefault;
 use LessDocumentor\Type\Attribute\DocDeprecated;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
@@ -28,8 +30,6 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
         $properties = [];
 
         foreach ($classReflected->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            ;
-
             $properties[$property->getName()] = new Property(
                 $this->getPropertyType($property),
                 deprecated: AttributeHelper::hasAttribute($property, DocDeprecated::class),

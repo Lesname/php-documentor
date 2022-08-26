@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Attribute\DocDefault;
 use LessDocumentor\Type\Attribute\DocDeprecated;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
@@ -16,6 +18,9 @@ use RuntimeException;
 
 final class MethodInputTypeDocumentor
 {
+    /**
+     * @throws MissingAttribute
+     */
     public function document(ReflectionMethod $method): TypeDocument
     {
         $parameters = [];
@@ -23,14 +28,24 @@ final class MethodInputTypeDocumentor
         foreach ($method->getParameters() as $parameter) {
             $type = $parameter->getType();
 
+            if (AttributeHelper::hasAttribute($parameter, DocDefault::class)) {
+                $attribute = AttributeHelper::getAttribute($parameter, DocDefault::class);
+
+                $default = $attribute->default;
+                $required = false;
+            } else {
+                $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
+                $default = $parameter->isDefaultValueAvailable()
+                    ? $parameter->getDefaultValue()
+                    : null;
+            }
+
             assert($type instanceof ReflectionNamedType, new RuntimeException());
 
             $parameters[$parameter->getName()] = new Property(
                 $this->getParameterType($parameter),
-                $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false,
-                $parameter->isDefaultValueAvailable()
-                    ? $parameter->getDefaultValue()
-                    : null,
+                $required,
+                $default,
                 AttributeHelper::hasAttribute($parameter, DocDeprecated::class),
             );
         }
