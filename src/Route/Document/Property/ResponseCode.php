@@ -10,35 +10,43 @@ use RuntimeException;
  */
 final class ResponseCode
 {
-    public function __construct(public readonly int $code)
+    /** @deprecated use value */
+    public readonly int $code;
+
+    /**
+     * @psalm-suppress DeprecatedProperty
+     */
+    public function __construct(public readonly int $value)
     {
-        if ($this->code < 200 || $this->code >= 600) {
+        $this->code = $value;
+
+        if ($value < 200 || $value >= 600) {
             throw new RuntimeException();
         }
     }
 
     public function isSuccess(): bool
     {
-        return $this->code >= 200 && $this->code <= 299;
+        return $this->value >= 200 && $this->value <= 299;
     }
 
     public function isRedirection(): bool
     {
-        return $this->code >= 300 && $this->code <= 399;
+        return $this->value >= 300 && $this->value <= 399;
     }
 
     public function isError(): bool
     {
-        return $this->code >= 400 && $this->code <= 599;
+        return $this->value >= 400 && $this->value <= 599;
     }
 
     public function isErrorClient(): bool
     {
-        return $this->code >= 400 && $this->code <= 499;
+        return $this->value >= 400 && $this->value <= 499;
     }
 
     public function isErrorServer(): bool
     {
-        return $this->code >= 500 && $this->code <= 599;
+        return $this->value >= 500 && $this->value <= 599;
     }
 }
