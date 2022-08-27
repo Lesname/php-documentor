@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use A;
 use BackedEnum;
+use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Attribute\DocStringFormat;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
@@ -16,6 +20,8 @@ use LessValueObject\Collection\CollectionValueObject;
 use LessValueObject\Number\NumberValueObject;
 use LessValueObject\String\StringValueObject;
 use LessValueObject\ValueObject;
+use ReflectionClass;
+use ReflectionException;
 
 abstract class AbstractObjectTypeDocumentor
 {
@@ -67,10 +73,19 @@ abstract class AbstractObjectTypeDocumentor
 
     /**
      * @param class-string<StringValueObject> $class
+     *
+     * @throws MissingAttribute
+     * @throws ReflectionException
      */
     protected function documentStringValueObject(string $class): TypeDocument
     {
-        return new StringTypeDocument(new Length($class::getMinLength(), $class::getMaxLength()), $class);
+        $refClass = new ReflectionClass($class);
+
+        $format = AttributeHelper::hasAttribute($refClass, DocStringFormat::class)
+            ? AttributeHelper::getAttribute($refClass, DocStringFormat::class)->name
+            : null;
+
+        return new StringTypeDocument(new Length($class::getMinLength(), $class::getMaxLength()), $format, $class);
     }
 
     /**
