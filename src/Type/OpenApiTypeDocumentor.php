@@ -202,9 +202,13 @@ final class OpenApiTypeDocumentor
         $maxLength = $schema['maxLength'] ?? null;
         assert(is_int($maxLength) || $maxLength === null);
 
+        $format = isset($schema['format']) && is_string($schema['format'])
+            ? $schema['format']
+            : null;
+
         return new StringTypeDocument(
             new Length($minLength, $maxLength),
-            $schema['format'] ?? null,
+            $format,
         );
     }
 
