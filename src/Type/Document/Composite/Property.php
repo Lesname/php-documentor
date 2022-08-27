@@ -11,7 +11,7 @@ use LessDocumentor\Type\Document\TypeDocument;
 final class Property
 {
     /**
-     * @param string|int|bool|null|array<string|int|bool|null|float>|float $default
+     * @param string|int|bool|null|array<mixed>|float $default
      */
     public function __construct(
         public readonly TypeDocument $type,
