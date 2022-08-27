@@ -204,6 +204,7 @@ final class OpenApiTypeDocumentor
 
         return new StringTypeDocument(
             new Length($minLength, $maxLength),
+            $schema['format'] ?? null,
         );
     }
 
