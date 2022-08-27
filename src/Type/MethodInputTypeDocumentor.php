@@ -41,6 +41,8 @@ final class MethodInputTypeDocumentor
                 $default = $parameter->isDefaultValueAvailable()
                     ? $parameter->getDefaultValue()
                     : null;
+
+                assert(is_scalar($default) || is_array($default) || $default === null);
             }
 
             $parameters[$parameter->getName()] = new Property(

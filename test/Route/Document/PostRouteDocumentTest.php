@@ -7,6 +7,7 @@ use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Type\Document\TypeDocument;
@@ -22,10 +23,11 @@ final class PostRouteDocumentTest extends TestCase
         $deprecated = new Deprecated('fiz', null);
         $input = $this->createMock(TypeDocument::class);
         $response = new Response(new ResponseCode(204), null);
+        $path = new Path('fiz.biz');
 
         $doc = new PostRouteDocument(
             Category::Command,
-            'path',
+            $path,
             'resource',
             $deprecated,
             $input,
@@ -34,7 +36,7 @@ final class PostRouteDocumentTest extends TestCase
 
         self::assertSame(Method::Post, $doc->getMethod());
         self::assertSame(Category::Command, $doc->getCategory());
-        self::assertSame('path', $doc->getPath());
+        self::assertSame($path, $doc->getPath());
         self::assertSame('resource', $doc->getResource());
         self::assertSame($deprecated, $doc->getDeprecated());
         self::assertSame($input, $doc->getInput());

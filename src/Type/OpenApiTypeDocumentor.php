@@ -165,10 +165,14 @@ final class OpenApiTypeDocumentor
             assert(is_string($key));
             assert(is_array($propSchema));
 
+            $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
+                ? $propSchema['default']
+                : null;
+
             $properties[$key] = new Property(
                 $this->document($propSchema),
                 in_array($key, $required),
-                $properties['default'] ?? null,
+                $default,
                 isset($propSchema['deprecated']) && $propSchema['deprecated'],
             );
         }

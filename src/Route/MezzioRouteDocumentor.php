@@ -10,6 +10,7 @@ use LessDocumentor\Route\Attribute\DocResource;
 use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\Document\RouteDocument;
@@ -18,7 +19,6 @@ use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use ReflectionClass;
@@ -60,7 +60,7 @@ final class MezzioRouteDocumentor implements RouteDocumentor
 
         return new PostRouteDocument(
             $route['category'],
-            $route['path'],
+            new Path($route['path']),
             $route['resource'],
             $deprecated,
             $this->getRouteInputDocumentor()->document($route),

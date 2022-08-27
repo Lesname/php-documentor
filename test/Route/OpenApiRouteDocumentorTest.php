@@ -5,6 +5,7 @@ namespace LessDocumentorTest\Route;
 
 use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\OpenApiRouteDocumentor;
@@ -78,7 +79,7 @@ final class OpenApiRouteDocumentorTest extends TestCase
         self::assertEquals(
             new PostRouteDocument(
                 Category::Command,
-                '/foo.bar',
+                new Path('/foo.bar'),
                 'foo',
                 null,
                 new CompositeTypeDocument(

@@ -10,6 +10,7 @@ use LessDocumentor\Route\Attribute\DocResource;
 use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\Document\RouteDocument;
@@ -57,7 +58,7 @@ final class LessRouteDocumentor implements RouteDocumentor
 
         return new PostRouteDocument(
             $route['category'],
-            $route['path'],
+            new Path($route['path']),
             $route['resource'],
             $deprecated,
             $this->getRouteInputDocumentor()->document($route),
