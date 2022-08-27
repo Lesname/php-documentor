@@ -5,6 +5,9 @@ namespace LessDocumentor\Route\Document\Property;
 
 use RuntimeException;
 
+/**
+ * @psalm-immutable
+ */
 final class Path
 {
     private readonly string $resource;
@@ -20,7 +23,9 @@ final class Path
             throw new RuntimeException("$path");
         }
 
-        $this->action = array_pop($parts);
+        $action = array_pop($parts);
+
+        $this->action = $action;
         $this->resource = implode('.', $parts);
     }
 
