@@ -9,6 +9,7 @@ use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\LessRouteDocumentor;
@@ -53,7 +54,7 @@ final class LessRouteDocumentorTest extends TestCase
         );
 
         self::assertSame(Method::Post, $document->getMethod());
-        self::assertSame('/fiz/bar.foo', $document->getPath());
+        self::assertEquals(new Path('/fiz/bar.foo'), $document->getPath());
         self::assertSame('bar', $document->getResource());
         self::assertEquals(
             new Deprecated(null, 'test'),
@@ -99,7 +100,7 @@ final class LessRouteDocumentorTest extends TestCase
         );
 
         self::assertSame(Method::Post, $document->getMethod());
-        self::assertSame('/fiz/bar.foo', $document->getPath());
+        self::assertEquals(new Path('/fiz/bar.foo'), $document->getPath());
         self::assertSame('bar', $document->getResource());
         self::assertEquals(
             new Deprecated('test', null),
@@ -221,7 +222,7 @@ final class LessRouteDocumentorTest extends TestCase
         );
 
         self::assertSame(Method::Post, $document->getMethod());
-        self::assertSame('/fiz/bar.foo', $document->getPath());
+        self::assertEquals(new Path('/fiz/bar.foo'), $document->getPath());
         self::assertSame('bar', $document->getResource());
         self::assertNull($document->getDeprecated());
 

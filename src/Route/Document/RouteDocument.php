@@ -6,6 +6,7 @@ namespace LessDocumentor\Route\Document;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Type\Document\TypeDocument;
 
 /**
@@ -17,7 +18,7 @@ interface RouteDocument
 
     public function getCategory(): Category;
 
-    public function getPath(): string;
+    public function getPath(): Path;
 
     public function getResource(): string;
 

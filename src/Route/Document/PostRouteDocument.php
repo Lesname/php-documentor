@@ -6,6 +6,7 @@ namespace LessDocumentor\Route\Document;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
+use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Type\Document\TypeDocument;
 
 /**
@@ -18,7 +19,7 @@ final class PostRouteDocument implements RouteDocument
      */
     public function __construct(
         private readonly Category $category,
-        private readonly string $path,
+        private readonly Path $path,
         private readonly string $resource,
         private readonly ?Deprecated $deprecated,
         private readonly TypeDocument $input,
@@ -35,7 +36,7 @@ final class PostRouteDocument implements RouteDocument
         return $this->category;
     }
 
-    public function getPath(): string
+    public function getPath(): Path
     {
         return $this->path;
     }
