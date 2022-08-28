@@ -83,7 +83,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(EnumTypeDocument::class, $document);
 
-        self::assertSame(EnumStub::cases(), $document->cases);
+        self::assertSame(['foo', 'fiz'], $document->cases);
         self::assertSame(EnumStub::class, $document->getReference());
         self::assertNull($document->getDescription());
         self::assertNull($document->getDeprecated());
@@ -124,7 +124,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(EnumTypeDocument::class, $item);
 
-        self::assertSame(EnumStub::cases(), $item->cases);
+        self::assertSame(['foo', 'fiz'], $item->cases);
         self::assertSame(EnumStub::class, $item->getReference());
     }
 }
