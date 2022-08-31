@@ -224,7 +224,7 @@ final class OpenApiTypeDocumentor
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
         if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
-            $multipleOf = (String)$schema['multipleOf'];
+            $multipleOf = (string)$schema['multipleOf'];
 
             if (str_contains($multipleOf, '.')) {
                 $pos = strpos($multipleOf, '.');

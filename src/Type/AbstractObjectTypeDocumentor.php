@@ -60,7 +60,9 @@ abstract class AbstractObjectTypeDocumentor
             array_map(
                 static fn (BackedEnum $enum): string => (string)$enum->value,
                 $class::cases(),
-            ), $class);
+            ),
+            $class,
+        );
     }
 
     /**
