@@ -17,9 +17,8 @@ final class AbstractTypeDocumentTest extends TestCase
             AbstractTypeDocument::class,
             [
                 'ref',
-                true,
                 'description',
-                'deprecated',
+                null,
             ],
         );
 

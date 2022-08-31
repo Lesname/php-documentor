@@ -21,13 +21,11 @@ final class StringTypeDocumentTest extends TestCase
             'format',
             'ref',
             'description',
-            'deprecated',
         );
 
         self::assertSame($length, $document->length);
         self::assertSame('format', $document->format);
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
-        self::assertSame('deprecated', $document->getDeprecated());
     }
 }

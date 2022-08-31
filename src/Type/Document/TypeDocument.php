@@ -20,7 +20,13 @@ interface TypeDocument
 
     public function getDescription(): ?string;
 
+    /**
+     * @deprecated is a property concern
+     */
     public function withDeprecated(string $deprecated): TypeDocument;
 
+    /**
+     * @deprecated is a property concern
+     */
     public function getDeprecated(): ?string;
 }

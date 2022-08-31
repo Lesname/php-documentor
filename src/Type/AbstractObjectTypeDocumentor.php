@@ -27,6 +27,9 @@ abstract class AbstractObjectTypeDocumentor
 {
     /**
      * @param class-string $class
+     *
+     * @throws MissingAttribute
+     * @throws ReflectionException
      */
     public function document(string $class): TypeDocument
     {

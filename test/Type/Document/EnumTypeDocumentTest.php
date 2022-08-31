@@ -18,12 +18,10 @@ final class EnumTypeDocumentTest extends TestCase
             EnumStub::cases(),
             'ref',
             'description',
-            'deprecated',
         );
 
         self::assertSame(EnumStub::cases(), $document->cases);
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
-        self::assertSame('deprecated', $document->getDeprecated());
     }
 }
