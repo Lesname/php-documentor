@@ -44,7 +44,7 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         self::assertNull($perPage->type->getDeprecated());
 
         $stub = $document->properties['stub'];
-        self::assertSame(EnumStub::cases(), $stub->type->cases);
+        self::assertSame(['foo', 'fiz'], $stub->type->cases);
         self::assertSame(EnumStub::class, $stub->type->getReference());
         self::assertNull($stub->type->getDescription());
         self::assertNull($stub->type->getDeprecated());

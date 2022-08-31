@@ -12,7 +12,7 @@ use LessValueObject\Enum\EnumValueObject;
 enum EnumStub: string implements EnumValueObject
 {
     case Foo = 'foo';
-    case Fiz = 'Fiz';
+    case Fiz = 'fiz';
 
     public function jsonSerialize(): string
     {

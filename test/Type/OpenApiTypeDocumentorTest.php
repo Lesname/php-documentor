@@ -131,7 +131,7 @@ final class OpenApiTypeDocumentorTest extends TestCase
                     'fiz' => new Property(
                         (                        new NumberTypeDocument(
                             new Range(-321, 123),
-                            1
+                            0
                         ))->withDeprecated('deprecated'),
                         false,
                         deprecated: true,
@@ -149,7 +149,7 @@ final class OpenApiTypeDocumentorTest extends TestCase
                                     -321,
                                     123.4,
                                 ),
-                                3,
+                                2,
                             ),
                             new Size(1, 99),
                         ),

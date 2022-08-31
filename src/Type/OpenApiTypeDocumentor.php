@@ -223,12 +223,24 @@ final class OpenApiTypeDocumentor
         $maximum = $schema['maximum'] ?? null;
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
-        $multipleOf = $schema['multipleOf'] ?? 1;
-        assert(is_int($multipleOf) || is_float($multipleOf));
+        if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
+            $multipleOf = (string)$schema['multipleOf'];
+
+            if (str_contains($multipleOf, '.')) {
+                $pos = strpos($multipleOf, '.');
+                $precision = $pos !== false
+                    ? strlen(substr($multipleOf, $pos + 1))
+                    : null;
+            } else {
+                $precision = 0;
+            }
+        } else {
+            $precision = null;
+        }
 
         return new NumberTypeDocument(
             new Range($minimum, $maximum),
-            strlen((string)(1 / $multipleOf)),
+            $precision,
         );
     }
 

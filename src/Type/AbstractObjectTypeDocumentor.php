@@ -56,7 +56,13 @@ abstract class AbstractObjectTypeDocumentor
      */
     protected function documentEnum(string $class): TypeDocument
     {
-        return new EnumTypeDocument($class::cases(), $class);
+        return new EnumTypeDocument(
+            array_map(
+                static fn (BackedEnum $enum): string => (string)$enum->value,
+                $class::cases(),
+            ),
+            $class,
+        );
     }
 
     /**
