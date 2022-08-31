@@ -6,20 +6,29 @@ namespace LessDocumentor\Type;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocDeprecated;
+use LessDocumentor\Type\Document\AnyTypeDocument;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LessDocumentor\Type\Document\Number\Range;
+use LessDocumentor\Type\Document\NumberTypeDocument;
+use LessDocumentor\Type\Document\String\Length;
+use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
+use LessDocumentor\Type\Document\UnionTypeDocument;
 use LessHydrator\Attribute\DefaultValue;
+use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
-use ReflectionParameter;
+use ReflectionType;
+use ReflectionUnionType;
 use RuntimeException;
 
 final class MethodInputTypeDocumentor
 {
     /**
      * @throws MissingAttribute
+     * @throws ReflectionException
      *
      * @psalm-suppress MixedAssignment
      */
@@ -45,8 +54,14 @@ final class MethodInputTypeDocumentor
                 assert(is_scalar($default) || is_array($default) || $default === null);
             }
 
+            $propType = $parameter->getType();
+
+            if ($propType === null) {
+                throw new RuntimeException();
+            }
+
             $parameters[$parameter->getName()] = new Property(
-                $this->getParameterType($parameter),
+                $this->getTypeDocument($propType),
                 $required,
                 $default,
                 AttributeHelper::hasAttribute($parameter, DocDeprecated::class),
@@ -56,30 +71,49 @@ final class MethodInputTypeDocumentor
         return new CompositeTypeDocument($parameters);
     }
 
-    private function getParameterType(ReflectionParameter $parameter): TypeDocument
+    /**
+     * @throws MissingAttribute
+     * @throws ReflectionException
+     */
+    private function getTypeDocument(ReflectionType $type): TypeDocument
     {
-        $type = $parameter->getType();
+        if ($type instanceof ReflectionUnionType) {
+            $types = $type->getTypes();
+
+            if (count($types) === 1) {
+                return $this->getTypeDocument($types[0]);
+            }
+
+            return new UnionTypeDocument(
+                array_map(
+                    function (ReflectionType $type): TypeDocument {
+                        return $this->getTypeDocument($type);
+                    },
+                    $types,
+                ),
+            );
+        }
 
         assert($type instanceof ReflectionNamedType, new RuntimeException());
 
         $typename = $type->getName();
 
         if (!class_exists($typename)) {
-            return match ($typename) {
-                'bool' => $type->allowsNull()
-                    ? (new BoolTypeDocument())->withNullable()
-                    : new BoolTypeDocument(),
-                'array' => $type->allowsNull()
-                    ? (new CompositeTypeDocument([], true))->withNullable()
-                    : new CompositeTypeDocument([], true),
+            $typeDocument = match ($typename) {
+                'array' => new CompositeTypeDocument([], true),
+                'bool' => new BoolTypeDocument(),
+                'float' => new NumberTypeDocument(new Range(null, null), null),
+                'int' => new NumberTypeDocument(new Range(null, null), 0),
+                'mixed' => new AnyTypeDocument(),
+                'string' => new StringTypeDocument(new Length(null, null)),
                 default => throw new RuntimeException($typename),
             };
+        } else {
+            $typeDocument = (new ObjectInputTypeDocumentor())->document($typename);
         }
 
-        $paramDocument = (new ObjectInputTypeDocumentor())->document($typename);
-
         return $type->allowsNull()
-            ? $paramDocument->withNullable()
-            : $paramDocument;
+            ? $typeDocument->withNullable()
+            : $typeDocument;
     }
 }

@@ -21,13 +21,11 @@ final class NumberTypeDocumentTest extends TestCase
             3,
             'ref',
             'description',
-            'deprecated',
         );
 
         self::assertSame($range, $document->range);
         self::assertSame(3, $document->precision);
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
-        self::assertSame('deprecated', $document->getDeprecated());
     }
 }

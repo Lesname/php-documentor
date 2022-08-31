@@ -10,6 +10,9 @@ abstract class AbstractTypeDocument implements TypeDocument
 {
     protected bool $nullable = false;
 
+    /**
+     * @psalm-suppress ImpureFunctionCall
+     */
     public function __construct(
         private ?string $reference = null,
         private ?string $description = null,

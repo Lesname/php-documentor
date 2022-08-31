@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessDocumentor\Type\Document\AnyTypeDocument;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
@@ -15,12 +16,31 @@ use LessDocumentor\Type\Document\ReferenceTypeDocument;
 use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
+use LessDocumentor\Type\Document\UnionTypeDocument;
 use RuntimeException;
 
 final class OpenApiTypeDocumentor
 {
+    private const TYPE_STRING = 1;
+    private const TYPE_INT = 2;
+    private const TYPE_NUMBER = 4;
+    private const TYPE_BOOL = 8;
+    private const TYPE_OBJECT = 16;
+    private const TYPE_ARRAY = 32;
+    private const TYPE_NULL = 64;
+
+    private const TYPE_ANY = self::TYPE_STRING
+        | self::TYPE_INT
+        | self::TYPE_NUMBER
+        | self::TYPE_BOOL
+        | self::TYPE_OBJECT
+        | self::TYPE_ARRAY
+        | self::TYPE_NULL;
+
     /**
      * @param array<mixed> $schema
+     *
+     * @psalm-suppress DeprecatedMethod
      */
     public function document(array $schema): TypeDocument
     {
@@ -50,7 +70,13 @@ final class OpenApiTypeDocumentor
         if (isset($schema['anyOf'])) {
             assert(is_array($schema['anyOf']));
 
-            return $this->documenyAnyOf($schema);
+            return $this->documentUnion($schema['anyOf']);
+        }
+
+        if (isset($schema['oneOf'])) {
+            assert(is_array($schema['oneOf']));
+
+            return $this->documentUnion($schema['oneOf']);
         }
 
         $nullable = false;
@@ -61,16 +87,21 @@ final class OpenApiTypeDocumentor
             $type = $schema['type'];
         } elseif (is_array($schema['type'])) {
             $nullable = in_array('null', $schema['type']);
-            $type = $this->filterOut($schema['type'], 'null');
+            $types = array_values(
+                array_filter(
+                    $schema['type'],
+                    static fn (string $item) => $item !== 'null',
+                ),
+            );
 
-            if (count($type) === 1) {
-                $type = $type[0];
+            if (count($types) === 1) {
+                $type = $types[0];
                 assert(is_string($type));
             } else {
-                throw new RuntimeException('Types "' . implode(',', $type) . '"');
+                throw new RuntimeException('Types "' . implode(', ', $types) . '"');
             }
         } else {
-            throw new RuntimeException();
+            throw new RuntimeException('Type can only be a string or array');
         }
 
         $document = match ($type) {
@@ -89,36 +120,61 @@ final class OpenApiTypeDocumentor
     }
 
     /**
-     * @param array<mixed> $schema
+     * @param array<mixed> $subs
      *
      * @psalm-suppress MixedAssignment
      */
-    private function documenyAnyOf(array $schema): TypeDocument
+    private function documentUnion(array $subs): TypeDocument
     {
-        $nullable = false;
+        $toDocTypes = [];
+        $bitTypes = 0;
 
-        assert(is_array($schema['anyOf']));
+        foreach ($subs as $item) {
+            assert(is_array($item));
 
-        foreach ($schema['anyOf'] as $item) {
-            if ($item === ['type' => 'null']) {
-                $nullable = true;
+            if (isset($item['type']) && is_string($item['type'])) {
+                if ($item['type'] === 'null') {
+                    $bitTypes |= self::TYPE_NULL;
+                } else {
+                    if (count(array_keys($item)) === 1) {
+                        $bitTypes |= match ($item['type']) {
+                            'string' => self::TYPE_STRING,
+                            'integer' => self::TYPE_INT,
+                            'number' => self::TYPE_NUMBER,
+                            'boolean' => self::TYPE_BOOL,
+                            'object' => self::TYPE_OBJECT,
+                            'array' => self::TYPE_ARRAY,
+                            default => throw new RuntimeException("Type '{$item['type']}' unknown"),
+                        };
+                    }
 
-                break;
+                    $toDocTypes[] = $item;
+                }
+            } else {
+                $toDocTypes[] = $item;
             }
         }
 
-        $any = $this->filterOut($schema['anyOf'], ['type' => 'null']);
-
-        if (count($any) === 1) {
-            assert(is_array($any[0]));
-            $document = $this->document($any[0]);
-        } else {
-            $count = count($any);
-
-            throw new RuntimeException("Failed any with count {$count}");
+        if (($bitTypes & self::TYPE_ANY) === self::TYPE_ANY) {
+            return new AnyTypeDocument();
         }
 
-        return $nullable
+        if (count($toDocTypes) === 1) {
+            $document = $this->document($toDocTypes[0]);
+        } elseif (count($toDocTypes) === 0) {
+            throw new RuntimeException();
+        } else {
+            $document = new UnionTypeDocument(
+                array_map(
+                    function (array $input): TypeDocument {
+                        return $this->document($input);
+                    },
+                    $toDocTypes,
+                ),
+            );
+        }
+
+        return ($bitTypes & self::TYPE_NULL) === self::TYPE_NULL
             ? $document->withNullable()
             : $document;
     }
@@ -241,23 +297,6 @@ final class OpenApiTypeDocumentor
         return new NumberTypeDocument(
             new Range($minimum, $maximum),
             $precision,
-        );
-    }
-
-    /**
-     * @param array<mixed> $array
-     *
-     * @return array<mixed>
-     */
-    private function filterOut(array $array, mixed $value): array
-    {
-        return array_values(
-            array_unique(
-                array_filter(
-                    $array,
-                    static fn (mixed $t): bool => $t !== $value,
-                ),
-            )
         );
     }
 }
