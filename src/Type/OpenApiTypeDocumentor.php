@@ -223,7 +223,7 @@ final class OpenApiTypeDocumentor
         $maximum = $schema['maximum'] ?? null;
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
-        if (isset($schema['multipleOf'])) {
+        if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
             $multipleOf = (String)$schema['multipleOf'];
 
             if (str_contains($multipleOf, '.')) {
