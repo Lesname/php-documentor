@@ -206,8 +206,6 @@ final class OpenApiTypeDocumentor
         $extraProperties = $schema['additionalProperties'] ?? false;
         assert(is_bool($extraProperties));
 
-        assert(is_array($schema['properties']));
-
         if (isset($schema['required'])) {
             assert(is_array($schema['required']));
             $required = $schema['required'];
@@ -217,20 +215,22 @@ final class OpenApiTypeDocumentor
 
         $properties = [];
 
-        foreach ($schema['properties'] as $key => $propSchema) {
-            assert(is_string($key));
-            assert(is_array($propSchema));
+        if (isset($schema['properties']) && is_array($schema['properties'])) {
+            foreach ($schema['properties'] as $key => $propSchema) {
+                assert(is_string($key));
+                assert(is_array($propSchema));
 
-            $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
-                ? $propSchema['default']
-                : null;
+                $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
+                    ? $propSchema['default']
+                    : null;
 
-            $properties[$key] = new Property(
-                $this->document($propSchema),
-                in_array($key, $required),
-                $default,
-                isset($propSchema['deprecated']) && $propSchema['deprecated'],
-            );
+                $properties[$key] = new Property(
+                    $this->document($propSchema),
+                    in_array($key, $required),
+                    $default,
+                    isset($propSchema['deprecated']) && $propSchema['deprecated'],
+                );
+            }
         }
 
         return new CompositeTypeDocument(
