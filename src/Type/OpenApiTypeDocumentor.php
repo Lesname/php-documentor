@@ -184,8 +184,6 @@ final class OpenApiTypeDocumentor
      */
     private function documentArray(array $schema): TypeDocument
     {
-        assert(is_array($schema['items']));
-
         $minItems = $schema['minItems'] ?? null;
         assert(is_int($minItems) || $minItems === null);
 
@@ -193,7 +191,9 @@ final class OpenApiTypeDocumentor
         assert(is_int($maxItems) || $maxItems === null);
 
         return new CollectionTypeDocument(
-            $this->document($schema['items']),
+            isset($schema['items']) && is_array($schema['items'])
+                ? $this->document($schema['items'])
+                : new AnyTypeDocument(),
             new Size($minItems, $maxItems),
         );
     }
