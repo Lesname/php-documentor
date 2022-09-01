@@ -19,6 +19,7 @@ final class NumberTypeDocumentTest extends TestCase
         $document = new NumberTypeDocument(
             $range,
             3,
+            'format',
             'ref',
             'description',
         );
