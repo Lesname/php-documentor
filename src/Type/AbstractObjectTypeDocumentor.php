@@ -96,6 +96,8 @@ abstract class AbstractObjectTypeDocumentor
      *
      * @throws MissingAttribute
      * @throws ReflectionException
+     *
+     * @psalm-suppress DeprecatedClass
      */
     protected function documentStringValueObject(string $class): TypeDocument
     {
