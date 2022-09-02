@@ -7,11 +7,9 @@ use Attribute;
 
 /**
  * @psalm-immutable
- *
- * @deprecated use DocFormat
  */
 #[Attribute(Attribute::TARGET_CLASS)]
-final class DocStringFormat
+final class DocFormat
 {
     public function __construct(public readonly string $name)
     {}

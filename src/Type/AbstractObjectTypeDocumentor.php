@@ -7,6 +7,7 @@ use A;
 use BackedEnum;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Attribute\DocFormat;
 use LessDocumentor\Type\Attribute\DocStringFormat;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
@@ -70,12 +71,22 @@ abstract class AbstractObjectTypeDocumentor
 
     /**
      * @param class-string<NumberValueObject> $class
+     *
+     * @throws MissingAttribute
+     * @throws ReflectionException
      */
     protected function documentNumberValueObject(string $class): TypeDocument
     {
+        $refClass = new ReflectionClass($class);
+
+        $format = AttributeHelper::hasAttribute($refClass, DocFormat::class)
+            ? AttributeHelper::getAttribute($refClass, DocFormat::class)->name
+            : null;
+
         return new NumberTypeDocument(
             new Range($class::getMinValue(), $class::getMaxValue()),
             $class::getPrecision(),
+            $format,
             $class,
         );
     }
@@ -85,14 +96,20 @@ abstract class AbstractObjectTypeDocumentor
      *
      * @throws MissingAttribute
      * @throws ReflectionException
+     *
+     * @psalm-suppress DeprecatedClass
      */
     protected function documentStringValueObject(string $class): TypeDocument
     {
         $refClass = new ReflectionClass($class);
 
-        $format = AttributeHelper::hasAttribute($refClass, DocStringFormat::class)
-            ? AttributeHelper::getAttribute($refClass, DocStringFormat::class)->name
-            : null;
+        if (AttributeHelper::hasAttribute($refClass, DocFormat::class)) {
+            $format = AttributeHelper::getAttribute($refClass, DocFormat::class)->name;
+        } elseif (AttributeHelper::hasAttribute($refClass, DocStringFormat::class)) {
+            $format = AttributeHelper::getAttribute($refClass, DocStringFormat::class)->name;
+        } else {
+            $format = null;
+        }
 
         return new StringTypeDocument(new Length($class::getMinLength(), $class::getMaxLength()), $format, $class);
     }
