@@ -16,7 +16,6 @@ use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Document\UnionTypeDocument;
-use PhpParser\Node\UnionType;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionNamedType;
