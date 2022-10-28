@@ -16,7 +16,6 @@ use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Document\UnionTypeDocument;
-use LessHydrator\Attribute\DefaultValue;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
@@ -40,19 +39,12 @@ final class MethodInputTypeDocumentor
             $type = $parameter->getType();
             assert($type instanceof ReflectionNamedType, new RuntimeException());
 
-            if (AttributeHelper::hasAttribute($parameter, DefaultValue::class)) {
-                $attribute = AttributeHelper::getAttribute($parameter, DefaultValue::class);
+            $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
+            $default = $parameter->isDefaultValueAvailable()
+                ? $parameter->getDefaultValue()
+                : null;
 
-                $default = $attribute->default;
-                $required = false;
-            } else {
-                $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
-                $default = $parameter->isDefaultValueAvailable()
-                    ? $parameter->getDefaultValue()
-                    : null;
-
-                assert(is_scalar($default) || is_array($default) || $default === null);
-            }
+            assert(is_scalar($default) || is_array($default) || $default === null);
 
             $propType = $parameter->getType();
 
