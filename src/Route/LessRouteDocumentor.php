@@ -149,7 +149,6 @@ final class LessRouteDocumentor implements RouteDocumentor
                         default => throw new RuntimeException("Unknown type '{$returns}'"),
                     };
                 }
-
             }
         } else {
             $attribute = AttributeHelper::getAttribute($handler, DocHttpProxy::class);
