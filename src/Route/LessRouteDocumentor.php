@@ -17,15 +17,22 @@ use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LessDocumentor\Route\Input\RouteInputDocumentor;
+use LessDocumentor\Type\Document\AnyTypeDocument;
+use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LessDocumentor\Type\Document\Number\Range;
+use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\Document\String\Length;
+use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
+use RuntimeException;
 use Traversable;
 
 final class LessRouteDocumentor implements RouteDocumentor
@@ -127,10 +134,21 @@ final class LessRouteDocumentor implements RouteDocumentor
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = $objInputDocumentor->document($attribute->resource);
             } else {
-                $resultClass = $return->getName();
-                assert(class_exists($resultClass));
+                $returns = $return->getName();
 
-                $output = $objInputDocumentor->document($resultClass);
+                if (class_exists($returns)) {
+                    $output = $objInputDocumentor->document($returns);
+                } else {
+                    $output = match ($returns) {
+                        'array' => new CompositeTypeDocument([], true),
+                        'bool' => new BoolTypeDocument(),
+                        'float' => new NumberTypeDocument(new Range(null, null), null),
+                        'int' => new NumberTypeDocument(new Range(null, null), 0),
+                        'mixed' => new AnyTypeDocument(),
+                        'string' => new StringTypeDocument(new Length(null, null)),
+                        default => throw new RuntimeException("Unknown type '{$returns}'"),
+                    };
+                }
             }
         } else {
             $attribute = AttributeHelper::getAttribute($handler, DocHttpProxy::class);
