@@ -124,7 +124,6 @@ final class MezzioRouteDocumentor implements RouteDocumentor
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
-                    new Size(null, null),
                     null,
                 );
             } elseif (interface_exists($return->getName())) {

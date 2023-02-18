@@ -180,7 +180,7 @@ final class LessRouteDocumentorTest extends TestCase
                     new ResponseCode(200),
                     new CollectionTypeDocument(
                         (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
-                        new Size(null, null),
+                        null,
                         null,
                     ),
                 ),

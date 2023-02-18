@@ -30,12 +30,12 @@ final class OpenApiTypeDocumentor
     private const TYPE_NULL = 64;
 
     private const TYPE_ANY = self::TYPE_STRING
-        | self::TYPE_INT
-        | self::TYPE_NUMBER
-        | self::TYPE_BOOL
-        | self::TYPE_OBJECT
-        | self::TYPE_ARRAY
-        | self::TYPE_NULL;
+    | self::TYPE_INT
+    | self::TYPE_NUMBER
+    | self::TYPE_BOOL
+    | self::TYPE_OBJECT
+    | self::TYPE_ARRAY
+    | self::TYPE_NULL;
 
     /**
      * @param array<mixed> $schema
@@ -90,7 +90,7 @@ final class OpenApiTypeDocumentor
             $types = array_values(
                 array_filter(
                     $schema['type'],
-                    static fn (string $item) => $item !== 'null',
+                    static fn(string $item) => $item !== 'null',
                 ),
             );
 
@@ -194,7 +194,9 @@ final class OpenApiTypeDocumentor
             isset($schema['items']) && is_array($schema['items'])
                 ? $this->document($schema['items'])
                 : new AnyTypeDocument(),
-            new Size($minItems, $maxItems),
+            $minItems !== null && $maxItems !== null
+                ? new Size($minItems, $maxItems)
+                : null,
         );
     }
 
@@ -263,7 +265,9 @@ final class OpenApiTypeDocumentor
             : null;
 
         return new StringTypeDocument(
-            new Length($minLength, $maxLength),
+            $minLength !== null && $maxLength !== null
+                ? new Length($minLength, $maxLength)
+                : null,
             $format,
         );
     }
@@ -279,13 +283,16 @@ final class OpenApiTypeDocumentor
         $maximum = $schema['maximum'] ?? null;
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
-        if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
-            $multipleOf = (string)$schema['multipleOf'];
+        $multipleOf = null;
 
-            if (str_contains($multipleOf, '.')) {
-                $pos = strpos($multipleOf, '.');
+        if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
+            $multipleOf = $schema['multipleOf'];
+            $multipleOfStr = (string)$multipleOf;
+
+            if (str_contains($multipleOfStr, '.')) {
+                $pos = strpos($multipleOfStr, '.');
                 $precision = $pos !== false
-                    ? strlen(substr($multipleOf, $pos + 1))
+                    ? strlen(substr($multipleOfStr, $pos + 1))
                     : null;
             } else {
                 $precision = 0;
@@ -295,7 +302,10 @@ final class OpenApiTypeDocumentor
         }
 
         return new NumberTypeDocument(
-            new Range($minimum, $maximum),
+            $minimum !== null && $maximum !== null
+                ? new Range($minimum, $maximum)
+                : null,
+            $multipleOf,
             $precision,
         );
     }

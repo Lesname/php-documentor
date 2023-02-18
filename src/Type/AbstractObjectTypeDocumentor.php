@@ -50,7 +50,10 @@ abstract class AbstractObjectTypeDocumentor
     {
         return new CollectionTypeDocument(
             $this->document($class::getItemType()),
-            new Size($class::getMinlength(), $class::getMaxLength()),
+            new Size(
+                $class::getMinimumLength(),
+                $class::getMaximumLength(),
+            ),
             $class,
         );
     }
@@ -74,6 +77,8 @@ abstract class AbstractObjectTypeDocumentor
      *
      * @throws MissingAttribute
      * @throws ReflectionException
+     *
+     * @psalm-suppress DeprecatedMethod
      */
     protected function documentNumberValueObject(string $class): TypeDocument
     {
@@ -84,7 +89,11 @@ abstract class AbstractObjectTypeDocumentor
             : null;
 
         return new NumberTypeDocument(
-            new Range($class::getMinValue(), $class::getMaxValue()),
+            new Range(
+                $class::getMinimumValue(),
+                $class::getMaximumValue(),
+            ),
+            $class::getMultipleOf(),
             $class::getPrecision(),
             $format,
             $class,
@@ -111,7 +120,11 @@ abstract class AbstractObjectTypeDocumentor
             $format = null;
         }
 
-        return new StringTypeDocument(new Length($class::getMinLength(), $class::getMaxLength()), $format, $class);
+        return new StringTypeDocument(
+            new Length($class::getMinimumLength(), $class::getMaximumLength()),
+            $format,
+            $class,
+        );
     }
 
     /**

@@ -129,7 +129,7 @@ final class LessRouteDocumentor implements RouteDocumentor
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
-                    new Size(null, null),
+                    null,
                     null,
                 );
             } elseif (interface_exists($return->getName())) {
@@ -144,10 +144,10 @@ final class LessRouteDocumentor implements RouteDocumentor
                     $output = match ($returns) {
                         'array' => new CompositeTypeDocument([], true),
                         'bool' => new BoolTypeDocument(),
-                        'float' => new NumberTypeDocument(new Range(null, null), null),
-                        'int' => new NumberTypeDocument(new Range(null, null), 0),
+                        'float' => new NumberTypeDocument(null, null, null),
+                        'int' => new NumberTypeDocument(null, 1, 0),
                         'mixed' => new AnyTypeDocument(),
-                        'string' => new StringTypeDocument(new Length(null, null)),
+                        'string' => new StringTypeDocument(null),
                         default => throw new RuntimeException("Unknown type '{$returns}'"),
                     };
                 }
