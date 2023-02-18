@@ -3,31 +3,84 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document;
 
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Document\Property\Deprecated;
-use LessDocumentor\Route\Document\Property\Method;
-use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Type\Document\TypeDocument;
+use LessValueObject\Composite\AbstractCompositeValueObject;
 
 /**
+ * Will become final in next release
+ *
+ * @todo make final
+ *
  * @psalm-immutable
  */
-interface RouteDocument
+class RouteDocument extends AbstractCompositeValueObject
 {
-    public function getMethod(): Method;
+    /**
+     * @param array<int, Property\Response> $responses
+     */
+    public function __construct(
+        public readonly Property\Method $method,
+        public readonly Property\Category $category,
+        public readonly Property\Path $path,
+        public readonly Property\Resource $resource,
+        public readonly ?Property\Deprecated $deprecated,
+        public readonly TypeDocument $input,
+        public readonly array $responses,
+    ) {}
 
-    public function getCategory(): Category;
+    /**
+     * @deprecated use property
+     */
+    public function getMethod(): Property\Method
+    {
+        return $this->method;
+    }
 
-    public function getPath(): Path;
+    /**
+     * @deprecated use property
+     */
+    public function getCategory(): Property\Category
+    {
+        return $this->category;
+    }
 
-    public function getResource(): string;
+    /**
+     * @deprecated use property
+     */
+    public function getPath(): Property\Path
+    {
+        return $this->path;
+    }
 
-    public function getDeprecated(): ?Deprecated;
+    /**
+     * @deprecated use property
+     */
+    public function getResource(): string
+    {
+        return (string)$this->resource;
+    }
 
-    public function getInput(): TypeDocument;
+    /**
+     * @deprecated use property
+     */
+    public function getDeprecated(): ?Property\Deprecated
+    {
+        return $this->deprecated;
+    }
+
+    /**
+     * @deprecated use property
+     */
+    public function getInput(): TypeDocument
+    {
+        return $this->input;
+    }
 
     /**
      * @return array<Property\Response>
      */
-    public function getRespones(): array;
+    public function getRespones(): array
+    {
+        return $this->responses;
+    }
 }

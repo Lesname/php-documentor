@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
-use LessDocumentor\Route\Document\PostRouteDocument;
+use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
@@ -93,6 +94,14 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
             );
         }
 
-        return new PostRouteDocument($category, new Path($path), $resource, $deprecated, $input, $responses);
+        return new RouteDocument(
+            Method::Post,
+            $category,
+            new Path($path),
+            new Resource($resource),
+            $deprecated,
+            $input,
+            $responses,
+        );
     }
 }

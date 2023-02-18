@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Route;
 
-use LessDocumentor\Route\Document\PostRouteDocument;
+use LessDocumentor\Route\Document\RouteDocument;
+use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\OpenApiRouteDocumentor;
 use LessDocumentor\Type\Document\Composite\Property;
@@ -77,10 +79,11 @@ final class OpenApiRouteDocumentorTest extends TestCase
         $routeDocumentor = new OpenApiRouteDocumentor();
 
         self::assertEquals(
-            new PostRouteDocument(
+            new RouteDocument(
+                Method::Post,
                 Category::Command,
                 new Path('/foo.bar'),
-                'foo',
+                new Resource('foo'),
                 null,
                 new CompositeTypeDocument(
                     [

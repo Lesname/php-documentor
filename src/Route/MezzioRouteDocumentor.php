@@ -5,10 +5,11 @@ namespace LessDocumentor\Route;
 
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
+use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocResource;
-use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
@@ -58,10 +59,11 @@ final class MezzioRouteDocumentor implements RouteDocumentor
             $deprecated = new Deprecated($routeAlternate, $routeDeprecated);
         }
 
-        return new PostRouteDocument(
+        return new RouteDocument(
+            Method::Post,
             $route['category'],
             new Path($route['path']),
-            $route['resource'],
+            new Resource($route['resource']),
             $deprecated,
             $this->getRouteInputDocumentor()->document($route),
             $this->documentResponses($route),
