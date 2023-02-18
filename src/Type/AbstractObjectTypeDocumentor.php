@@ -6,6 +6,7 @@ namespace LessDocumentor\Type;
 use A;
 use BackedEnum;
 use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocFormat;
 use LessDocumentor\Type\Attribute\DocStringFormat;
@@ -23,6 +24,8 @@ use LessValueObject\String\StringValueObject;
 use LessValueObject\ValueObject;
 use ReflectionClass;
 use ReflectionException;
+use LessValueObject\String\Format\FormattedStringValueObject;
+use LessValueObject\String\Format\AbstractRegularExpressionStringValueObject;
 
 abstract class AbstractObjectTypeDocumentor
 {
@@ -120,9 +123,14 @@ abstract class AbstractObjectTypeDocumentor
             $format = null;
         }
 
+        $pattern = is_subclass_of($class, AbstractRegularExpressionStringValueObject::class)
+            ? new Pattern($class::getRegularExpression())
+            : null;
+
         return new StringTypeDocument(
             new Length($class::getMinimumLength(), $class::getMaximumLength()),
             $format,
+            $pattern,
             $class,
         );
     }
