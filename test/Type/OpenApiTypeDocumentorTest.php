@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type;
 
+use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
@@ -70,7 +71,8 @@ final class OpenApiTypeDocumentorTest extends TestCase
                 'bar' => [
                     'type' => 'string',
                     'minLength' => 3,
-                    'maxLength' => 30
+                    'maxLength' => 30,
+                    'pattern' => '/^.{1,30}$/'
                 ],
                 'biz' => [
                     'type' => 'array',
@@ -140,6 +142,7 @@ final class OpenApiTypeDocumentorTest extends TestCase
                     'bar' => new Property(
                         new StringTypeDocument(
                             new Length(3, 30),
+                            pattern: new Pattern('/^.{1,30}$/'),
                         ),
                         false,
                     ),

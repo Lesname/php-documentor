@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Type\Document\AnyTypeDocument;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
@@ -245,6 +248,9 @@ final class OpenApiTypeDocumentor
      * @param array<mixed> $schema
      *
      * @psalm-suppress MixedArgumentTypeCoercion
+     *
+     * @throws TooLong
+     * @throws TooShort
      */
     private function documentString(array $schema): TypeDocument
     {
@@ -260,15 +266,16 @@ final class OpenApiTypeDocumentor
         $maxLength = $schema['maxLength'] ?? null;
         assert(is_int($maxLength) || $maxLength === null);
 
-        $format = isset($schema['format']) && is_string($schema['format'])
-            ? $schema['format']
-            : null;
-
         return new StringTypeDocument(
             $minLength !== null && $maxLength !== null
                 ? new Length($minLength, $maxLength)
                 : null,
-            $format,
+            isset($schema['format']) && is_string($schema['format'])
+                ? $schema['format']
+                : null,
+            isset($schema['pattern']) && is_string($schema['pattern'])
+                ? new Pattern($schema['pattern'])
+                : null,
         );
     }
 
