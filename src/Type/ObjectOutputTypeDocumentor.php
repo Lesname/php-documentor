@@ -84,10 +84,10 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
             $typeDocument = match ($typename) {
                 'array' => new CompositeTypeDocument([], true),
                 'bool' => new BoolTypeDocument(),
-                'float' => new NumberTypeDocument(new Range(null, null), null),
-                'int' => new NumberTypeDocument(new Range(null, null), 0),
+                'float' => new NumberTypeDocument(null, null, null),
+                'int' => new NumberTypeDocument(null, 1, 0),
                 'mixed' => new AnyTypeDocument(),
-                'string' => new StringTypeDocument(new Length(null, null)),
+                'string' => new StringTypeDocument(null),
                 default => throw new RuntimeException($typename),
             };
         } else {

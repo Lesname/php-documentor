@@ -5,10 +5,11 @@ namespace LessDocumentor\Route;
 
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
+use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocResource;
-use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
@@ -63,10 +64,11 @@ final class LessRouteDocumentor implements RouteDocumentor
             $deprecated = new Deprecated($routeAlternate, $routeDeprecated);
         }
 
-        return new PostRouteDocument(
+        return new RouteDocument(
+            Method::Post,
             $route['category'],
             new Path($route['path']),
-            $route['resource'],
+            new Resource($route['resource']),
             $deprecated,
             $this->getRouteInputDocumentor()->document($route),
             $this->documentResponses($route),
@@ -127,7 +129,7 @@ final class LessRouteDocumentor implements RouteDocumentor
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
-                    new Size(null, null),
+                    null,
                     null,
                 );
             } elseif (interface_exists($return->getName())) {
@@ -142,10 +144,10 @@ final class LessRouteDocumentor implements RouteDocumentor
                     $output = match ($returns) {
                         'array' => new CompositeTypeDocument([], true),
                         'bool' => new BoolTypeDocument(),
-                        'float' => new NumberTypeDocument(new Range(null, null), null),
-                        'int' => new NumberTypeDocument(new Range(null, null), 0),
+                        'float' => new NumberTypeDocument(null, null, null),
+                        'int' => new NumberTypeDocument(null, 1, 0),
                         'mixed' => new AnyTypeDocument(),
-                        'string' => new StringTypeDocument(new Length(null, null)),
+                        'string' => new StringTypeDocument(null),
                         default => throw new RuntimeException("Unknown type '{$returns}'"),
                     };
                 }

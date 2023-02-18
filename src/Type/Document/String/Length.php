@@ -9,7 +9,7 @@ namespace LessDocumentor\Type\Document\String;
 final class Length
 {
     public function __construct(
-        public readonly ?int $minimal,
-        public readonly ?int $maximal,
+        public readonly int $minimal,
+        public readonly int $maximal,
     ) {}
 }

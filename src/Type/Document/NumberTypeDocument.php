@@ -9,7 +9,9 @@ namespace LessDocumentor\Type\Document;
 final class NumberTypeDocument extends AbstractTypeDocument
 {
     public function __construct(
-        public readonly Number\Range $range,
+        public readonly ?Number\Range $range,
+        public readonly float|int|null $multipleOf,
+        /** @deprecated use multipleOf */
         public readonly ?int $precision,
         public readonly ?string $format = null,
         ?string $reference = null,
