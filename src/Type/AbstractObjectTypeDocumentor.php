@@ -54,8 +54,8 @@ abstract class AbstractObjectTypeDocumentor
         return new CollectionTypeDocument(
             $this->document($class::getItemType()),
             new Size(
-                $class::getMinimumLength(),
-                $class::getMaximumLength(),
+                $class::getMinimumSize(),
+                $class::getMaximumSize(),
             ),
             $class,
         );
