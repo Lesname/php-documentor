@@ -12,7 +12,7 @@ interface TypeDocument
 
     public function getReference(): ?string;
 
-    public function withNullable(): TypeDocument;
+    public function withNullable(bool $nullable = true): TypeDocument;
 
     public function isNullable(): bool;
 
