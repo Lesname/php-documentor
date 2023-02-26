@@ -36,10 +36,10 @@ abstract class AbstractTypeDocument implements TypeDocument
         return $this->reference;
     }
 
-    public function withNullable(): TypeDocument
+    public function withNullable(bool $nullable = true): TypeDocument
     {
         $clone = clone $this;
-        $clone->nullable = true;
+        $clone->nullable = $nullable;
 
         return $clone;
     }
