@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
+use LessValueObject\Composite\Paginate;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
+use LessValueObject\Number\Int\Paginate\PerPage;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocResource;
@@ -126,10 +128,22 @@ final class LessRouteDocumentor implements RouteDocumentor
             assert($return instanceof ReflectionNamedType);
 
             if (is_subclass_of($return->getName(), Traversable::class)) {
+                $hasPaginate = false;
+
+                foreach ($proxyMethod->getParameters() as $parameter) {
+                    $type = $parameter->getType();
+
+                    if ($type instanceof ReflectionNamedType && $type->getName() === Paginate::class) {
+                        $hasPaginate = true;
+
+                        break;
+                    }
+                }
+
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
                 $output = new CollectionTypeDocument(
                     $objInputDocumentor->document($attribute->resource),
-                    null,
+                    $hasPaginate ? new Size(max(0, (int)floor(PerPage::getMinimumValue())), (int)ceil(PerPage::getMaximumValue())) : null,
                     null,
                 );
             } elseif (interface_exists($return->getName())) {
