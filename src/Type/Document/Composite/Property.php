@@ -11,12 +11,12 @@ use LessDocumentor\Type\Document\TypeDocument;
 final class Property
 {
     /**
-     * @param string|int|bool|null|array<mixed>|float $default
+     * @param object|string|int|bool|null|array<mixed>|float $default
      */
     public function __construct(
         public readonly TypeDocument $type,
         public readonly bool $required = true,
-        public readonly string|int|bool|null|array|float $default = null,
+        public readonly object|string|int|bool|null|array|float $default = null,
         public readonly bool $deprecated = false,
     ) {}
 }
