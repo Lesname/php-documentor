@@ -11,6 +11,7 @@ use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocFormat;
 use LessDocumentor\Type\Attribute\DocStringFormat;
 use LessDocumentor\Type\Document\Collection\Size;
+use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\EnumTypeDocument;
 use LessDocumentor\Type\Document\Number\Range;
@@ -24,6 +25,7 @@ use LessValueObject\String\StringValueObject;
 use LessValueObject\ValueObject;
 use ReflectionClass;
 use ReflectionException;
+use LessValueObject\Composite\DynamicCompositeValueObject;
 use LessValueObject\String\Format\FormattedStringValueObject;
 use LessValueObject\String\Format\AbstractRegularExpressionStringValueObject;
 
@@ -37,6 +39,10 @@ abstract class AbstractObjectTypeDocumentor
      */
     public function document(string $class): TypeDocument
     {
+        if ($class === DynamicCompositeValueObject::class) {
+            return new CompositeTypeDocument([], true);
+        }
+
         return match (true) {
             is_subclass_of($class, StringValueObject::class) => $this->documentStringValueObject($class),
             is_subclass_of($class, NumberValueObject::class) => $this->documentNumberValueObject($class),
