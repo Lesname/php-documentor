@@ -44,7 +44,7 @@ final class MethodInputTypeDocumentor
                 ? $parameter->getDefaultValue()
                 : null;
 
-            assert(is_scalar($default) || is_array($default) || $default === null);
+            assert(is_scalar($default) || is_object($default) || is_array($default) || $default === null);
 
             $propType = $parameter->getType();
 
