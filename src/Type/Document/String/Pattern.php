@@ -23,6 +23,6 @@ final class Pattern extends AbstractStringValueObject
      */
     public static function getMaxLength(): int
     {
-        return 99;
+        return 255;
     }
 }
