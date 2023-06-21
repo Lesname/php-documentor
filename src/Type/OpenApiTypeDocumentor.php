@@ -42,8 +42,6 @@ final class OpenApiTypeDocumentor
 
     /**
      * @param array<mixed> $schema
-     *
-     * @psalm-suppress DeprecatedMethod
      */
     public function document(array $schema): TypeDocument
     {

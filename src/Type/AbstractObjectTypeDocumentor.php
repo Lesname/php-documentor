@@ -86,8 +86,6 @@ abstract class AbstractObjectTypeDocumentor
      *
      * @throws MissingAttribute
      * @throws ReflectionException
-     *
-     * @psalm-suppress DeprecatedMethod
      */
     protected function documentNumberValueObject(string $class): TypeDocument
     {
@@ -114,8 +112,6 @@ abstract class AbstractObjectTypeDocumentor
      *
      * @throws MissingAttribute
      * @throws ReflectionException
-     *
-     * @psalm-suppress DeprecatedClass
      */
     protected function documentStringValueObject(string $class): TypeDocument
     {
