@@ -5,6 +5,8 @@ namespace LessDocumentor\Route;
 
 use LessValueObject\Composite\Paginate;
 use LessDocumentor\Helper\AttributeHelper;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessValueObject\Number\Int\Paginate\PerPage;
 use LessDocumentor\Route\Document\Property\Method;
@@ -25,9 +27,7 @@ use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
 use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use LessDocumentor\Type\ObjectOutputTypeDocumentor;
@@ -45,6 +45,9 @@ final class LessRouteDocumentor implements RouteDocumentor
     /**
      * @param array<mixed> $route
      *
+     * @return RouteDocument
+     * @throws TooLong
+     * @throws TooShort
      * @throws MissingAttribute
      * @throws ReflectionException
      */
@@ -159,7 +162,7 @@ final class LessRouteDocumentor implements RouteDocumentor
                         'array' => new CompositeTypeDocument([], true),
                         'bool' => new BoolTypeDocument(),
                         'float' => new NumberTypeDocument(null, null, null),
-                        'int' => new NumberTypeDocument(null, 1, 0),
+                        'int' => new NumberTypeDocument(null, 1),
                         'mixed' => new AnyTypeDocument(),
                         'string' => new StringTypeDocument(null),
                         default => throw new RuntimeException("Unknown type '{$returns}'"),

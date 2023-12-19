@@ -21,12 +21,12 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
     public function testStringValueObject(): void
     {
         $valueObject = new class ('foo') extends AbstractStringValueObject {
-            public static function getMinLength(): int
+            public static function getMinimumLength(): int
             {
                 return 1;
             }
 
-            public static function getMaxLength(): int
+            public static function getMaximumLength(): int
             {
                 return 5;
             }
@@ -41,23 +41,22 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
         self::assertSame(5, $document->length->maximal);
         self::assertSame($valueObject::class, $document->getReference());
         self::assertNull($document->getDescription());
-        self::assertNull($document->getDeprecated());
     }
 
     public function testNumberValueObject(): void
     {
         $valueObject = new class (3.213) extends AbstractNumberValueObject {
-            public static function getPrecision(): int
+            public static function getMultipleOf(): float|int
             {
-                return 3;
+                return .001;
             }
 
-            public static function getMinValue(): float|int
+            public static function getMinimumValue(): float|int
             {
                 return 1;
             }
 
-            public static function getMaxValue(): float|int
+            public static function getMaximumValue(): float|int
             {
                 return 5.43;
             }
@@ -70,10 +69,9 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertSame(1, $document->range->minimal);
         self::assertSame(5.43, $document->range->maximal);
-        self::assertEquals(3, $document->precision);
+        self::assertEquals(.001, $document->multipleOf);
         self::assertSame($valueObject::class, $document->getReference());
         self::assertNull($document->getDescription());
-        self::assertNull($document->getDeprecated());
     }
 
     public function testEnumValueObject(): void
@@ -86,18 +84,17 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
         self::assertSame(['foo', 'fiz'], $document->cases);
         self::assertSame(EnumStub::class, $document->getReference());
         self::assertNull($document->getDescription());
-        self::assertNull($document->getDeprecated());
     }
 
     public function testCollectionValueObject(): void
     {
         $collection = new class ([]) extends AbstractCollectionValueObject {
-            public static function getMinlength(): int
+            public static function getMinimumSize(): int
             {
                 return 0;
             }
 
-            public static function getMaxLength(): int
+            public static function getMaximumSize(): int
             {
                 return 5;
             }
@@ -118,7 +115,6 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
         self::assertSame($collection::class, $document->getReference());
         self::assertNull($document->getDescription());
-        self::assertNull($document->getDeprecated());
 
         $item = $document->item;
 

@@ -15,8 +15,7 @@ final class UnionTypeDocument extends AbstractTypeDocument
         public array $subTypes,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

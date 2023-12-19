@@ -38,18 +38,4 @@ final class AbstractTypeDocumentTest extends TestCase
         self::assertNotSame($clone, $document);
         self::assertSame('fiz', $clone->getDescription());
     }
-
-    public function testWithDeprecated(): void
-    {
-        $document = $this->getMockForAbstractClass(
-            AbstractTypeDocument::class,
-            ['ref'],
-        );
-
-        $clone = $document->withDeprecated('fiz');
-
-        self::assertNull($document->getDeprecated());
-        self::assertNotSame($clone, $document);
-        self::assertSame('fiz', $clone->getDeprecated());
-    }
 }

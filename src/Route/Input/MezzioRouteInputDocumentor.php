@@ -83,6 +83,9 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 
     /**
      * @param class-string $event
+     * @return CompositeTypeDocument
+     * @throws MissingAttribute
+     * @throws ReflectionException
      */
     private function documentValueObject(string $event): CompositeTypeDocument
     {

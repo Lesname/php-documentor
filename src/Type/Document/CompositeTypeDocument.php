@@ -16,8 +16,7 @@ final class CompositeTypeDocument extends AbstractTypeDocument
         public readonly bool $allowExtraProperties = false,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

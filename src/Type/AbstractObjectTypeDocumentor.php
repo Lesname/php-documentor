@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
-use A;
 use BackedEnum;
 use LessDocumentor\Helper\AttributeHelper;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
 use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocFormat;
-use LessDocumentor\Type\Attribute\DocStringFormat;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
@@ -26,8 +26,7 @@ use LessValueObject\ValueObject;
 use ReflectionClass;
 use ReflectionException;
 use LessValueObject\Composite\DynamicCompositeValueObject;
-use LessValueObject\String\Format\FormattedStringValueObject;
-use LessValueObject\String\Format\AbstractRegularExpressionStringValueObject;
+use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
 
 abstract class AbstractObjectTypeDocumentor
 {
@@ -54,6 +53,9 @@ abstract class AbstractObjectTypeDocumentor
 
     /**
      * @param class-string<CollectionValueObject<ValueObject>> $class
+     *
+     * @throws MissingAttribute
+     * @throws ReflectionException
      */
     protected function documentCollectionValueObject(string $class): TypeDocument
     {
@@ -101,7 +103,6 @@ abstract class AbstractObjectTypeDocumentor
                 $class::getMaximumValue(),
             ),
             $class::getMultipleOf(),
-            $class::getPrecision(),
             $format,
             $class,
         );
@@ -110,6 +111,9 @@ abstract class AbstractObjectTypeDocumentor
     /**
      * @param class-string<StringValueObject> $class
      *
+     * @return TypeDocument
+     * @throws TooLong
+     * @throws TooShort
      * @throws MissingAttribute
      * @throws ReflectionException
      */
@@ -119,13 +123,11 @@ abstract class AbstractObjectTypeDocumentor
 
         if (AttributeHelper::hasAttribute($refClass, DocFormat::class)) {
             $format = AttributeHelper::getAttribute($refClass, DocFormat::class)->name;
-        } elseif (AttributeHelper::hasAttribute($refClass, DocStringFormat::class)) {
-            $format = AttributeHelper::getAttribute($refClass, DocStringFormat::class)->name;
         } else {
             $format = null;
         }
 
-        $pattern = is_subclass_of($class, AbstractRegularExpressionStringValueObject::class)
+        $pattern = is_subclass_of($class, AbstractRegexStringFormatValueObject::class)
             ? new Pattern($class::getRegularExpression())
             : null;
 

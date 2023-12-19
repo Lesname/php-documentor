@@ -16,12 +16,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function __construct(
         private ?string $reference = null,
         private ?string $description = null,
-        private ?string $deprecated = null,
-    ) {
-        if (is_string($deprecated)) {
-            trigger_error("Parameter 'deprecated' deprecated");
-        }
-    }
+    ) {}
 
     public function withReference(string $reference): TypeDocument
     {
@@ -60,18 +55,5 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function withDeprecated(string $deprecated): TypeDocument
-    {
-        $clone = clone $this;
-        $clone->deprecated = $deprecated;
-
-        return $clone;
-    }
-
-    public function getDeprecated(): ?string
-    {
-        return $this->deprecated;
     }
 }

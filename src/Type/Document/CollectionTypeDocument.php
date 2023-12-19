@@ -13,8 +13,7 @@ final class CollectionTypeDocument extends AbstractTypeDocument
         public readonly ?Collection\Size $size,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

@@ -14,8 +14,7 @@ final class StringTypeDocument extends AbstractTypeDocument
         public readonly ?String\Pattern $pattern = null,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

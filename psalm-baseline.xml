@@ -1,26 +1,2 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
-  <file src="src/Route/Document/Property/ResponseCode.php">
-    <DeprecatedProperty>
-      <code><![CDATA[$this->code]]></code>
-    </DeprecatedProperty>
-  </file>
-  <file src="src/Type/AbstractObjectTypeDocumentor.php">
-    <DeprecatedClass>
-      <code>$class::getMaximumLength()</code>
-      <code>$class::getMinimumLength()</code>
-      <code>$class::getRegularExpression()</code>
-      <code>AbstractRegularExpressionStringValueObject::class</code>
-      <code>DocStringFormat::class</code>
-      <code>DocStringFormat::class</code>
-    </DeprecatedClass>
-    <DeprecatedMethod>
-      <code>$class::getPrecision()</code>
-    </DeprecatedMethod>
-  </file>
-  <file src="src/Type/OpenApiTypeDocumentor.php">
-    <DeprecatedMethod>
-      <code>withDeprecated</code>
-    </DeprecatedMethod>
-  </file>
-</files>
+<files psalm-version="5.18.0@b113f3ed0259fd6e212d87c3df80eec95a6abf19"/>

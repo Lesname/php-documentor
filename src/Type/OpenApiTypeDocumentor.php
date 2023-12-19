@@ -33,32 +33,29 @@ final class OpenApiTypeDocumentor
     private const TYPE_NULL = 64;
 
     private const TYPE_ANY = self::TYPE_STRING
-    | self::TYPE_INT
-    | self::TYPE_NUMBER
-    | self::TYPE_BOOL
-    | self::TYPE_OBJECT
-    | self::TYPE_ARRAY
-    | self::TYPE_NULL;
+        | self::TYPE_INT
+        | self::TYPE_NUMBER
+        | self::TYPE_BOOL
+        | self::TYPE_OBJECT
+        | self::TYPE_ARRAY
+        | self::TYPE_NULL;
 
     /**
      * @param array<mixed> $schema
      */
     public function document(array $schema): TypeDocument
     {
-        $document = $this->documentType($schema);
-
-        if (isset($schema['deprecated']) && $schema['deprecated']) {
-            $document = $document->withDeprecated('deprecated');
-        }
-
-        return $document;
+        return $this->documentType($schema);
     }
 
     /**
      * @param array<mixed> $schema
      *
+     * @return TypeDocument
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedArgumentTypeCoercion
+     * @throws TooLong
+     * @throws TooShort
      */
     private function documentType(array $schema): TypeDocument
     {
@@ -288,30 +285,15 @@ final class OpenApiTypeDocumentor
         $maximum = $schema['maximum'] ?? null;
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
-        $multipleOf = null;
-
-        if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
-            $multipleOf = $schema['multipleOf'];
-            $multipleOfStr = (string)$multipleOf;
-
-            if (str_contains($multipleOfStr, '.')) {
-                $pos = strpos($multipleOfStr, '.');
-                $precision = $pos !== false
-                    ? strlen(substr($multipleOfStr, $pos + 1))
-                    : null;
-            } else {
-                $precision = 0;
-            }
-        } else {
-            $precision = null;
-        }
+        $multipleOf = isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))
+            ? $schema['multipleOf']
+            : null;
 
         return new NumberTypeDocument(
             $minimum !== null && $maximum !== null
                 ? new Range($minimum, $maximum)
                 : null,
             $multipleOf,
-            $precision,
         );
     }
 }
