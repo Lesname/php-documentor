@@ -10,16 +10,8 @@ use RuntimeException;
  */
 final class ResponseCode
 {
-    /** @deprecated use value */
-    public readonly int $code;
-
-    /**
-     * @psalm-suppress DeprecatedProperty
-     */
     public function __construct(public readonly int $value)
     {
-        $this->code = $value;
-
         if ($value < 200 || $value >= 600) {
             throw new RuntimeException();
         }

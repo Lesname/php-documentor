@@ -19,14 +19,13 @@ final class NumberTypeDocumentTest extends TestCase
         $document = new NumberTypeDocument(
             $range,
             .001,
-            3,
             'format',
             'ref',
             'description',
         );
 
         self::assertSame($range, $document->range);
-        self::assertSame(3, $document->precision);
+        self::assertSame(.001, $document->multipleOf);
         self::assertSame('ref', $document->getReference());
         self::assertSame('description', $document->getDescription());
     }

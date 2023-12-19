@@ -16,18 +16,4 @@ enum Category: string implements EnumValueObject
 
     case Command = 'command';
     case Query = 'query';
-
-    /**
-     * @param array<mixed> $tags
-     */
-    public static function fromTags(array $tags): Category
-    {
-        foreach (self::cases() as $case) {
-            if (in_array($case->value, $tags)) {
-                return $case;
-            }
-        }
-
-        throw new RuntimeException();
-    }
 }

@@ -13,7 +13,7 @@ final class Pattern extends AbstractStringValueObject
     /**
      * @psalm-pure
      */
-    public static function getMinLength(): int
+    public static function getMinimumLength(): int
     {
         return 3;
     }
@@ -21,7 +21,7 @@ final class Pattern extends AbstractStringValueObject
     /**
      * @psalm-pure
      */
-    public static function getMaxLength(): int
+    public static function getMaximumLength(): int
     {
         return 255;
     }

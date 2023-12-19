@@ -8,8 +8,8 @@ namespace LessDocumentor\Type\Document;
  */
 final class ReferenceTypeDocument extends AbstractTypeDocument
 {
-    public function __construct(string $reference, ?string $description = null, ?string $deprecated = null)
+    public function __construct(string $reference, ?string $description = null)
     {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

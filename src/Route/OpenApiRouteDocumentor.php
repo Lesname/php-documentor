@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Category;
 use LessDocumentor\Route\Document\Property\Resource;
@@ -18,6 +20,9 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
 {
     /**
      * @param array<mixed> $route
+     * @return RouteDocument
+     * @throws TooLong
+     * @throws TooShort
      */
     public function document(array $route): RouteDocument
     {
@@ -45,7 +50,22 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
             : null;
 
         assert(is_array($schema['tags']));
-        $category = Category::fromTags($schema['tags']);
+
+        $category = null;
+
+        foreach ($schema['tags'] as $tag) {
+            assert(is_string($tag));
+
+            $category = Category::tryFrom($tag);
+
+            if ($category) {
+                break;
+            }
+        }
+
+        if (!isset($category)) {
+            throw new RuntimeException();
+        }
 
         $position = strrpos($path, '/');
         $resource = is_int($position)
