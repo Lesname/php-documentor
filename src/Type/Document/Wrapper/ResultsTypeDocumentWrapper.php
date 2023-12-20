@@ -22,8 +22,7 @@ final class ResultsTypeDocumentWrapper implements TypeDocumentWrapper
                             'total' => new Property(
                                 new NumberTypeDocument(
                                     new Range(0, PHP_INT_MAX),
-                                    0,
-                                    null,
+                                    1,
                                 ),
                             ),
                         ],
