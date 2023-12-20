@@ -51,9 +51,9 @@ final class OpenApiTypeDocumentor
     /**
      * @param array<mixed> $schema
      *
-     * @return TypeDocument
      * @psalm-suppress MixedAssignment
      * @psalm-suppress MixedArgumentTypeCoercion
+     *
      * @throws TooLong
      * @throws TooShort
      */
