@@ -4,10 +4,13 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use BackedEnum;
+use ReflectionType;
 use LessDocumentor\Helper\AttributeHelper;
 use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
 use LessDocumentor\Type\Document\String\Pattern;
+use LessDocumentor\Type\Exception\UnexpectedInput;
+use LessDocumentor\Type\Document\UnionTypeDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocFormat;
 use LessDocumentor\Type\Document\Collection\Size;
@@ -28,26 +31,39 @@ use ReflectionException;
 use LessValueObject\Composite\DynamicCompositeValueObject;
 use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
 
-abstract class AbstractObjectTypeDocumentor
+abstract class AbstractObjectTypeDocumentor implements TypeDocumentor
 {
     /**
-     * @param class-string $class
-     *
+     * @psalm-assert-if-true class-string $input
+     */
+    public function canDocument(mixed $input): bool
+    {
+        return is_string($input) && class_exists($input);
+    }
+
+    /**
      * @throws MissingAttribute
      * @throws ReflectionException
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
      */
-    public function document(string $class): TypeDocument
+    public function document(mixed $input): TypeDocument
     {
-        if ($class === DynamicCompositeValueObject::class) {
+        if (!$this->canDocument($input)) {
+            throw new UnexpectedInput('class-string', $input);
+        }
+
+        if ($input === DynamicCompositeValueObject::class) {
             return new CompositeTypeDocument([], true);
         }
 
         return match (true) {
-            is_subclass_of($class, StringValueObject::class) => $this->documentStringValueObject($class),
-            is_subclass_of($class, NumberValueObject::class) => $this->documentNumberValueObject($class),
-            is_subclass_of($class, CollectionValueObject::class) => $this->documentCollectionValueObject($class),
-            is_subclass_of($class, BackedEnum::class) => $this->documentEnum($class),
-            default => $this->documentObject($class),
+            is_subclass_of($input, StringValueObject::class) => $this->documentStringValueObject($input),
+            is_subclass_of($input, NumberValueObject::class) => $this->documentNumberValueObject($input),
+            is_subclass_of($input, CollectionValueObject::class) => $this->documentCollectionValueObject($input),
+            is_subclass_of($input, BackedEnum::class) => $this->documentEnum($input),
+            default => $this->documentObject($input),
         };
     }
 

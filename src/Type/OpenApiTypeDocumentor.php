@@ -9,6 +9,7 @@ use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Type\Document\AnyTypeDocument;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
+use LessDocumentor\Type\Exception\UnexpectedInput;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
@@ -22,7 +23,7 @@ use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Document\UnionTypeDocument;
 use RuntimeException;
 
-final class OpenApiTypeDocumentor
+final class OpenApiTypeDocumentor implements TypeDocumentor
 {
     private const TYPE_STRING = 1;
     private const TYPE_INT = 2;
@@ -40,12 +41,23 @@ final class OpenApiTypeDocumentor
         | self::TYPE_ARRAY
         | self::TYPE_NULL;
 
-    /**
-     * @param array<mixed> $schema
-     */
-    public function document(array $schema): TypeDocument
+    public function canDocument(mixed $input): bool
     {
-        return $this->documentType($schema);
+        return is_array($input);
+    }
+
+    /**
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
+     */
+    public function document(mixed $input): TypeDocument
+    {
+        if (!is_array($input)) {
+            throw new UnexpectedInput('array', $input);
+        }
+
+        return $this->documentType($input);
     }
 
     /**

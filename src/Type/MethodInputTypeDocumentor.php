@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Type\Exception\UnexpectedInput;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocDeprecated;
 use LessDocumentor\Type\Document\AnyTypeDocument;
@@ -21,20 +22,31 @@ use ReflectionType;
 use ReflectionUnionType;
 use RuntimeException;
 
-final class MethodInputTypeDocumentor
+final class MethodInputTypeDocumentor implements TypeDocumentor
 {
+    public function canDocument(mixed $input): bool
+    {
+        return $input instanceof ReflectionMethod;
+    }
+
     /**
+     * @psalm-suppress MixedAssignment
+     *
+     * @throws UnexpectedInput
      * @throws MissingAttribute
      * @throws ReflectionException
-     *
-     * @psalm-suppress MixedAssignment
      */
-    public function document(ReflectionMethod $method): TypeDocument
+    public function document(mixed $input): TypeDocument
     {
+        if (!$input instanceof ReflectionMethod) {
+            throw new UnexpectedInput(ReflectionMethod::class, $input);
+        }
+
         $parameters = [];
 
-        foreach ($method->getParameters() as $parameter) {
+        foreach ($input->getParameters() as $parameter) {
             $type = $parameter->getType();
+
             assert($type instanceof ReflectionNamedType, new RuntimeException());
 
             $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
