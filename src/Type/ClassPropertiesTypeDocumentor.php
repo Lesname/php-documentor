@@ -3,28 +3,25 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use ReflectionType;
+use ReflectionClass;
+use RuntimeException;
+use ReflectionProperty;
+use ReflectionException;
+use ReflectionUnionType;
+use ReflectionNamedType;
 use LessDocumentor\Helper\AttributeHelper;
 use LessValueObject\String\Exception\TooLong;
 use LessValueObject\String\Exception\TooShort;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Attribute\DocDeprecated;
+use LessDocumentor\Type\Exception\UnexpectedInput;
+use LessDocumentor\Type\Document\UnionTypeDocument;
+use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\UnionTypeDocument;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionNamedType;
-use ReflectionProperty;
-use ReflectionType;
-use ReflectionUnionType;
-use RuntimeException;
 
-/**
- * @deprecated ClassPropertiesTypeDocumentor
- */
-final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
+final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
 {
     private readonly TypeDocumentor $builtinTypeDocumentor;
 

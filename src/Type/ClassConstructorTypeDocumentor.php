@@ -9,10 +9,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
-/**
- * @deprecated use ClassConstructorTypeDocumentor
- */
-final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
+final class ClassConstructorTypeDocumentor extends AbstractClassTypeDocumentor
 {
     /**
      * @param class-string $class

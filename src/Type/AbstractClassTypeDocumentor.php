@@ -4,35 +4,32 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use BackedEnum;
-use LessDocumentor\Helper\AttributeHelper;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
-use LessDocumentor\Type\Document\String\Pattern;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Route\Exception\MissingAttribute;
-use LessDocumentor\Type\Attribute\DocFormat;
-use LessDocumentor\Type\Document\Collection\Size;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessValueObject\Collection\CollectionValueObject;
-use LessValueObject\Number\NumberValueObject;
-use LessValueObject\String\StringValueObject;
-use LessValueObject\ValueObject;
 use ReflectionClass;
 use ReflectionException;
+use LessValueObject\ValueObject;
+use LessDocumentor\Helper\AttributeHelper;
+use LessDocumentor\Type\Attribute\DocFormat;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\StringValueObject;
+use LessValueObject\Number\NumberValueObject;
+use LessValueObject\String\Exception\TooShort;
+use LessDocumentor\Type\Document\TypeDocument;
+use LessDocumentor\Type\Document\Number\Range;
+use LessDocumentor\Type\Document\String\Length;
+use LessDocumentor\Type\Document\String\Pattern;
+use LessDocumentor\Type\Document\Collection\Size;
+use LessDocumentor\Type\Exception\UnexpectedInput;
+use LessDocumentor\Type\Document\EnumTypeDocument;
+use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Document\NumberTypeDocument;
+use LessDocumentor\Type\Document\StringTypeDocument;
+use LessValueObject\Collection\CollectionValueObject;
+use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessValueObject\Composite\DynamicCompositeValueObject;
 use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
 
-/**
- * @deprecated use AbstractClassTypeDocumentor
- */
-abstract class AbstractObjectTypeDocumentor implements TypeDocumentor
+abstract class AbstractClassTypeDocumentor implements TypeDocumentor
 {
     /**
      * @psalm-assert-if-true class-string $input
