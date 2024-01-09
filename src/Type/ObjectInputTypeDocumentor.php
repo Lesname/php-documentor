@@ -11,6 +11,8 @@ use ReflectionMethod;
 
 /**
  * @deprecated use ClassConstructorTypeDocumentor
+ *
+ * @psalm-suppress DeprecatedClass
  */
 final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
 {

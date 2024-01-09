@@ -23,6 +23,8 @@ use RuntimeException;
 
 /**
  * @deprecated ClassPropertiesTypeDocumentor
+ *
+ * @psalm-suppress DeprecatedClass
  */
 final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
 {

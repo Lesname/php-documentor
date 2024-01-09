@@ -111,7 +111,7 @@ final class MethodInputTypeDocumentor implements TypeDocumentor
                 default => throw new RuntimeException($typename),
             };
         } else {
-            $typeDocument = (new ObjectInputTypeDocumentor())->document($typename);
+            $typeDocument = (new ClassConstructorTypeDocumentor())->document($typename);
         }
 
         return $type->allowsNull()

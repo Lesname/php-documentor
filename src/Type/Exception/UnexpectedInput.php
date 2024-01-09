@@ -5,6 +5,9 @@ namespace LessDocumentor\Type\Exception;
 
 use LessDocumentor\Exception\AbstractException;
 
+/**
+ * @psalm-immutable
+ */
 final class UnexpectedInput extends AbstractException
 {
     public function __construct(public readonly string $expected, public readonly mixed $gotten)
