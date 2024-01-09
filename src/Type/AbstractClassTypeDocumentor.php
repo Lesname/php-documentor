@@ -68,6 +68,9 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
     /**
      * @param class-string<CollectionValueObject<ValueObject>> $class
      *
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
      * @throws MissingAttribute
      * @throws ReflectionException
      */

@@ -3,18 +3,25 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
-use LessDocumentor\Route\Exception\MissingAttribute;
+use LessDocumentor\Type\Exception\UnexpectedInput;
 use LessDocumentor\Type\Document\TypeDocument;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
-final class ClassConstructorTypeDocumentor extends AbstractClassTypeDocumentor
+final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
 {
+    private readonly TypeDocumentor $methodInputTypeDocumentor;
+
+    public function __construct(?TypeDocumentor $methodInputTypeDocumentor = null)
+    {
+        $this->methodInputTypeDocumentor = $methodInputTypeDocumentor ?? new MethodInputTypeDocumentor(new HintTypeDocumentor($this));
+    }
+
     /**
      * @param class-string $class
      *
-     * @throws MissingAttribute
+     * @throws UnexpectedInput
      * @throws ReflectionException
      */
     protected function documentObject(string $class): TypeDocument
@@ -23,7 +30,8 @@ final class ClassConstructorTypeDocumentor extends AbstractClassTypeDocumentor
         $constructor = $classReflected->getConstructor();
         assert($constructor instanceof ReflectionMethod);
 
-        return (new MethodInputTypeDocumentor())
+        return $this
+            ->methodInputTypeDocumentor
             ->document($constructor)
             ->withReference($class);
     }

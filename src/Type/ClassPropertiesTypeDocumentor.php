@@ -3,97 +3,50 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
-use ReflectionType;
 use ReflectionClass;
 use RuntimeException;
 use ReflectionProperty;
 use ReflectionException;
-use ReflectionUnionType;
-use ReflectionNamedType;
 use LessDocumentor\Helper\AttributeHelper;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Attribute\DocDeprecated;
 use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\UnionTypeDocument;
-use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 
 final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
 {
-    private readonly TypeDocumentor $builtinTypeDocumentor;
+    private readonly TypeDocumentor $hintTypeDocumentor;
 
-    public function __construct(?TypeDocumentor $builtinTypeDocumentor = null)
+    public function __construct(?TypeDocumentor $hintTypeDocumentor = null)
     {
-        $this->builtinTypeDocumentor = $builtinTypeDocumentor ?? new BuiltinTypeDocumentor();
+        $this->hintTypeDocumentor = $hintTypeDocumentor ?? new HintTypeDocumentor($this);
     }
 
     /**
      * @param class-string $class
      *
      * @throws ReflectionException
-     * @throws TooLong
-     * @throws TooShort
      * @throws UnexpectedInput
-     * @throws MissingAttribute
      */
     protected function documentObject(string $class): TypeDocument
     {
-        $classReflected = new ReflectionClass($class);
+        $classReflection = new ReflectionClass($class);
         $properties = [];
 
-        foreach ($classReflected->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            $propType = $property->getType();
+        foreach ($classReflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            $propertyType = $property->getType();
 
-            if ($propType === null) {
-                throw new RuntimeException();
+            if ($propertyType === null) {
+                throw new RuntimeException("{$property->getName()} misses type information");
             }
 
             $properties[$property->getName()] = new Property(
-                $this->getTypeDocument($propType),
+                $this->hintTypeDocumentor->document($propertyType),
                 deprecated: AttributeHelper::hasAttribute($property, DocDeprecated::class),
             );
         }
 
         return new CompositeTypeDocument($properties, reference: $class);
-    }
-
-    /**
-     * @throws Exception\UnexpectedInput
-     * @throws MissingAttribute
-     * @throws ReflectionException
-     * @throws TooLong
-     * @throws TooShort
-     */
-    private function getTypeDocument(ReflectionType $type): TypeDocument
-    {
-        if ($type instanceof ReflectionUnionType) {
-            $types = $type->getTypes();
-
-            if (count($types) === 1) {
-                return $this->getTypeDocument($types[0]);
-            }
-
-            return new UnionTypeDocument(
-                array_map(
-                    function (ReflectionType $type): TypeDocument {
-                        return $this->getTypeDocument($type);
-                    },
-                    $types,
-                ),
-            );
-        }
-
-        assert($type instanceof ReflectionNamedType, new RuntimeException());
-
-        $typeDocument = $type->isBuiltin()
-            ? $this->builtinTypeDocumentor->document($type->getName())
-            : $this->document($type->getName());
-
-        return $type->allowsNull()
-            ? $typeDocument->withNullable()
-            : $typeDocument;
     }
 }

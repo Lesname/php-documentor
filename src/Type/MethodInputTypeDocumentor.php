@@ -3,38 +3,32 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use ReflectionParameter;
 use LessDocumentor\Helper\AttributeHelper;
 use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocDeprecated;
-use LessDocumentor\Type\Document\AnyTypeDocument;
-use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\UnionTypeDocument;
-use ReflectionException;
 use ReflectionMethod;
-use ReflectionNamedType;
-use ReflectionType;
-use ReflectionUnionType;
 use RuntimeException;
 
 final class MethodInputTypeDocumentor implements TypeDocumentor
 {
+    private readonly TypeDocumentor $hintTypeDocumentor;
+
+    public function __construct(?TypeDocumentor $hintTypeDocumentor = null)
+    {
+        $this->hintTypeDocumentor = $hintTypeDocumentor ?? new HintTypeDocumentor(new ClassParametersTypeDocumentor($this));
+    }
+
     public function canDocument(mixed $input): bool
     {
         return $input instanceof ReflectionMethod;
     }
 
     /**
-     * @psalm-suppress MixedAssignment
-     *
      * @throws UnexpectedInput
-     * @throws MissingAttribute
-     * @throws ReflectionException
      */
     public function document(mixed $input): TypeDocument
     {
@@ -45,77 +39,34 @@ final class MethodInputTypeDocumentor implements TypeDocumentor
         $parameters = [];
 
         foreach ($input->getParameters() as $parameter) {
-            $type = $parameter->getType();
-
-            assert($type instanceof ReflectionNamedType, new RuntimeException());
-
-            $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
-            $default = $parameter->isDefaultValueAvailable()
-                ? $parameter->getDefaultValue()
-                : null;
-
-            assert(is_scalar($default) || is_object($default) || is_array($default) || $default === null);
-
-            $propType = $parameter->getType();
-
-            if ($propType === null) {
-                throw new RuntimeException();
-            }
-
-            $parameters[$parameter->getName()] = new Property(
-                $this->getTypeDocument($propType),
-                $required,
-                $default,
-                AttributeHelper::hasAttribute($parameter, DocDeprecated::class),
-            );
+            $parameters[$parameter->getName()] = $this->documentParameter($parameter);
         }
 
         return new CompositeTypeDocument($parameters);
     }
 
     /**
-     * @throws MissingAttribute
-     * @throws ReflectionException
+     * @throws UnexpectedInput
      */
-    private function getTypeDocument(ReflectionType $type): TypeDocument
+    private function documentParameter(ReflectionParameter $parameter): Property
     {
-        if ($type instanceof ReflectionUnionType) {
-            $types = $type->getTypes();
+        $type = $parameter->getType();
 
-            if (count($types) === 1) {
-                return $this->getTypeDocument($types[0]);
-            }
-
-            return new UnionTypeDocument(
-                array_map(
-                    function (ReflectionType $type): TypeDocument {
-                        return $this->getTypeDocument($type);
-                    },
-                    $types,
-                ),
-            );
+        if ($type === null) {
+            throw new RuntimeException("Missing type for '{$parameter->getName()}'");
         }
 
-        assert($type instanceof ReflectionNamedType, new RuntimeException());
+        $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
+        $paramTypeDocument = $this->hintTypeDocumentor->document($type);
 
-        $typename = $type->getName();
+        $default = $parameter->isDefaultValueAvailable()
+            ? $parameter->getDefaultValue()
+            : null;
 
-        if (!class_exists($typename)) {
-            $typeDocument = match ($typename) {
-                'array' => new CompositeTypeDocument([], true),
-                'bool' => new BoolTypeDocument(),
-                'float' => new NumberTypeDocument(null, null),
-                'int' => new NumberTypeDocument(null, 1),
-                'mixed' => new AnyTypeDocument(),
-                'string' => new StringTypeDocument(null),
-                default => throw new RuntimeException($typename),
-            };
-        } else {
-            $typeDocument = (new ClassConstructorTypeDocumentor())->document($typename);
-        }
+        assert(is_scalar($default) || is_object($default) || is_array($default) || $default === null);
 
-        return $type->allowsNull()
-            ? $typeDocument->withNullable()
-            : $typeDocument;
+        $isDeprecated = AttributeHelper::hasAttribute($parameter, DocDeprecated::class);
+
+        return new Property($paramTypeDocument, $required, $default, $isDeprecated);
     }
 }
