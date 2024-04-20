@@ -14,7 +14,6 @@ use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\LessRouteDocumentor;
-use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;

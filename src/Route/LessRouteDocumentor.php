@@ -17,6 +17,7 @@ use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
+use LessDocumentor\Type\ClassPropertiesTypeDocumentor;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
@@ -100,7 +101,7 @@ final class LessRouteDocumentor implements RouteDocumentor
     {
         assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
 
-        $objInputDocumentor = new ObjectOutputTypeDocumentor();
+        $classPropertiesTypeDocumentor = new ClassPropertiesTypeDocumentor();
 
         $handler = new ReflectionClass($route['middleware']);
 
@@ -111,7 +112,7 @@ final class LessRouteDocumentor implements RouteDocumentor
                 new Response(
                     new ResponseCode($response->code),
                     $response->output
-                        ? $objInputDocumentor->document($response->output)
+                        ? $classPropertiesTypeDocumentor->document($response->output)
                         : null,
                 ),
             ];
@@ -143,20 +144,23 @@ final class LessRouteDocumentor implements RouteDocumentor
                     }
                 }
 
-                $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
+                $attribute = AttributeHelper::hasAttribute($proxyMethod, DocResource::class)
+                    ? AttributeHelper::getAttribute($proxyMethod, DocResource::class)
+                    : AttributeHelper::getAttribute($proxyClass, DocResource::class);
+
                 $output = new CollectionTypeDocument(
-                    $objInputDocumentor->document($attribute->resource),
+                    $classPropertiesTypeDocumentor->document($attribute->resource),
                     $hasPaginate ? new Size(max(0, (int)floor(PerPage::getMinimumValue())), (int)ceil(PerPage::getMaximumValue())) : null,
                     null,
                 );
             } elseif (interface_exists($return->getName())) {
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
-                $output = $objInputDocumentor->document($attribute->resource);
+                $output = $classPropertiesTypeDocumentor->document($attribute->resource);
             } else {
                 $returns = $return->getName();
 
                 if (class_exists($returns)) {
-                    $output = $objInputDocumentor->document($returns);
+                    $output = $classPropertiesTypeDocumentor->document($returns);
                 } else {
                     $output = match ($returns) {
                         'array' => new CompositeTypeDocument([], true),
@@ -187,7 +191,7 @@ final class LessRouteDocumentor implements RouteDocumentor
                 assert(class_exists($class));
             }
 
-            $output = $objInputDocumentor->document($class);
+            $output = $classPropertiesTypeDocumentor->document($class);
         }
 
         if (AttributeHelper::hasAttribute($handler, DocTypeWrapper::class)) {

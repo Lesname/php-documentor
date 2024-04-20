@@ -5,7 +5,7 @@ namespace LessDocumentor\Route\Attribute;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_CLASS)]
+#[Attribute(Attribute::TARGET_CLASS | Attribute::TARGET_METHOD)]
 final class DocResource
 {
     /**
