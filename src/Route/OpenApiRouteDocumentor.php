@@ -45,7 +45,7 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
         $schema = $sub[$method];
         assert(is_array($schema));
 
-        $deprecated = ($schema['deprecated'] ?? false)
+        $deprecated = isset($schema['deprecated']) && $schema['deprecated']
             ? new Deprecated('', '')
             : null;
 
