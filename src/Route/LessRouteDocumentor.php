@@ -144,7 +144,10 @@ final class LessRouteDocumentor implements RouteDocumentor
                     }
                 }
 
-                $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
+                $attribute = AttributeHelper::hasAttribute($proxyMethod, DocResource::class)
+                    ? AttributeHelper::getAttribute($proxyMethod, DocResource::class)
+                    : AttributeHelper::getAttribute($proxyClass, DocResource::class);
+
                 $output = new CollectionTypeDocument(
                     $classPropertiesTypeDocumentor->document($attribute->resource),
                     $hasPaginate ? new Size(max(0, (int)floor(PerPage::getMinimumValue())), (int)ceil(PerPage::getMaximumValue())) : null,
