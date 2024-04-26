@@ -64,6 +64,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
      * @param array<mixed> $schema
      *
      * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArgument
      * @psalm-suppress MixedArgumentTypeCoercion
      *
      * @throws TooLong
@@ -87,6 +88,19 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
             assert(is_array($schema['oneOf']));
 
             return $this->documentUnion($schema['oneOf']);
+        }
+
+        if (isset($schema['allOf'])) {
+            assert(is_array($schema['allOf']));
+
+            if (count($schema['allOf']) !== 1) {
+                throw new RuntimeException('Currently allOf only supports a single type');
+            }
+
+            $subSchema = array_pop($schema['allOf']);
+            assert(is_array($subSchema));
+
+            return $this->documentType($subSchema);
         }
 
         $nullable = false;
