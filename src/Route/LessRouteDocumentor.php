@@ -131,7 +131,7 @@ final class LessRouteDocumentor implements RouteDocumentor
             $return = $proxyMethod->getReturnType();
             assert($return instanceof ReflectionNamedType);
 
-            if (is_subclass_of($return->getName(), Traversable::class)) {
+            if (is_subclass_of($return->getName(), Traversable::class) || $return->getName() === 'array') {
                 $hasPaginate = false;
 
                 foreach ($proxyMethod->getParameters() as $parameter) {
