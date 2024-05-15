@@ -31,7 +31,6 @@ use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\NumberTypeDocument;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
-use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -182,16 +181,22 @@ final class LessRouteDocumentor implements RouteDocumentor
             assert($return->isBuiltin() === false);
 
             if (interface_exists($return->getName())) {
+                $iterable = is_subclass_of($return->getName(), Traversable::class);
                 $class = AttributeHelper::getAttribute(
                     new ReflectionClass($attribute->class),
                     DocResource::class,
                 )->resource;
             } else {
+                $iterable = false;
                 $class = $return->getName();
                 assert(class_exists($class));
             }
 
             $output = $classPropertiesTypeDocumentor->document($class);
+
+            if ($iterable) {
+                $output = new CollectionTypeDocument($output, null);
+            }
         }
 
         if (AttributeHelper::hasAttribute($handler, DocTypeWrapper::class)) {
