@@ -20,13 +20,17 @@ final class Path extends AbstractStringValueObject
         parent::__construct($string);
 
         $parts = explode('/', $string);
-        $parts = explode('.', array_pop($parts));
+        $lastPart = $parts[count($parts) - 1];
+
+        $parts = explode('.', $lastPart);
 
         if (count($parts) < 2) {
             throw new RuntimeException("$string");
         }
 
-        $action = array_pop($parts);
+        $lastKey = count($parts) - 1;
+        $action = $parts[$lastKey];
+        unset($parts[$lastKey]);
 
         $this->action = $action;
         $this->resource = implode('.', $parts);

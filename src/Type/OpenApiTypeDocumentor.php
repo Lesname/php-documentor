@@ -114,7 +114,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
             $types = array_values(
                 array_filter(
                     $schema['type'],
-                    static fn(string $item) => $item !== 'null',
+                    static fn(mixed $item) => $item !== 'null',
                 ),
             );
 
@@ -278,6 +278,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         if (isset($schema['enum'])) {
             assert(is_array($schema['enum']));
 
+            // @phpstan-ignore argument.type
             return new EnumTypeDocument($schema['enum']);
         }
 

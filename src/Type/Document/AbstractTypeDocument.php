@@ -8,16 +8,16 @@ namespace LessDocumentor\Type\Document;
  */
 abstract class AbstractTypeDocument implements TypeDocument
 {
-    protected bool $nullable = false;
-
     public function __construct(
-        private ?string $reference = null,
-        private ?string $description = null,
+        protected ?string $reference = null,
+        protected ?string $description = null,
+        protected bool $nullable = false,
     ) {}
 
     public function withReference(string $reference): TypeDocument
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->reference = $reference;
 
         return $clone;
@@ -31,6 +31,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function withNullable(bool $nullable = true): TypeDocument
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->nullable = $nullable;
 
         return $clone;
@@ -44,6 +45,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function withDescription(string $description): TypeDocument
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->description = $description;
 
         return $clone;
