@@ -1,7 +1,7 @@
 {
   "name": "lessname/documentor",
   "description": "Document stuff",
-  "license": "proprietary",
+  "license": "MIT",
   "repositories": [
     {
       "type": "composer",
