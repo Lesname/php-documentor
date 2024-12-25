@@ -31,7 +31,6 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         self::assertInstanceOf(CompositeTypeDocument::class, $document);
         self::assertSame($composite::class, $document->getReference());
         self::assertNull($document->getDescription());
-        self::assertNull($document->getDeprecated());
 
         self::assertSame(3, count($document->properties));
 
@@ -41,13 +40,11 @@ final class ObjectInputTypeDocumentorTest extends TestCase
         self::assertSame(100, $perPage->type->range->maximal);
         self::assertSame(PerPage::class, $perPage->type->getReference());
         self::assertNull($perPage->type->getDescription());
-        self::assertNull($perPage->type->getDeprecated());
 
         $stub = $document->properties['stub'];
         self::assertSame(['foo', 'fiz'], $stub->type->cases);
         self::assertSame(EnumStub::class, $stub->type->getReference());
         self::assertNull($stub->type->getDescription());
-        self::assertNull($stub->type->getDeprecated());
 
         $biz = $document->properties['biz'];
         self::assertInstanceOf(BoolTypeDocument::class, $biz->type);

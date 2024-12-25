@@ -9,7 +9,7 @@ namespace LessDocumentor\Type\Document\Number;
 final class Range
 {
     public function __construct(
-        public readonly float|int|null $minimal,
-        public readonly float|int|null $maximal,
+        public readonly float|int $minimal,
+        public readonly float|int $maximal,
     ) {}
 }

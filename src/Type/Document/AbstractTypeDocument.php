@@ -8,24 +8,16 @@ namespace LessDocumentor\Type\Document;
  */
 abstract class AbstractTypeDocument implements TypeDocument
 {
-    protected bool $nullable = false;
-
-    /**
-     * @psalm-suppress ImpureFunctionCall
-     */
     public function __construct(
-        private ?string $reference = null,
-        private ?string $description = null,
-        private ?string $deprecated = null,
-    ) {
-        if (is_string($deprecated)) {
-            trigger_error("Parameter 'deprecated' deprecated");
-        }
-    }
+        protected ?string $reference = null,
+        protected ?string $description = null,
+        protected bool $nullable = false,
+    ) {}
 
     public function withReference(string $reference): TypeDocument
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->reference = $reference;
 
         return $clone;
@@ -36,10 +28,11 @@ abstract class AbstractTypeDocument implements TypeDocument
         return $this->reference;
     }
 
-    public function withNullable(): TypeDocument
+    public function withNullable(bool $nullable = true): TypeDocument
     {
         $clone = clone $this;
-        $clone->nullable = true;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
+        $clone->nullable = $nullable;
 
         return $clone;
     }
@@ -52,6 +45,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function withDescription(string $description): TypeDocument
     {
         $clone = clone $this;
+        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
         $clone->description = $description;
 
         return $clone;
@@ -60,18 +54,5 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    public function withDeprecated(string $deprecated): TypeDocument
-    {
-        $clone = clone $this;
-        $clone->deprecated = $deprecated;
-
-        return $clone;
-    }
-
-    public function getDeprecated(): ?string
-    {
-        return $this->deprecated;
     }
 }

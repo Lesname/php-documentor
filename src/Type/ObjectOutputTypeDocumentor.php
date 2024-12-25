@@ -4,16 +4,13 @@ declare(strict_types=1);
 namespace LessDocumentor\Type;
 
 use LessDocumentor\Helper\AttributeHelper;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessDocumentor\Type\Exception\UnexpectedInput;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Attribute\DocDeprecated;
-use LessDocumentor\Type\Document\AnyTypeDocument;
-use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
-use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Document\UnionTypeDocument;
 use ReflectionClass;
@@ -24,13 +21,28 @@ use ReflectionType;
 use ReflectionUnionType;
 use RuntimeException;
 
+/**
+ * @deprecated ClassPropertiesTypeDocumentor
+ *
+ * @psalm-suppress DeprecatedClass
+ */
 final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
 {
+    private readonly TypeDocumentor $builtinTypeDocumentor;
+
+    public function __construct(?TypeDocumentor $builtinTypeDocumentor = null)
+    {
+        $this->builtinTypeDocumentor = $builtinTypeDocumentor ?? new BuiltinTypeDocumentor();
+    }
+
     /**
      * @param class-string $class
      *
-     * @throws MissingAttribute
      * @throws ReflectionException
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
+     * @throws MissingAttribute
      */
     protected function documentObject(string $class): TypeDocument
     {
@@ -54,8 +66,11 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
     }
 
     /**
-     * @throws ReflectionException
+     * @throws Exception\UnexpectedInput
      * @throws MissingAttribute
+     * @throws ReflectionException
+     * @throws TooLong
+     * @throws TooShort
      */
     private function getTypeDocument(ReflectionType $type): TypeDocument
     {
@@ -78,21 +93,9 @@ final class ObjectOutputTypeDocumentor extends AbstractObjectTypeDocumentor
 
         assert($type instanceof ReflectionNamedType, new RuntimeException());
 
-        $typename = $type->getName();
-
-        if (!class_exists($typename)) {
-            $typeDocument = match ($typename) {
-                'array' => new CompositeTypeDocument([], true),
-                'bool' => new BoolTypeDocument(),
-                'float' => new NumberTypeDocument(new Range(null, null), null),
-                'int' => new NumberTypeDocument(new Range(null, null), 0),
-                'mixed' => new AnyTypeDocument(),
-                'string' => new StringTypeDocument(new Length(null, null)),
-                default => throw new RuntimeException($typename),
-            };
-        } else {
-            $typeDocument = $this->document($typename);
-        }
+        $typeDocument = $type->isBuiltin()
+            ? $this->builtinTypeDocumentor->document($type->getName())
+            : $this->document($type->getName());
 
         return $type->allowsNull()
             ? $typeDocument->withNullable()

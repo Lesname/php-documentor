@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Helper;
 
+use ReflectionMethod;
 use LessDocumentor\Route\Exception\MissingAttribute;
 use ReflectionAttribute;
 use ReflectionClass;
@@ -18,14 +19,14 @@ final class AttributeHelper
     {}
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
+     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
      *
      * @return array<T>
      */
-    public static function getAttributes(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute): array
+    public static function getAttributes(ReflectionClass|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector, string $nameAttribute): array
     {
         return array_map(
             static fn (ReflectionAttribute $attribute) => $attribute->newInstance(),
@@ -34,7 +35,7 @@ final class AttributeHelper
     }
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
+     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
@@ -43,7 +44,7 @@ final class AttributeHelper
      *
      * @throws MissingAttribute
      */
-    public static function getAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute)
+    public static function getAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector, string $nameAttribute)
     {
         foreach ($reflector->getAttributes($nameAttribute) as $attribute) {
             return $attribute->newInstance();
@@ -53,10 +54,10 @@ final class AttributeHelper
     }
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter $reflector
+     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string $nameAttribute
      */
-    public static function hasAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter $reflector, string $nameAttribute): bool
+    public static function hasAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector, string $nameAttribute): bool
     {
         return count($reflector->getAttributes($nameAttribute)) > 0;
     }

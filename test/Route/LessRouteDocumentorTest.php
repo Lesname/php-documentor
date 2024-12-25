@@ -7,13 +7,13 @@ use LessDocumentor\Route\Attribute\DocHttpProxy;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocInputProvided;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\LessRouteDocumentor;
-use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
@@ -53,19 +53,19 @@ final class LessRouteDocumentorTest extends TestCase
             ],
         );
 
-        self::assertSame(Method::Post, $document->getMethod());
-        self::assertEquals(new Path('/fiz/bar.foo'), $document->getPath());
-        self::assertSame('bar', $document->getResource());
+        self::assertSame(Method::Post, $document->method);
+        self::assertEquals(new Path('/fiz/bar.foo'), $document->path);
+        self::assertEquals(new Resource('bar'), $document->resource);
         self::assertEquals(
             new Deprecated(null, 'test'),
-            $document->getDeprecated()
+            $document->deprecated
         );
 
         self::assertEquals(
             new CompositeTypeDocument(
                 ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
             ),
-            $document->getInput(),
+            $document->input,
         );
 
         self::assertEquals(
@@ -75,7 +75,7 @@ final class LessRouteDocumentorTest extends TestCase
                     (new ObjectOutputTypeDocumentor())->document(Page::class),
                 ),
             ],
-            $document->getRespones(),
+            $document->responses,
         );
     }
 
@@ -99,19 +99,19 @@ final class LessRouteDocumentorTest extends TestCase
             ],
         );
 
-        self::assertSame(Method::Post, $document->getMethod());
-        self::assertEquals(new Path('/fiz/bar.foo'), $document->getPath());
-        self::assertSame('bar', $document->getResource());
+        self::assertSame(Method::Post, $document->method);
+        self::assertEquals(new Path('/fiz/bar.foo'), $document->path);
+        self::assertEquals(new Resource('bar'), $document->resource);
         self::assertEquals(
             new Deprecated('test', null),
-            $document->getDeprecated()
+            $document->deprecated
         );
 
         self::assertEquals(
             new CompositeTypeDocument(
                 ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
             ),
-            $document->getInput(),
+            $document->input,
         );
 
         self::assertEquals(
@@ -121,7 +121,7 @@ final class LessRouteDocumentorTest extends TestCase
                     (new ObjectOutputTypeDocumentor())->document(Page::class),
                 ),
             ],
-            $document->getRespones(),
+            $document->responses,
         );
     }
 
@@ -151,7 +151,7 @@ final class LessRouteDocumentorTest extends TestCase
                     (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
                 ),
             ],
-            $document->getRespones(),
+            $document->responses,
         );
     }
 
@@ -180,12 +180,12 @@ final class LessRouteDocumentorTest extends TestCase
                     new ResponseCode(200),
                     new CollectionTypeDocument(
                         (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
-                        new Size(null, null),
+                        null,
                         null,
                     ),
                 ),
             ],
-            $document->getRespones(),
+            $document->responses,
         );
     }
 
@@ -221,16 +221,16 @@ final class LessRouteDocumentorTest extends TestCase
             ],
         );
 
-        self::assertSame(Method::Post, $document->getMethod());
-        self::assertEquals(new Path('/fiz/bar.foo'), $document->getPath());
-        self::assertSame('bar', $document->getResource());
-        self::assertNull($document->getDeprecated());
+        self::assertSame(Method::Post, $document->method);
+        self::assertEquals(new Path('/fiz/bar.foo'), $document->path);
+        self::assertEquals(new Resource('bar'), $document->resource);
+        self::assertNull($document->deprecated);
 
         self::assertEquals(
             new CompositeTypeDocument(
                 ['page' => new Property((new ObjectInputTypeDocumentor())->document(Page::class))],
             ),
-            $document->getInput(),
+            $document->input,
         );
 
         self::assertEquals(
@@ -240,7 +240,7 @@ final class LessRouteDocumentorTest extends TestCase
                     (new ObjectOutputTypeDocumentor())->document(Content::class),
                 ),
             ],
-            $document->getRespones(),
+            $document->responses,
         );
     }
 

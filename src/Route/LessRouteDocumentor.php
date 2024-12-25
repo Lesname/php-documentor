@@ -3,15 +3,21 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
+use LessValueObject\Composite\Paginate;
 use LessDocumentor\Helper\AttributeHelper;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
 use LessDocumentor\Route\Attribute\DocHttpProxy;
+use LessValueObject\Number\Int\Paginate\PerPage;
+use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Attribute\DocHttpResponse;
 use LessDocumentor\Route\Attribute\DocResource;
-use LessDocumentor\Route\Document\PostRouteDocument;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
+use LessDocumentor\Type\ClassPropertiesTypeDocumentor;
 use LessDocumentor\Route\Document\Property\ResponseCode;
 use LessDocumentor\Route\Document\RouteDocument;
 use LessDocumentor\Route\Exception\MissingAttribute;
@@ -22,12 +28,9 @@ use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
 use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
 use LessDocumentor\Type\Document\StringTypeDocument;
 use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
-use LessDocumentor\Type\ObjectOutputTypeDocumentor;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -42,6 +45,9 @@ final class LessRouteDocumentor implements RouteDocumentor
     /**
      * @param array<mixed> $route
      *
+     * @return RouteDocument
+     * @throws TooLong
+     * @throws TooShort
      * @throws MissingAttribute
      * @throws ReflectionException
      */
@@ -63,10 +69,11 @@ final class LessRouteDocumentor implements RouteDocumentor
             $deprecated = new Deprecated($routeAlternate, $routeDeprecated);
         }
 
-        return new PostRouteDocument(
+        return new RouteDocument(
+            Method::Post,
             $route['category'],
             new Path($route['path']),
-            $route['resource'],
+            new Resource($route['resource']),
             $deprecated,
             $this->getRouteInputDocumentor()->document($route),
             $this->documentResponses($route),
@@ -93,7 +100,7 @@ final class LessRouteDocumentor implements RouteDocumentor
     {
         assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
 
-        $objInputDocumentor = new ObjectOutputTypeDocumentor();
+        $classPropertiesTypeDocumentor = new ClassPropertiesTypeDocumentor();
 
         $handler = new ReflectionClass($route['middleware']);
 
@@ -104,7 +111,7 @@ final class LessRouteDocumentor implements RouteDocumentor
                 new Response(
                     new ResponseCode($response->code),
                     $response->output
-                        ? $objInputDocumentor->document($response->output)
+                        ? $classPropertiesTypeDocumentor->document($response->output)
                         : null,
                 ),
             ];
@@ -123,29 +130,44 @@ final class LessRouteDocumentor implements RouteDocumentor
             $return = $proxyMethod->getReturnType();
             assert($return instanceof ReflectionNamedType);
 
-            if (is_subclass_of($return->getName(), Traversable::class)) {
-                $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
+            if (is_subclass_of($return->getName(), Traversable::class) || $return->getName() === 'array') {
+                $hasPaginate = false;
+
+                foreach ($proxyMethod->getParameters() as $parameter) {
+                    $type = $parameter->getType();
+
+                    if ($type instanceof ReflectionNamedType && $type->getName() === Paginate::class) {
+                        $hasPaginate = true;
+
+                        break;
+                    }
+                }
+
+                $attribute = AttributeHelper::hasAttribute($proxyMethod, DocResource::class)
+                    ? AttributeHelper::getAttribute($proxyMethod, DocResource::class)
+                    : AttributeHelper::getAttribute($proxyClass, DocResource::class);
+
                 $output = new CollectionTypeDocument(
-                    $objInputDocumentor->document($attribute->resource),
-                    new Size(null, null),
+                    $classPropertiesTypeDocumentor->document($attribute->resource),
+                    $hasPaginate ? new Size(max(0, (int)floor(PerPage::getMinimumValue())), (int)ceil(PerPage::getMaximumValue())) : null,
                     null,
                 );
             } elseif (interface_exists($return->getName())) {
                 $attribute = AttributeHelper::getAttribute($proxyClass, DocResource::class);
-                $output = $objInputDocumentor->document($attribute->resource);
+                $output = $classPropertiesTypeDocumentor->document($attribute->resource);
             } else {
                 $returns = $return->getName();
 
                 if (class_exists($returns)) {
-                    $output = $objInputDocumentor->document($returns);
+                    $output = $classPropertiesTypeDocumentor->document($returns);
                 } else {
                     $output = match ($returns) {
                         'array' => new CompositeTypeDocument([], true),
                         'bool' => new BoolTypeDocument(),
-                        'float' => new NumberTypeDocument(new Range(null, null), null),
-                        'int' => new NumberTypeDocument(new Range(null, null), 0),
+                        'float' => new NumberTypeDocument(null, null, null),
+                        'int' => new NumberTypeDocument(null, 1),
                         'mixed' => new AnyTypeDocument(),
-                        'string' => new StringTypeDocument(new Length(null, null)),
+                        'string' => new StringTypeDocument(null),
                         default => throw new RuntimeException("Unknown type '{$returns}'"),
                     };
                 }
@@ -159,16 +181,22 @@ final class LessRouteDocumentor implements RouteDocumentor
             assert($return->isBuiltin() === false);
 
             if (interface_exists($return->getName())) {
+                $iterable = is_subclass_of($return->getName(), Traversable::class);
                 $class = AttributeHelper::getAttribute(
                     new ReflectionClass($attribute->class),
                     DocResource::class,
                 )->resource;
             } else {
+                $iterable = false;
                 $class = $return->getName();
                 assert(class_exists($class));
             }
 
-            $output = $objInputDocumentor->document($class);
+            $output = $classPropertiesTypeDocumentor->document($class);
+
+            if ($iterable) {
+                $output = new CollectionTypeDocument($output, null);
+            }
         }
 
         if (AttributeHelper::hasAttribute($handler, DocTypeWrapper::class)) {

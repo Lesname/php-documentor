@@ -9,12 +9,12 @@ namespace LessDocumentor\Type\Document;
 final class StringTypeDocument extends AbstractTypeDocument
 {
     public function __construct(
-        public readonly String\Length $length,
+        public readonly ?String\Length $length,
         public readonly ?string $format = null,
+        public readonly ?String\Pattern $pattern = null,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

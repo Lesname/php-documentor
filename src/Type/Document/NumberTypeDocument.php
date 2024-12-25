@@ -9,13 +9,12 @@ namespace LessDocumentor\Type\Document;
 final class NumberTypeDocument extends AbstractTypeDocument
 {
     public function __construct(
-        public readonly Number\Range $range,
-        public readonly ?int $precision,
+        public readonly ?Number\Range $range,
+        public readonly float|int|null $multipleOf,
         public readonly ?string $format = null,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

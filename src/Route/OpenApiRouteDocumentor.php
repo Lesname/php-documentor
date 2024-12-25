@@ -3,8 +3,11 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route;
 
-use LessDocumentor\Route\Document\PostRouteDocument;
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessDocumentor\Route\Document\Property\Method;
 use LessDocumentor\Route\Document\Property\Category;
+use LessDocumentor\Route\Document\Property\Resource;
 use LessDocumentor\Route\Document\Property\Deprecated;
 use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Route\Document\Property\Response;
@@ -17,6 +20,9 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
 {
     /**
      * @param array<mixed> $route
+     * @return RouteDocument
+     * @throws TooLong
+     * @throws TooShort
      */
     public function document(array $route): RouteDocument
     {
@@ -39,12 +45,27 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
         $schema = $sub[$method];
         assert(is_array($schema));
 
-        $deprecated = ($schema['deprecated'] ?? false)
+        $deprecated = isset($schema['deprecated']) && $schema['deprecated']
             ? new Deprecated('', '')
             : null;
 
         assert(is_array($schema['tags']));
-        $category = Category::fromTags($schema['tags']);
+
+        $category = null;
+
+        foreach ($schema['tags'] as $tag) {
+            assert(is_string($tag));
+
+            $category = Category::tryFrom($tag);
+
+            if ($category) {
+                break;
+            }
+        }
+
+        if (!isset($category)) {
+            throw new RuntimeException();
+        }
 
         $position = strrpos($path, '/');
         $resource = is_int($position)
@@ -93,6 +114,14 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
             );
         }
 
-        return new PostRouteDocument($category, new Path($path), $resource, $deprecated, $input, $responses);
+        return new RouteDocument(
+            Method::Post,
+            $category,
+            new Path($path),
+            new Resource($resource),
+            $deprecated,
+            $input,
+            $responses,
+        );
     }
 }

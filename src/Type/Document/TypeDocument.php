@@ -12,21 +12,11 @@ interface TypeDocument
 
     public function getReference(): ?string;
 
-    public function withNullable(): TypeDocument;
+    public function withNullable(bool $nullable = true): TypeDocument;
 
     public function isNullable(): bool;
 
     public function withDescription(string $description): TypeDocument;
 
     public function getDescription(): ?string;
-
-    /**
-     * @deprecated is a property concern
-     */
-    public function withDeprecated(string $deprecated): TypeDocument;
-
-    /**
-     * @deprecated is a property concern
-     */
-    public function getDeprecated(): ?string;
 }

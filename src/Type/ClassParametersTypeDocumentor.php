@@ -9,18 +9,13 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 
-/**
- * @deprecated use ClassConstructorTypeDocumentor
- *
- * @psalm-suppress DeprecatedClass
- */
-final class ObjectInputTypeDocumentor extends AbstractObjectTypeDocumentor
+final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
 {
     private readonly TypeDocumentor $methodInputTypeDocumentor;
 
-    public function __construct()
+    public function __construct(?TypeDocumentor $methodInputTypeDocumentor = null)
     {
-        $this->methodInputTypeDocumentor = new MethodInputTypeDocumentor(new HintTypeDocumentor($this));
+        $this->methodInputTypeDocumentor = $methodInputTypeDocumentor ?? new MethodInputTypeDocumentor(new HintTypeDocumentor($this));
     }
 
     /**

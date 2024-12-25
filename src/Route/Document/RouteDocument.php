@@ -3,31 +3,24 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Route\Document;
 
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Document\Property\Deprecated;
-use LessDocumentor\Route\Document\Property\Method;
-use LessDocumentor\Route\Document\Property\Path;
 use LessDocumentor\Type\Document\TypeDocument;
+use LessValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable
  */
-interface RouteDocument
+final class RouteDocument extends AbstractCompositeValueObject
 {
-    public function getMethod(): Method;
-
-    public function getCategory(): Category;
-
-    public function getPath(): Path;
-
-    public function getResource(): string;
-
-    public function getDeprecated(): ?Deprecated;
-
-    public function getInput(): TypeDocument;
-
     /**
-     * @return array<Property\Response>
+     * @param array<int, Property\Response> $responses
      */
-    public function getRespones(): array;
+    public function __construct(
+        public readonly Property\Method $method,
+        public readonly Property\Category $category,
+        public readonly Property\Path $path,
+        public readonly Property\Resource $resource,
+        public readonly ?Property\Deprecated $deprecated,
+        public readonly TypeDocument $input,
+        public readonly array $responses,
+    ) {}
 }

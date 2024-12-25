@@ -9,7 +9,7 @@ namespace LessDocumentor\Type\Document\Collection;
 final class Size
 {
     public function __construct(
-        public readonly ?int $minimal,
-        public readonly ?int $maximal,
+        public readonly int $minimal,
+        public readonly int $maximal,
     ) {}
 }

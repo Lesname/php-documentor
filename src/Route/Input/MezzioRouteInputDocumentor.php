@@ -11,10 +11,10 @@ use LessDocumentor\Route\Exception\MissingAttribute;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
 use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\MethodInputTypeDocumentor;
-use LessDocumentor\Type\ObjectInputTypeDocumentor;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use LessDocumentor\Type\ClassParametersTypeDocumentor;
 
 final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 {
@@ -83,10 +83,13 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 
     /**
      * @param class-string $event
+     * @return CompositeTypeDocument
+     * @throws MissingAttribute
+     * @throws ReflectionException
      */
     private function documentValueObject(string $event): CompositeTypeDocument
     {
-        $objInputDocumentor = new ObjectInputTypeDocumentor();
+        $objInputDocumentor = new ClassParametersTypeDocumentor();
 
         $document = $objInputDocumentor->document($event);
         assert($document instanceof CompositeTypeDocument);

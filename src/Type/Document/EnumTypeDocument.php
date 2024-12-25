@@ -15,8 +15,7 @@ final class EnumTypeDocument extends AbstractTypeDocument
         public readonly array $cases,
         ?string $reference = null,
         ?string $description = null,
-        ?string $deprecated = null,
     ) {
-        parent::__construct($reference, $description, $deprecated);
+        parent::__construct($reference, $description);
     }
 }

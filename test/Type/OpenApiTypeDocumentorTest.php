@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LessDocumentorTest\Type;
 
+use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Type\Document\Collection\Size;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
@@ -70,7 +71,8 @@ final class OpenApiTypeDocumentorTest extends TestCase
                 'bar' => [
                     'type' => 'string',
                     'minLength' => 3,
-                    'maxLength' => 30
+                    'maxLength' => 30,
+                    'pattern' => '/^.{1,30}$/'
                 ],
                 'biz' => [
                     'type' => 'array',
@@ -118,27 +120,27 @@ final class OpenApiTypeDocumentorTest extends TestCase
                                 ),
                             ],
                             true,
-                        ))->withNullable()->withDeprecated('deprecated'),
+                        ))->withNullable(),
                         deprecated: true,
                     ),
                     'foo' => new Property(
                         (new ReferenceTypeDocument("#/components/schemas/Occurred"))
-                            ->withNullable()
-                            ->withDeprecated('deprecated'),
+                            ->withNullable(),
                         false,
                         deprecated: true,
                     ),
                     'fiz' => new Property(
-                        (                        new NumberTypeDocument(
+                        new NumberTypeDocument(
                             new Range(-321, 123),
-                            0
-                        ))->withDeprecated('deprecated'),
+                            1,
+                        ),
                         false,
                         deprecated: true,
                     ),
                     'bar' => new Property(
                         new StringTypeDocument(
                             new Length(3, 30),
+                            pattern: new Pattern('/^.{1,30}$/'),
                         ),
                         false,
                     ),
@@ -149,7 +151,7 @@ final class OpenApiTypeDocumentorTest extends TestCase
                                     -321,
                                     123.4,
                                 ),
-                                2,
+                                .01,
                             ),
                             new Size(1, 99),
                         ),

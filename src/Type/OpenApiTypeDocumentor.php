@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace LessDocumentor\Type;
 
+use LessValueObject\String\Exception\TooLong;
+use LessValueObject\String\Exception\TooShort;
+use LessDocumentor\Type\Document\String\Pattern;
 use LessDocumentor\Type\Document\AnyTypeDocument;
 use LessDocumentor\Type\Document\BoolTypeDocument;
 use LessDocumentor\Type\Document\Collection\Size;
+use LessDocumentor\Type\Exception\UnexpectedInput;
 use LessDocumentor\Type\Document\CollectionTypeDocument;
 use LessDocumentor\Type\Document\Composite\Property;
 use LessDocumentor\Type\Document\CompositeTypeDocument;
@@ -19,7 +23,7 @@ use LessDocumentor\Type\Document\TypeDocument;
 use LessDocumentor\Type\Document\UnionTypeDocument;
 use RuntimeException;
 
-final class OpenApiTypeDocumentor
+final class OpenApiTypeDocumentor implements TypeDocumentor
 {
     private const TYPE_STRING = 1;
     private const TYPE_INT = 2;
@@ -37,27 +41,34 @@ final class OpenApiTypeDocumentor
         | self::TYPE_ARRAY
         | self::TYPE_NULL;
 
-    /**
-     * @param array<mixed> $schema
-     *
-     * @psalm-suppress DeprecatedMethod
-     */
-    public function document(array $schema): TypeDocument
+    public function canDocument(mixed $input): bool
     {
-        $document = $this->documentType($schema);
+        return is_array($input);
+    }
 
-        if (isset($schema['deprecated']) && $schema['deprecated']) {
-            $document = $document->withDeprecated('deprecated');
+    /**
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
+     */
+    public function document(mixed $input): TypeDocument
+    {
+        if (!is_array($input)) {
+            throw new UnexpectedInput('array', $input);
         }
 
-        return $document;
+        return $this->documentType($input);
     }
 
     /**
      * @param array<mixed> $schema
      *
      * @psalm-suppress MixedAssignment
+     * @psalm-suppress MixedArgument
      * @psalm-suppress MixedArgumentTypeCoercion
+     *
+     * @throws TooLong
+     * @throws TooShort
      */
     private function documentType(array $schema): TypeDocument
     {
@@ -79,6 +90,19 @@ final class OpenApiTypeDocumentor
             return $this->documentUnion($schema['oneOf']);
         }
 
+        if (isset($schema['allOf'])) {
+            assert(is_array($schema['allOf']));
+
+            if (count($schema['allOf']) !== 1) {
+                throw new RuntimeException('Currently allOf only supports a single type');
+            }
+
+            $subSchema = array_pop($schema['allOf']);
+            assert(is_array($subSchema));
+
+            return $this->documentType($subSchema);
+        }
+
         $nullable = false;
 
         if (!isset($schema['type'])) {
@@ -90,7 +114,7 @@ final class OpenApiTypeDocumentor
             $types = array_values(
                 array_filter(
                     $schema['type'],
-                    static fn (string $item) => $item !== 'null',
+                    static fn(mixed $item) => $item !== 'null',
                 ),
             );
 
@@ -194,7 +218,9 @@ final class OpenApiTypeDocumentor
             isset($schema['items']) && is_array($schema['items'])
                 ? $this->document($schema['items'])
                 : new AnyTypeDocument(),
-            new Size($minItems, $maxItems),
+            $minItems !== null && $maxItems !== null
+                ? new Size($minItems, $maxItems)
+                : null,
         );
     }
 
@@ -243,12 +269,16 @@ final class OpenApiTypeDocumentor
      * @param array<mixed> $schema
      *
      * @psalm-suppress MixedArgumentTypeCoercion
+     *
+     * @throws TooLong
+     * @throws TooShort
      */
     private function documentString(array $schema): TypeDocument
     {
         if (isset($schema['enum'])) {
             assert(is_array($schema['enum']));
 
+            // @phpstan-ignore argument.type
             return new EnumTypeDocument($schema['enum']);
         }
 
@@ -258,13 +288,16 @@ final class OpenApiTypeDocumentor
         $maxLength = $schema['maxLength'] ?? null;
         assert(is_int($maxLength) || $maxLength === null);
 
-        $format = isset($schema['format']) && is_string($schema['format'])
-            ? $schema['format']
-            : null;
-
         return new StringTypeDocument(
-            new Length($minLength, $maxLength),
-            $format,
+            $minLength !== null && $maxLength !== null
+                ? new Length($minLength, $maxLength)
+                : null,
+            isset($schema['format']) && is_string($schema['format'])
+                ? $schema['format']
+                : null,
+            isset($schema['pattern']) && is_string($schema['pattern'])
+                ? new Pattern($schema['pattern'])
+                : null,
         );
     }
 
@@ -279,24 +312,15 @@ final class OpenApiTypeDocumentor
         $maximum = $schema['maximum'] ?? null;
         assert(is_float($maximum) || is_int($maximum) || $maximum === null);
 
-        if (isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))) {
-            $multipleOf = (string)$schema['multipleOf'];
-
-            if (str_contains($multipleOf, '.')) {
-                $pos = strpos($multipleOf, '.');
-                $precision = $pos !== false
-                    ? strlen(substr($multipleOf, $pos + 1))
-                    : null;
-            } else {
-                $precision = 0;
-            }
-        } else {
-            $precision = null;
-        }
+        $multipleOf = isset($schema['multipleOf']) && (is_int($schema['multipleOf']) || is_float($schema['multipleOf']))
+            ? $schema['multipleOf']
+            : null;
 
         return new NumberTypeDocument(
-            new Range($minimum, $maximum),
-            $precision,
+            $minimum !== null && $maximum !== null
+                ? new Range($minimum, $maximum)
+                : null,
+            $multipleOf,
         );
     }
 }

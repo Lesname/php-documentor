@@ -8,10 +8,11 @@ namespace LessDocumentor\Type\Document;
  */
 final class AnyTypeDocument extends AbstractTypeDocument
 {
-    public function __construct(?string $reference = null, ?string $description = null, ?string $deprecated = null)
-    {
-        parent::__construct($reference, $description, $deprecated);
-
-        $this->nullable = true;
+    public function __construct(
+        ?string $reference = null,
+        ?string $description = null,
+        bool $nullable = true,
+    ) {
+        parent::__construct($reference, $description, $nullable);
     }
 }
