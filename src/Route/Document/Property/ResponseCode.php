@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Document\Property;
+namespace LesDocumentor\Route\Document\Property;
 
 use RuntimeException;
 

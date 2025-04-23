@@ -1,29 +1,33 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route;
+namespace LesDocumentor\Route;
 
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
-use LessDocumentor\Route\Document\Property\Method;
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Document\Property\Resource;
-use LessDocumentor\Route\Document\Property\Deprecated;
-use LessDocumentor\Route\Document\Property\Path;
-use LessDocumentor\Route\Document\Property\Response;
-use LessDocumentor\Route\Document\Property\ResponseCode;
-use LessDocumentor\Route\Document\RouteDocument;
-use LessDocumentor\Type\OpenApiTypeDocumentor;
+use Override;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooShort;
+use LesDocumentor\Route\Document\Property\Method;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Route\Document\Property\Category;
+use LesDocumentor\Route\Document\Property\Resource;
+use LesDocumentor\Route\Document\Property\Deprecated;
+use LesDocumentor\Route\Document\Property\Path;
+use LesDocumentor\Route\Document\Property\Response;
+use LesDocumentor\Route\Document\Property\ResponseCode;
+use LesDocumentor\Route\Document\RouteDocument;
+use LesDocumentor\Type\OpenApiTypeDocumentor;
 use RuntimeException;
 
 final class OpenApiRouteDocumentor implements RouteDocumentor
 {
     /**
      * @param array<mixed> $route
-     * @return RouteDocument
+     *
+     * @throws UnexpectedInput
      * @throws TooLong
      * @throws TooShort
      */
+    #[Override]
     public function document(array $route): RouteDocument
     {
         if (count($route) !== 1) {

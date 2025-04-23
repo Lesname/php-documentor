@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type;
+namespace LesDocumentorTest\Type;
 
-use LessDocumentor\Type\Document\String\Pattern;
-use LessDocumentor\Type\Document\Collection\Size;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\ReferenceTypeDocument;
-use LessDocumentor\Type\Document\String\Length;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\OpenApiTypeDocumentor;
+use LesDocumentor\Type\Document\String\Pattern;
+use LesDocumentor\Type\Document\Collection\Size;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\EnumTypeDocument;
+use LesDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\ReferenceTypeDocument;
+use LesDocumentor\Type\Document\String\Length;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\OpenApiTypeDocumentor;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\OpenApiTypeDocumentor
+ * @covers \LesDocumentor\Type\OpenApiTypeDocumentor
  */
 final class OpenApiTypeDocumentorTest extends TestCase
 {

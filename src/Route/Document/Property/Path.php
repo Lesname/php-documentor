@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Document\Property;
+namespace LesDocumentor\Route\Document\Property;
 
+use Override;
 use RuntimeException;
-use LessValueObject\String\AbstractStringValueObject;
+use LesValueObject\String\AbstractStringValueObject;
 
 /**
  * @psalm-immutable
@@ -39,6 +40,7 @@ final class Path extends AbstractStringValueObject
     /**
      * @psalm-pure
      */
+    #[Override]
     public static function getMinimumLength(): int
     {
         return 1;
@@ -47,6 +49,7 @@ final class Path extends AbstractStringValueObject
     /**
      * @psalm-pure
      */
+    #[Override]
     public static function getMaximumLength(): int
     {
         return 255;

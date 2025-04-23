@@ -1,7 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Document;
+namespace LesDocumentor\Type\Document;
+
+use Override;
 
 /**
  * @psalm-immutable
@@ -14,6 +16,7 @@ abstract class AbstractTypeDocument implements TypeDocument
         protected bool $nullable = false,
     ) {}
 
+    #[Override]
     public function withReference(string $reference): TypeDocument
     {
         $clone = clone $this;
@@ -23,11 +26,13 @@ abstract class AbstractTypeDocument implements TypeDocument
         return $clone;
     }
 
+    #[Override]
     public function getReference(): ?string
     {
         return $this->reference;
     }
 
+    #[Override]
     public function withNullable(bool $nullable = true): TypeDocument
     {
         $clone = clone $this;
@@ -37,11 +42,13 @@ abstract class AbstractTypeDocument implements TypeDocument
         return $clone;
     }
 
+    #[Override]
     public function isNullable(): bool
     {
         return $this->nullable;
     }
 
+    #[Override]
     public function withDescription(string $description): TypeDocument
     {
         $clone = clone $this;
@@ -51,6 +58,7 @@ abstract class AbstractTypeDocument implements TypeDocument
         return $clone;
     }
 
+    #[Override]
     public function getDescription(): ?string
     {
         return $this->description;

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Exception;
+namespace LesDocumentor\Type\Exception;
 
-use LessDocumentor\Exception\AbstractException;
+use LesDocumentor\Exception\AbstractException;
 
 /**
  * @psalm-immutable

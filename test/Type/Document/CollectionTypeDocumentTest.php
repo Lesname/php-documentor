@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document;
+namespace LesDocumentorTest\Type\Document;
 
-use LessDocumentor\Type\Document\Collection\Size;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Collection\Size;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\CollectionTypeDocument
+ * @covers \LesDocumentor\Type\Document\CollectionTypeDocument
  */
 final class CollectionTypeDocumentTest extends TestCase
 {

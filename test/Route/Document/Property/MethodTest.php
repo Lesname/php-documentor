@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Document\Property;
+namespace LesDocumentorTest\Route\Document\Property;
 
-use LessDocumentor\Route\Document\Property\Method;
+use LesDocumentor\Route\Document\Property\Method;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Document\Property\Method
+ * @covers \LesDocumentor\Route\Document\Property\Method
  */
 final class MethodTest extends TestCase
 {

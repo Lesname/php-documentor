@@ -1,16 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type;
+namespace LesDocumentorTest\Type;
 
-use LessDocumentor\Type\Document\BoolTypeDocument;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\ObjectOutputTypeDocumentor;
-use LessValueObject\Number\Int\Paginate\PerPage;
+use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesDocumentor\Type\ClassPropertiesTypeDocumentor;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\ObjectOutputTypeDocumentor;
+use LesValueObject\Number\Int\Paginate\PerPage;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\ObjectOutputTypeDocumentor
+ * @covers \LesDocumentor\Type\ObjectOutputTypeDocumentor
  */
 final class ObjectOutputTypeDocumentorTest extends TestCase
 {
@@ -28,7 +29,7 @@ final class ObjectOutputTypeDocumentorTest extends TestCase
             ) {}
         };
 
-        $documentor = new ObjectOutputTypeDocumentor();
+        $documentor = new ClassPropertiesTypeDocumentor();
         $document = $documentor->document($composite::class);
 
         self::assertInstanceOf(CompositeTypeDocument::class, $document);

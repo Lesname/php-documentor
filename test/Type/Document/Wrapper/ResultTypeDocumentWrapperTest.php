@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document\Wrapper;
+namespace LesDocumentorTest\Type\Document\Wrapper;
 
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper
+ * @covers \LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper
  */
 final class ResultTypeDocumentWrapperTest extends TestCase
 {

@@ -1,24 +1,24 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route;
+namespace LesDocumentorTest\Route;
 
-use LessDocumentor\Route\Document\RouteDocument;
-use LessDocumentor\Route\Document\Property\Method;
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Document\Property\Path;
-use LessDocumentor\Route\Document\Property\Response;
-use LessDocumentor\Route\Document\Property\Resource;
-use LessDocumentor\Route\Document\Property\ResponseCode;
-use LessDocumentor\Route\OpenApiRouteDocumentor;
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentor\Type\Document\ReferenceTypeDocument;
+use LesDocumentor\Route\Document\RouteDocument;
+use LesDocumentor\Route\Document\Property\Method;
+use LesDocumentor\Route\Document\Property\Category;
+use LesDocumentor\Route\Document\Property\Path;
+use LesDocumentor\Route\Document\Property\Response;
+use LesDocumentor\Route\Document\Property\Resource;
+use LesDocumentor\Route\Document\Property\ResponseCode;
+use LesDocumentor\Route\OpenApiRouteDocumentor;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\EnumTypeDocument;
+use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\OpenApiRouteDocumentor
+ * @covers \LesDocumentor\Route\OpenApiRouteDocumentor
  */
 final class OpenApiRouteDocumentorTest extends TestCase
 {

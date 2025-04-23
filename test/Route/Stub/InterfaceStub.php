@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Stub;
+namespace LesDocumentorTest\Route\Stub;
 
 interface InterfaceStub
 {

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Attribute;
+namespace LesDocumentor\Route\Attribute;
 
 use Attribute;
 

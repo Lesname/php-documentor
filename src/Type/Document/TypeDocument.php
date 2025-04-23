@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Document;
+namespace LesDocumentor\Type\Document;
 
 /**
  * @psalm-immutable

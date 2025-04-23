@@ -1,31 +1,31 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type;
+namespace LesDocumentorTest\Type;
 
-use LessDocumentor\Type\BuiltinTypeDocumentor;
+use LesDocumentor\Type\BuiltinTypeDocumentor;
 use PHPUnit\Framework\TestCase;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\AnyTypeDocument;
-use LessDocumentor\Type\Document\BoolTypeDocument;
-use LessDocumentor\Type\Document\NullTypeDocument;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Number\Range;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use LesDocumentor\Type\Document\AnyTypeDocument;
+use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesDocumentor\Type\Document\NullTypeDocument;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
 
-/**
- * @covers \LessDocumentor\Type\BuiltinTypeDocumentor
- */
+#[CoversClass(\LesDocumentor\Type\BuiltinTypeDocumentor::class)]
 class BuiltinTypeDocumentorTest extends TestCase
 {
     /**
-     * @dataProvider getTestValues
      *
      * @throws UnexpectedInput
      */
+    #[DataProvider('getTestValues')]
     public function testDocument(string $input, TypeDocument $expected): void
     {
         $documentor = new BuiltinTypeDocumentor();

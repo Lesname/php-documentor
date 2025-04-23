@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Exception;
+namespace LesDocumentor\Route\Exception;
 
-use LessDocumentor\Exception\AbstractException;
+use LesDocumentor\Exception\AbstractException;
 
 /**
  * @psalm-immutable

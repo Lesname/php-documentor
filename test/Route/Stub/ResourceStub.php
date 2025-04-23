@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Stub;
+namespace LesDocumentorTest\Route\Stub;
 
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Resource\Type;
+use LesValueObject\String\Format\Resource\Identifier;
+use LesValueObject\String\Format\Resource\Type;
 
 final class ResourceStub
 {

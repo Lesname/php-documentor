@@ -1,19 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type;
+namespace LesDocumentorTest\Type;
 
 use ReflectionNamedType;
 use ReflectionUnionType;
-use LessDocumentor\Type\TypeDocumentor;
-use LessDocumentor\Type\HintTypeDocumentor;
+use LesDocumentor\Type\TypeDocumentor;
+use LesDocumentor\Type\HintTypeDocumentor;
 use PHPUnit\Framework\TestCase;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\UnionTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\UnionTypeDocument;
 
 /**
- * @covers \LessDocumentor\Type\HintTypeDocumentor
+ * @covers \LesDocumentor\Type\HintTypeDocumentor
  */
 class HintTypeDocumentorTest extends TestCase
 {

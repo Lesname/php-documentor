@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Attribute;
+namespace LesDocumentor\Type\Attribute;
 
 use Attribute;
 

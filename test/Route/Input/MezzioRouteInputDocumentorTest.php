@@ -1,29 +1,30 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Input;
+namespace LesDocumentorTest\Route\Input;
 
-use LessDocumentor\Route\Attribute\DocHttpProxy;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInput;
-use LessDocumentor\Route\Attribute\DocInputProvided;
-use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\ObjectInputTypeDocumentor;
-use LessDocumentorTest\Route\Stub\ClassProxyStub;
-use LessValueObject\Composite\Content;
-use LessValueObject\Composite\Paginate;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\Number\Int\Paginate\Page;
-use LessValueObject\Number\Int\Paginate\PerPage;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Resource\Type;
+use LesDocumentor\Route\Attribute\DocHttpProxy;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesDocumentor\Route\Attribute\DocInput;
+use LesDocumentor\Route\Attribute\DocInputProvided;
+use LesDocumentor\Type\ClassParametersTypeDocumentor;
+use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\ObjectInputTypeDocumentor;
+use LesDocumentorTest\Route\Stub\ClassProxyStub;
+use LesValueObject\Composite\Content;
+use LesValueObject\Composite\Paginate;
+use LesValueObject\Number\Int\Date\MilliTimestamp;
+use LesValueObject\Number\Int\Paginate\Page;
+use LesValueObject\Number\Int\Paginate\PerPage;
+use LesValueObject\String\Format\Resource\Identifier;
+use LesValueObject\String\Format\Resource\Type;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
 /**
- * @covers \LessDocumentor\Route\Input\MezzioRouteInputDocumentor
+ * @covers \LesDocumentor\Route\Input\MezzioRouteInputDocumentor
  */
 final class MezzioRouteInputDocumentorTest extends TestCase
 {
@@ -48,8 +49,8 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 [
-                    'perPage' => new Property((new ObjectInputTypeDocumentor())->document(PerPage::class)),
-                    'page' => new Property((new ObjectInputTypeDocumentor())->document(Page::class)),
+                    'perPage' => new Property((new ClassParametersTypeDocumentor())->document(PerPage::class)),
+                    'page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class)),
                 ],
             ),
             $input,
@@ -76,7 +77,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
+                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $input,
         );
@@ -103,7 +104,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
+                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $input,
         );
@@ -141,7 +142,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => new Property((new ObjectInputTypeDocumentor())->document(Page::class))],
+                ['page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class))],
             ),
             $input,
         );

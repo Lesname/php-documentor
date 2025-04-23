@@ -1,38 +1,37 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route;
+namespace LesDocumentorTest\Route;
 
-use LessDocumentor\Route\Attribute\DocHttpProxy;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocInputProvided;
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Document\Property\Resource;
-use LessDocumentor\Route\Document\Property\Deprecated;
-use LessDocumentor\Route\Document\Property\Method;
-use LessDocumentor\Route\Document\Property\Path;
-use LessDocumentor\Route\Document\Property\Response;
-use LessDocumentor\Route\Document\Property\ResponseCode;
-use LessDocumentor\Route\LessRouteDocumentor;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\ObjectInputTypeDocumentor;
-use LessDocumentor\Type\ObjectOutputTypeDocumentor;
-use LessDocumentorTest\Route\Stub\ClassProxyStub;
-use LessDocumentorTest\Route\Stub\ResourceStub;
-use LessValueObject\Composite\Content;
-use LessValueObject\Number\Int\Date\MilliTimestamp;
-use LessValueObject\Number\Int\Paginate\Page;
-use LessValueObject\String\Format\Resource\Identifier;
-use LessValueObject\String\Format\Resource\Type;
+use PHPUnit\Framework\Attributes\CoversClass;
+use LesDocumentor\Route\Attribute\DocHttpProxy;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesDocumentor\Route\Attribute\DocInputProvided;
+use LesDocumentor\Route\Document\Property\Category;
+use LesDocumentor\Route\Document\Property\Resource;
+use LesDocumentor\Route\Document\Property\Deprecated;
+use LesDocumentor\Route\Document\Property\Method;
+use LesDocumentor\Route\Document\Property\Path;
+use LesDocumentor\Route\Document\Property\Response;
+use LesDocumentor\Type\ClassParametersTypeDocumentor;
+use LesDocumentor\Type\ClassPropertiesTypeDocumentor;
+use LesDocumentor\Route\Document\Property\ResponseCode;
+use LesDocumentor\Route\LesRouteDocumentor;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentorTest\Route\Stub\ClassProxyStub;
+use LesDocumentorTest\Route\Stub\ResourceStub;
+use LesValueObject\Composite\Content;
+use LesValueObject\Number\Int\Date\MilliTimestamp;
+use LesValueObject\Number\Int\Paginate\Page;
+use LesValueObject\String\Format\Resource\Identifier;
+use LesValueObject\String\Format\Resource\Type;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
-/**
- * @covers \LessDocumentor\Route\LessRouteDocumentor
- */
-final class LessRouteDocumentorTest extends TestCase
+#[CoversClass(LesRouteDocumentor::class)]
+final class LesRouteDocumentorTest extends TestCase
 {
     public function testProxyAttr(): void
     {
@@ -42,7 +41,7 @@ final class LessRouteDocumentorTest extends TestCase
         class {
         };
 
-        $documentor = new LessRouteDocumentor();
+        $documentor = new LesRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -63,7 +62,7 @@ final class LessRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
+                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $document->input,
         );
@@ -72,7 +71,7 @@ final class LessRouteDocumentorTest extends TestCase
             [
                 new Response(
                     new ResponseCode(200),
-                    (new ObjectOutputTypeDocumentor())->document(Page::class),
+                    (new ClassPropertiesTypeDocumentor())->document(Page::class),
                 ),
             ],
             $document->responses,
@@ -84,7 +83,7 @@ final class LessRouteDocumentorTest extends TestCase
         $handler = new #[DocInputProvided(['fiz'])] class {
         };
 
-        $documentor = new LessRouteDocumentor();
+        $documentor = new LesRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -109,7 +108,7 @@ final class LessRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ObjectInputTypeDocumentor())->document(Type::class))],
+                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $document->input,
         );
@@ -118,7 +117,7 @@ final class LessRouteDocumentorTest extends TestCase
             [
                 new Response(
                     new ResponseCode(200),
-                    (new ObjectOutputTypeDocumentor())->document(Page::class),
+                    (new ClassPropertiesTypeDocumentor())->document(Page::class),
                 ),
             ],
             $document->responses,
@@ -130,7 +129,7 @@ final class LessRouteDocumentorTest extends TestCase
         $handler = new class {
         };
 
-        $documentor = new LessRouteDocumentor();
+        $documentor = new LesRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -148,7 +147,7 @@ final class LessRouteDocumentorTest extends TestCase
             [
                 new Response(
                     new ResponseCode(200),
-                    (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
+                    (new ClassPropertiesTypeDocumentor())->document(ResourceStub::class),
                 ),
             ],
             $document->responses,
@@ -160,7 +159,7 @@ final class LessRouteDocumentorTest extends TestCase
         $handler = new class {
         };
 
-        $documentor = new LessRouteDocumentor();
+        $documentor = new LesRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -179,7 +178,7 @@ final class LessRouteDocumentorTest extends TestCase
                 new Response(
                     new ResponseCode(200),
                     new CollectionTypeDocument(
-                        (new ObjectOutputTypeDocumentor())->document(ResourceStub::class),
+                        (new ClassPropertiesTypeDocumentor())->document(ResourceStub::class),
                         null,
                         null,
                     ),
@@ -210,7 +209,7 @@ final class LessRouteDocumentorTest extends TestCase
             }
         };
 
-        $documentor = new LessRouteDocumentor();
+        $documentor = new LesRouteDocumentor();
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
@@ -228,7 +227,7 @@ final class LessRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => new Property((new ObjectInputTypeDocumentor())->document(Page::class))],
+                ['page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class))],
             ),
             $document->input,
         );
@@ -237,7 +236,7 @@ final class LessRouteDocumentorTest extends TestCase
             [
                 new Response(
                     new ResponseCode(201),
-                    (new ObjectOutputTypeDocumentor())->document(Content::class),
+                    (new ClassPropertiesTypeDocumentor())->document(Content::class),
                 ),
             ],
             $document->responses,
@@ -251,7 +250,7 @@ final class LessRouteDocumentorTest extends TestCase
         $handler = new class {
         };
 
-        $documentor = new LessRouteDocumentor();
+        $documentor = new LesRouteDocumentor();
         $documentor->document(
             [
                 'path' => '/fiz/bar.foo',

@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Attribute;
+namespace LesDocumentorTest\Route\Attribute;
 
-use LessDocumentor\Route\Attribute\DocHttpProxy;
+use LesDocumentor\Route\Attribute\DocHttpProxy;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Attribute\DocHttpProxy
+ * @covers \LesDocumentor\Route\Attribute\DocHttpProxy
  */
 final class DocHttpProxyTest extends TestCase
 {

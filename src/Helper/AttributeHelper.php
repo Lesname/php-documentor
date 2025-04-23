@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Helper;
+namespace LesDocumentor\Helper;
 
 use ReflectionMethod;
-use LessDocumentor\Route\Exception\MissingAttribute;
+use LesDocumentor\Route\Exception\MissingAttribute;
 use ReflectionAttribute;
 use ReflectionClass;
 use ReflectionParameter;
@@ -19,7 +19,7 @@ final class AttributeHelper
     {}
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
+     * @param ReflectionClass<covariant object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
@@ -35,7 +35,7 @@ final class AttributeHelper
     }
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
+     * @param ReflectionClass<covariant object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string<T> $nameAttribute
      *
      * @template T
@@ -54,7 +54,7 @@ final class AttributeHelper
     }
 
     /**
-     * @param ReflectionClass<object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
+     * @param ReflectionClass<covariant object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string $nameAttribute
      */
     public static function hasAttribute(ReflectionClass|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector, string $nameAttribute): bool
