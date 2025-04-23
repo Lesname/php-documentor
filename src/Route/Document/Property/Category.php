@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Document\Property;
+namespace LesDocumentor\Route\Document\Property;
 
 use RuntimeException;
-use LessValueObject\Enum\EnumValueObject;
-use LessValueObject\Enum\Helper\EnumValueHelper;
+use LesValueObject\Enum\EnumValueObject;
+use LesValueObject\Enum\Helper\EnumValueHelper;
 
 /**
  * @psalm-immutable

@@ -14,10 +14,7 @@ use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionMethod;
 use RuntimeException;
 
-/**
- * @deprecated use MethodParametersTypeDocumentor
- */
-final class MethodInputTypeDocumentor implements TypeDocumentor
+final class MethodParametersTypeDocumentor implements TypeDocumentor
 {
     private readonly TypeDocumentor $hintTypeDocumentor;
 

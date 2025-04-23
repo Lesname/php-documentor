@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Document\Property;
+namespace LesDocumentorTest\Route\Document\Property;
 
-use LessDocumentor\Route\Document\Property\Response;
-use LessDocumentor\Route\Document\Property\ResponseCode;
-use LessDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Route\Document\Property\Response;
+use LesDocumentor\Route\Document\Property\ResponseCode;
+use LesDocumentor\Type\Document\TypeDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Document\Property\Response
+ * @covers \LesDocumentor\Route\Document\Property\Response
  */
 final class ResponseTest extends TestCase
 {

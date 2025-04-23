@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Attribute;
+namespace LesDocumentorTest\Route\Attribute;
 
-use LessDocumentor\Route\Attribute\DocInputProvided;
+use LesDocumentor\Route\Attribute\DocInputProvided;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Attribute\DocInputProvided
+ * @covers \LesDocumentor\Route\Attribute\DocInputProvided
  */
 final class DocInputProvidedTest extends TestCase
 {

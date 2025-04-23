@@ -1,36 +1,37 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route;
+namespace LesDocumentor\Route;
 
-use LessValueObject\Composite\Paginate;
-use LessDocumentor\Helper\AttributeHelper;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\Exception\TooShort;
-use LessDocumentor\Route\Attribute\DocHttpProxy;
-use LessValueObject\Number\Int\Paginate\PerPage;
-use LessDocumentor\Route\Document\Property\Method;
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessDocumentor\Route\Attribute\DocResource;
-use LessDocumentor\Route\Document\Property\Category;
-use LessDocumentor\Route\Document\Property\Resource;
-use LessDocumentor\Route\Document\Property\Deprecated;
-use LessDocumentor\Route\Document\Property\Path;
-use LessDocumentor\Route\Document\Property\Response;
-use LessDocumentor\Type\ClassPropertiesTypeDocumentor;
-use LessDocumentor\Route\Document\Property\ResponseCode;
-use LessDocumentor\Route\Document\RouteDocument;
-use LessDocumentor\Route\Exception\MissingAttribute;
-use LessDocumentor\Route\Input\MezzioRouteInputDocumentor;
-use LessDocumentor\Route\Input\RouteInputDocumentor;
-use LessDocumentor\Type\Document\AnyTypeDocument;
-use LessDocumentor\Type\Document\BoolTypeDocument;
-use LessDocumentor\Type\Document\Collection\Size;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
+use Override;
+use LesValueObject\Composite\Paginate;
+use LesDocumentor\Helper\AttributeHelper;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooShort;
+use LesDocumentor\Route\Attribute\DocHttpProxy;
+use LesValueObject\Number\Int\Paginate\PerPage;
+use LesDocumentor\Route\Document\Property\Method;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesDocumentor\Route\Attribute\DocResource;
+use LesDocumentor\Route\Document\Property\Category;
+use LesDocumentor\Route\Document\Property\Resource;
+use LesDocumentor\Route\Document\Property\Deprecated;
+use LesDocumentor\Route\Document\Property\Path;
+use LesDocumentor\Route\Document\Property\Response;
+use LesDocumentor\Type\ClassPropertiesTypeDocumentor;
+use LesDocumentor\Route\Document\Property\ResponseCode;
+use LesDocumentor\Route\Document\RouteDocument;
+use LesDocumentor\Route\Exception\MissingAttribute;
+use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
+use LesDocumentor\Route\Input\RouteInputDocumentor;
+use LesDocumentor\Type\Document\AnyTypeDocument;
+use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesDocumentor\Type\Document\Collection\Size;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -38,7 +39,7 @@ use ReflectionNamedType;
 use RuntimeException;
 use Traversable;
 
-final class LessRouteDocumentor implements RouteDocumentor
+final class LesRouteDocumentor implements RouteDocumentor
 {
     private ?RouteInputDocumentor $routeInputDocumentor = null;
 
@@ -51,6 +52,7 @@ final class LessRouteDocumentor implements RouteDocumentor
      * @throws MissingAttribute
      * @throws ReflectionException
      */
+    #[Override]
     public function document(array $route): RouteDocument
     {
         assert(isset($route['path']) && is_string($route['path']));

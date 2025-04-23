@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Helper;
+namespace LesDocumentorTest\Helper;
 
-use LessDocumentor\Helper\AttributeHelper;
-use LessDocumentor\Route\Exception\MissingAttribute;
+use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Route\Exception\MissingAttribute;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
 /**
- * @covers \LessDocumentor\Helper\AttributeHelper
+ * @covers \LesDocumentor\Helper\AttributeHelper
  */
 final class AttributeHelperTest extends TestCase
 {

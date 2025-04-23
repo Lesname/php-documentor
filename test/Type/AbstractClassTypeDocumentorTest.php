@@ -1,22 +1,23 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type;
+namespace LesDocumentorTest\Type;
 
-use LessDocumentor\Type\AbstractObjectTypeDocumentor;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessValueObject\Collection\AbstractCollectionValueObject;
-use LessValueObject\Number\AbstractNumberValueObject;
-use LessValueObject\String\AbstractStringValueObject;
+use RuntimeException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\AbstractClassTypeDocumentor;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\EnumTypeDocument;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesValueObject\Number\Float\AbstractFloatValueObject;
+use LesValueObject\Collection\AbstractCollectionValueObject;
+use LesValueObject\String\AbstractStringValueObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LessDocumentor\Type\AbstractObjectTypeDocumentor
- */
-final class AbstractObjectTypeDocumentorTest extends TestCase
+#[CoversClass(AbstractClassTypeDocumentor::class)]
+final class AbstractClassTypeDocumentorTest extends TestCase
 {
     public function testStringValueObject(): void
     {
@@ -32,7 +33,14 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
             }
         };
 
-        $documentor = $this->getMockForAbstractClass(AbstractObjectTypeDocumentor::class);
+
+        $documentor = new class extends AbstractClassTypeDocumentor {
+            protected function documentClass(string $class): TypeDocument
+            {
+                throw new RuntimeException();
+            }
+        };
+
         $document = $documentor->document($valueObject::class);
 
         self::assertInstanceOf(StringTypeDocument::class, $document);
@@ -45,7 +53,7 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
     public function testNumberValueObject(): void
     {
-        $valueObject = new class (3.213) extends AbstractNumberValueObject {
+        $valueObject = new class (3.213) extends AbstractFloatValueObject {
             public static function getMultipleOf(): float|int
             {
                 return .001;
@@ -62,7 +70,14 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
             }
         };
 
-        $documentor = $this->getMockForAbstractClass(AbstractObjectTypeDocumentor::class);
+
+        $documentor = new class extends AbstractClassTypeDocumentor {
+            protected function documentClass(string $class): TypeDocument
+            {
+                throw new RuntimeException();
+            }
+        };
+
         $document = $documentor->document($valueObject::class);
 
         self::assertInstanceOf(NumberTypeDocument::class, $document);
@@ -76,7 +91,14 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
 
     public function testEnumValueObject(): void
     {
-        $documentor = $this->getMockForAbstractClass(AbstractObjectTypeDocumentor::class);
+
+        $documentor = new class extends AbstractClassTypeDocumentor {
+            protected function documentClass(string $class): TypeDocument
+            {
+                throw new RuntimeException();
+            }
+        };
+
         $document = $documentor->document(EnumStub::class);
 
         self::assertInstanceOf(EnumTypeDocument::class, $document);
@@ -105,7 +127,13 @@ final class AbstractObjectTypeDocumentorTest extends TestCase
             }
         };
 
-        $documentor = $this->getMockForAbstractClass(AbstractObjectTypeDocumentor::class);
+        $documentor = new class extends AbstractClassTypeDocumentor {
+            protected function documentClass(string $class): TypeDocument
+            {
+                throw new RuntimeException();
+            }
+        };
+
         $document = $documentor->document($collection::class);
 
         self::assertInstanceOf(CollectionTypeDocument::class, $document);

@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Stub;
+namespace LesDocumentorTest\Route\Stub;
 
-use LessDocumentor\Route\Attribute\DocResource;
-use LessValueObject\Number\Int\Date\Timestamp;
-use LessValueObject\Number\Int\Paginate\Page;
-use LessValueObject\String\Format\Resource\Type;
+use LesDocumentor\Route\Attribute\DocResource;
+use LesValueObject\Number\Int\Date\Timestamp;
+use LesValueObject\Number\Int\Paginate\Page;
+use LesValueObject\String\Format\Resource\Type;
 
 #[DocResource(ResourceStub::class)]
 final class ClassProxyStub

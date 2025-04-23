@@ -1,27 +1,30 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type;
+namespace LesDocumentor\Type;
 
+use Override;
 use RuntimeException;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\AnyTypeDocument;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\BoolTypeDocument;
-use LessDocumentor\Type\Document\NullTypeDocument;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Document\AnyTypeDocument;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\BoolTypeDocument;
+use LesDocumentor\Type\Document\NullTypeDocument;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
 
 final class BuiltinTypeDocumentor implements TypeDocumentor
 {
+    #[Override]
     public function canDocument(mixed $input): bool
     {
         return is_string($input);
     }
 
+    #[Override]
     public function document(mixed $input): TypeDocument
     {
         if (!is_string($input)) {

@@ -1,15 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type;
+namespace LesDocumentor\Type;
 
+use Override;
 use ReflectionType;
 use RuntimeException;
 use ReflectionUnionType;
 use ReflectionNamedType;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\UnionTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\UnionTypeDocument;
 
 final class HintTypeDocumentor implements TypeDocumentor
 {
@@ -25,11 +26,13 @@ final class HintTypeDocumentor implements TypeDocumentor
     /**
      * @psalm-assert-if-true ReflectionUnionType|ReflectionNamedType $input
      */
+    #[Override]
     public function canDocument(mixed $input): bool
     {
         return $input instanceof ReflectionUnionType || $input instanceof ReflectionNamedType;
     }
 
+    #[Override]
     public function document(mixed $input): TypeDocument
     {
         if (!$input instanceof ReflectionType) {

@@ -1,10 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type;
+namespace LesDocumentor\Type;
 
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\TypeDocument;
+use Override;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
@@ -13,9 +14,9 @@ final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
 {
     private readonly TypeDocumentor $methodInputTypeDocumentor;
 
-    public function __construct(?TypeDocumentor $methodInputTypeDocumentor = null)
+    public function __construct(?TypeDocumentor $methodParameterTypeDocumentor = null)
     {
-        $this->methodInputTypeDocumentor = $methodInputTypeDocumentor ?? new MethodInputTypeDocumentor(new HintTypeDocumentor($this));
+        $this->methodInputTypeDocumentor = $methodParameterTypeDocumentor ?? new MethodParametersTypeDocumentor(new HintTypeDocumentor($this));
     }
 
     /**
@@ -24,7 +25,8 @@ final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
      * @throws UnexpectedInput
      * @throws ReflectionException
      */
-    protected function documentObject(string $class): TypeDocument
+    #[Override]
+    protected function documentClass(string $class): TypeDocument
     {
         $classReflected = new ReflectionClass($class);
         $constructor = $classReflected->getConstructor();

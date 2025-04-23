@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Document\Wrapper;
+namespace LesDocumentor\Type\Document\Wrapper;
 
-use LessDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 
 interface TypeDocumentWrapper
 {

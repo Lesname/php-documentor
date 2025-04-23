@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Exception;
+namespace LesDocumentorTest\Route\Exception;
 
-use LessDocumentor\Route\Exception\MissingAttribute;
+use LesDocumentor\Route\Exception\MissingAttribute;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Exception\MissingAttribute
+ * @covers \LesDocumentor\Route\Exception\MissingAttribute
  */
 final class MissingAttributeTest extends TestCase
 {

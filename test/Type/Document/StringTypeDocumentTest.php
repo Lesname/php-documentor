@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document;
+namespace LesDocumentorTest\Type\Document;
 
-use LessDocumentor\Type\Document\String\Length;
-use LessDocumentor\Type\Document\String\Pattern;
-use LessDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\Document\String\Length;
+use LesDocumentor\Type\Document\String\Pattern;
+use LesDocumentor\Type\Document\StringTypeDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\StringTypeDocument
+ * @covers \LesDocumentor\Type\Document\StringTypeDocument
  */
 final class StringTypeDocumentTest extends TestCase
 {

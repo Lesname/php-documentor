@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type;
+namespace LesDocumentor\Type;
 
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Exception\UnexpectedInput;
 
 interface TypeDocumentor
 {

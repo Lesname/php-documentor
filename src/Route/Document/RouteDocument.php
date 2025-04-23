@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Document;
+namespace LesDocumentor\Route\Document;
 
-use LessDocumentor\Type\Document\TypeDocument;
-use LessValueObject\Composite\AbstractCompositeValueObject;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesValueObject\Composite\AbstractCompositeValueObject;
 
 /**
  * @psalm-immutable

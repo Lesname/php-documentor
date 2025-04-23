@@ -1,14 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Document\Wrapper;
+namespace LesDocumentor\Type\Document\Wrapper;
 
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
+use Override;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 
 final class ResultTypeDocumentWrapper implements TypeDocumentWrapper
 {
+    #[Override]
     public function wrap(TypeDocument $typeDocument): TypeDocument
     {
         return new CompositeTypeDocument(['result' => new Property($typeDocument)]);

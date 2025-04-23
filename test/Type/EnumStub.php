@@ -2,9 +2,9 @@
 // phpcs:ignoreFile enum
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type;
+namespace LesDocumentorTest\Type;
 
-use LessValueObject\Enum\EnumValueObject;
+use LesValueObject\Enum\EnumValueObject;
 
 /**
  * @psalm-immutable

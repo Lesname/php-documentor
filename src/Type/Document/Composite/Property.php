@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type\Document\Composite;
+namespace LesDocumentor\Type\Document\Composite;
 
-use LessDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 
 /**
  * @psalm-immutable

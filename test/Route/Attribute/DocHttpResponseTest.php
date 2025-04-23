@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Attribute;
+namespace LesDocumentorTest\Route\Attribute;
 
-use LessDocumentor\Route\Attribute\DocHttpResponse;
-use LessValueObject\ValueObject;
+use LesDocumentor\Route\Attribute\DocHttpResponse;
+use LesValueObject\ValueObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Attribute\DocHttpResponse
+ * @covers \LesDocumentor\Route\Attribute\DocHttpResponse
  */
 final class DocHttpResponseTest extends TestCase
 {

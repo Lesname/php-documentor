@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route;
+namespace LesDocumentor\Route;
 
-use LessDocumentor\Route\Document\RouteDocument;
+use LesDocumentor\Route\Document\RouteDocument;
 
 interface RouteDocumentor
 {

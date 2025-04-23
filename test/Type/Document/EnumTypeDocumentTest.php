@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document;
+namespace LesDocumentorTest\Type\Document;
 
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentorTest\Type\EnumStub;
+use LesDocumentor\Type\Document\EnumTypeDocument;
+use LesDocumentorTest\Type\EnumStub;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\EnumTypeDocument
+ * @covers \LesDocumentor\Type\Document\EnumTypeDocument
  */
 final class EnumTypeDocumentTest extends TestCase
 {

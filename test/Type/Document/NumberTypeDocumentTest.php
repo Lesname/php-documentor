@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document;
+namespace LesDocumentorTest\Type\Document;
 
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Document\NumberTypeDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\NumberTypeDocument
+ * @covers \LesDocumentor\Type\Document\NumberTypeDocument
  */
 final class NumberTypeDocumentTest extends TestCase
 {

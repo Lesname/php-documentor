@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document\Wrapper\Attribute;
+namespace LesDocumentorTest\Type\Document\Wrapper\Attribute;
 
-use LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
+use LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper
+ * @covers \LesDocumentor\Type\Document\Wrapper\Attribute\DocTypeWrapper
  */
 final class DocTypeWrapperTest extends TestCase
 {

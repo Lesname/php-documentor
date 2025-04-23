@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document\Property;
+namespace LesDocumentorTest\Type\Document\Property;
 
-use LessDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Document\Number\Range;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\Number\Range
+ * @covers \LesDocumentor\Type\Document\Number\Range
  */
 final class RangeTest extends TestCase
 {

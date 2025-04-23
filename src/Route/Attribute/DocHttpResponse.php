@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Attribute;
+namespace LesDocumentor\Route\Attribute;
 
 use Attribute;
-use LessValueObject\ValueObject;
+use LesValueObject\ValueObject;
 
 #[Attribute(Attribute::TARGET_CLASS)]
 final class DocHttpResponse

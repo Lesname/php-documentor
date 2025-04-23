@@ -1,20 +1,21 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Input;
+namespace LesDocumentor\Route\Input;
 
-use LessDocumentor\Helper\AttributeHelper;
-use LessDocumentor\Route\Attribute\DocHttpProxy;
-use LessDocumentor\Route\Attribute\DocInput;
-use LessDocumentor\Route\Attribute\DocInputProvided;
-use LessDocumentor\Route\Exception\MissingAttribute;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\MethodInputTypeDocumentor;
+use Override;
+use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Route\Attribute\DocHttpProxy;
+use LesDocumentor\Route\Attribute\DocInput;
+use LesDocumentor\Route\Attribute\DocInputProvided;
+use LesDocumentor\Route\Exception\MissingAttribute;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
-use LessDocumentor\Type\ClassParametersTypeDocumentor;
+use LesDocumentor\Type\ClassParametersTypeDocumentor;
+use LesDocumentor\Type\MethodParametersTypeDocumentor;
 
 final class MezzioRouteInputDocumentor implements RouteInputDocumentor
 {
@@ -24,6 +25,7 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
      * @throws MissingAttribute
      * @throws ReflectionException
      */
+    #[Override]
     public function document(array $route): TypeDocument
     {
         assert(isset($route['middleware']) && is_string($route['middleware']) && class_exists($route['middleware']));
@@ -49,7 +51,7 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
                 $method = new ReflectionMethod($attribute->class, $attribute->method);
             }
 
-            $document = (new MethodInputTypeDocumentor())
+            $document = (new MethodParametersTypeDocumentor())
                 ->document($method);
         }
 

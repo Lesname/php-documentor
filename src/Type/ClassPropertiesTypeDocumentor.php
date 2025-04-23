@@ -1,18 +1,19 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type;
+namespace LesDocumentor\Type;
 
+use Override;
 use ReflectionClass;
 use RuntimeException;
 use ReflectionProperty;
 use ReflectionException;
-use LessDocumentor\Helper\AttributeHelper;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Attribute\DocDeprecated;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Attribute\DocDeprecated;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
 
 final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
 {
@@ -29,7 +30,8 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
      * @throws ReflectionException
      * @throws UnexpectedInput
      */
-    protected function documentObject(string $class): TypeDocument
+    #[Override]
+    protected function documentClass(string $class): TypeDocument
     {
         $classReflection = new ReflectionClass($class);
         $properties = [];

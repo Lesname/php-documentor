@@ -1,18 +1,18 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document\Wrapper;
+namespace LesDocumentorTest\Type\Document\Wrapper;
 
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper
+ * @covers \LesDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper
  */
 final class ResultsTypeDocumentWrapperTest extends TestCase
 {

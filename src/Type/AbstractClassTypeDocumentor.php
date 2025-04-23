@@ -1,39 +1,41 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Type;
+namespace LesDocumentor\Type;
 
+use Override;
 use BackedEnum;
 use ReflectionClass;
 use ReflectionException;
-use LessValueObject\ValueObject;
-use LessDocumentor\Helper\AttributeHelper;
-use LessDocumentor\Type\Attribute\DocFormat;
-use LessValueObject\String\Exception\TooLong;
-use LessValueObject\String\StringValueObject;
-use LessValueObject\Number\NumberValueObject;
-use LessValueObject\String\Exception\TooShort;
-use LessDocumentor\Type\Document\TypeDocument;
-use LessDocumentor\Type\Document\Number\Range;
-use LessDocumentor\Type\Document\String\Length;
-use LessDocumentor\Type\Document\String\Pattern;
-use LessDocumentor\Type\Document\Collection\Size;
-use LessDocumentor\Type\Exception\UnexpectedInput;
-use LessDocumentor\Type\Document\EnumTypeDocument;
-use LessDocumentor\Route\Exception\MissingAttribute;
-use LessDocumentor\Type\Document\NumberTypeDocument;
-use LessDocumentor\Type\Document\StringTypeDocument;
-use LessValueObject\Collection\CollectionValueObject;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\CollectionTypeDocument;
-use LessValueObject\Composite\DynamicCompositeValueObject;
-use LessValueObject\String\Format\AbstractRegexStringFormatValueObject;
+use LesValueObject\ValueObject;
+use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Type\Attribute\DocFormat;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\StringValueObject;
+use LesValueObject\Number\NumberValueObject;
+use LesValueObject\String\Exception\TooShort;
+use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Document\String\Length;
+use LesDocumentor\Type\Document\String\Pattern;
+use LesDocumentor\Type\Document\Collection\Size;
+use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\EnumTypeDocument;
+use LesDocumentor\Route\Exception\MissingAttribute;
+use LesDocumentor\Type\Document\NumberTypeDocument;
+use LesDocumentor\Type\Document\StringTypeDocument;
+use LesValueObject\Collection\CollectionValueObject;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesValueObject\Composite\DynamicCompositeValueObject;
+use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
 
 abstract class AbstractClassTypeDocumentor implements TypeDocumentor
 {
     /**
      * @psalm-assert-if-true class-string $input
      */
+    #[Override]
     public function canDocument(mixed $input): bool
     {
         return is_string($input) && class_exists($input);
@@ -46,6 +48,7 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
      * @throws TooShort
      * @throws UnexpectedInput
      */
+    #[Override]
     public function document(mixed $input): TypeDocument
     {
         if (!$this->canDocument($input)) {
@@ -61,7 +64,7 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
             is_subclass_of($input, NumberValueObject::class) => $this->documentNumberValueObject($input),
             is_subclass_of($input, CollectionValueObject::class) => $this->documentCollectionValueObject($input),
             is_subclass_of($input, BackedEnum::class) => $this->documentEnum($input),
-            default => $this->documentObject($input),
+            default => $this->documentClass($input),
         };
     }
 
@@ -159,5 +162,5 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
     /**
      * @param class-string $class
      */
-    abstract protected function documentObject(string $class): TypeDocument;
+    abstract protected function documentClass(string $class): TypeDocument;
 }

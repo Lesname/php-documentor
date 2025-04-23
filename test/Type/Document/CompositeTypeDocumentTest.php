@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Type\Document;
+namespace LesDocumentorTest\Type\Document;
 
-use LessDocumentor\Type\Document\Composite\Property;
-use LessDocumentor\Type\Document\CompositeTypeDocument;
-use LessDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Composite\Property;
+use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Type\Document\CompositeTypeDocument
+ * @covers \LesDocumentor\Type\Document\CompositeTypeDocument
  */
 final class CompositeTypeDocumentTest extends TestCase
 {

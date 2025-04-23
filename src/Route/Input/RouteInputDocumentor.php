@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentor\Route\Input;
+namespace LesDocumentor\Route\Input;
 
-use LessDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\TypeDocument;
 
 interface RouteInputDocumentor
 {

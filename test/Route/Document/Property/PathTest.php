@@ -1,13 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace LessDocumentorTest\Route\Document\Property;
+namespace LesDocumentorTest\Route\Document\Property;
 
-use LessDocumentor\Route\Document\Property\Path;
+use LesDocumentor\Route\Document\Property\Path;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \LessDocumentor\Route\Document\Property\Path
+ * @covers \LesDocumentor\Route\Document\Property\Path
  */
 final class PathTest extends TestCase
 {
