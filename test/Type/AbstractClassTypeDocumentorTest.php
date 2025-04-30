@@ -7,6 +7,7 @@ use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\AbstractClassTypeDocumentor;
+use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\EnumTypeDocument;
 use LesDocumentor\Type\Document\NumberTypeDocument;
@@ -15,6 +16,7 @@ use LesValueObject\Number\Float\AbstractFloatValueObject;
 use LesValueObject\Collection\AbstractCollectionValueObject;
 use LesValueObject\String\AbstractStringValueObject;
 use PHPUnit\Framework\TestCase;
+use LesDocumentorTest\Type\Stub\RecursiveCollectionValueObject;
 
 #[CoversClass(AbstractClassTypeDocumentor::class)]
 final class AbstractClassTypeDocumentorTest extends TestCase
@@ -91,7 +93,6 @@ final class AbstractClassTypeDocumentorTest extends TestCase
 
     public function testEnumValueObject(): void
     {
-
         $documentor = new class extends AbstractClassTypeDocumentor {
             protected function documentClass(string $class): TypeDocument
             {
@@ -150,5 +151,29 @@ final class AbstractClassTypeDocumentorTest extends TestCase
 
         self::assertSame(['foo', 'fiz'], $item->cases);
         self::assertSame(EnumStub::class, $item->getReference());
+    }
+
+    public function testDocumentRecursively(): void
+    {
+        $documentor = new class extends AbstractClassTypeDocumentor {
+            protected function documentClass(string $class): TypeDocument
+            {
+                throw new RuntimeException();
+            }
+        };
+
+        $document = $documentor->document(RecursiveCollectionValueObject::class);
+
+        self::assertInstanceOf(CollectionTypeDocument::class, $document);
+
+        self::assertSame(0, $document->size->minimal);
+        self::assertSame(9, $document->size->maximal);
+
+        self::assertSame(RecursiveCollectionValueObject::class, $document->getReference());
+
+        $item = $document->item;
+
+        self::assertInstanceOf(ReferenceTypeDocument::class, $item);
+        self::assertSame(RecursiveCollectionValueObject::class, $item->getReference());
     }
 }
