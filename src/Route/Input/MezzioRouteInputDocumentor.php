@@ -5,8 +5,11 @@ namespace LesDocumentor\Route\Input;
 
 use Override;
 use LesDocumentor\Helper\AttributeHelper;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooShort;
 use LesDocumentor\Route\Attribute\DocHttpProxy;
 use LesDocumentor\Route\Attribute\DocInput;
+use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Route\Attribute\DocInputProvided;
 use LesDocumentor\Route\Exception\MissingAttribute;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
@@ -84,16 +87,19 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
     }
 
     /**
-     * @param class-string $event
-     * @return CompositeTypeDocument
+     * @param class-string $valueObject
+     *
+     * @throws UnexpectedInput
+     * @throws TooLong
+     * @throws TooShort
      * @throws MissingAttribute
      * @throws ReflectionException
      */
-    private function documentValueObject(string $event): CompositeTypeDocument
+    private function documentValueObject(string $valueObject): CompositeTypeDocument
     {
         $objInputDocumentor = new ClassParametersTypeDocumentor();
 
-        $document = $objInputDocumentor->document($event);
+        $document = $objInputDocumentor->document($valueObject);
         assert($document instanceof CompositeTypeDocument);
 
         return $document;
