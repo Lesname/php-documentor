@@ -26,18 +26,12 @@ use LesDocumentor\Type\Document\NumberTypeDocument;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesValueObject\Collection\CollectionValueObject;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
-use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesValueObject\Composite\DynamicCompositeValueObject;
 use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
 
 abstract class AbstractClassTypeDocumentor implements TypeDocumentor
 {
-    /** @var array<string> */
-    private array $documented = [];
-
-    private int $depth = 0;
-
     /**
      * @psalm-assert-if-true class-string $input
      */
@@ -65,49 +59,35 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
             return new CompositeTypeDocument([], true);
         }
 
-        if (in_array($input, $this->documented, true)) {
-            return new ReferenceTypeDocument($input);
-        }
-
-        $this->documented[] = $input;
-        $this->depth++;
-
-        $result = match (true) {
+        return match (true) {
             is_subclass_of($input, StringValueObject::class) => $this->documentStringValueObject($input),
             is_subclass_of($input, NumberValueObject::class) => $this->documentNumberValueObject($input),
             is_subclass_of($input, CollectionValueObject::class) => $this->documentCollectionValueObject($input),
             is_subclass_of($input, BackedEnum::class) => $this->documentEnum($input),
             default => $this->documentClass($input),
         };
-
-        $this->depth--;
-
-        if ($this->depth === 0) {
-            $this->documented = [];
-        }
-
-        return $result;
     }
 
     /**
      * @param class-string<CollectionValueObject<ValueObject>> $class
      *
-     * @throws TooLong
-     * @throws TooShort
-     * @throws UnexpectedInput
-     * @throws MissingAttribute
      * @throws ReflectionException
      */
     protected function documentCollectionValueObject(string $class): TypeDocument
     {
-        return new CollectionTypeDocument(
-            $this->document($class::getItemType()),
-            new Size(
-                $class::getMinimumSize(),
-                $class::getMaximumSize(),
-            ),
-            $class,
-        );
+        return (new ReflectionClass(CollectionTypeDocument::class))
+            ->newLazyProxy(
+                function () use ($class) {
+                    return new CollectionTypeDocument(
+                        $this->document($class::getItemType()),
+                        new Size(
+                            $class::getMinimumSize(),
+                            $class::getMaximumSize(),
+                        ),
+                        $class,
+                    );
+                },
+            );
     }
 
     /**

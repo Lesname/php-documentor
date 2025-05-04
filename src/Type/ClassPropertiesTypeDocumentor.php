@@ -7,11 +7,9 @@ use Override;
 use ReflectionClass;
 use RuntimeException;
 use ReflectionProperty;
-use ReflectionException;
 use LesDocumentor\Helper\AttributeHelper;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Attribute\DocDeprecated;
-use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 
@@ -26,29 +24,32 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
 
     /**
      * @param class-string $class
-     *
-     * @throws ReflectionException
-     * @throws UnexpectedInput
      */
     #[Override]
     protected function documentClass(string $class): TypeDocument
     {
-        $classReflection = new ReflectionClass($class);
-        $properties = [];
+        return (new ReflectionClass(CompositeTypeDocument::class))
+            ->newLazyProxy(
+                function () use ($class) {
 
-        foreach ($classReflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            $propertyType = $property->getType();
+                    $classReflection = new ReflectionClass($class);
+                    $properties = [];
 
-            if ($propertyType === null) {
-                throw new RuntimeException("{$property->getName()} misses type information");
-            }
+                    foreach ($classReflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+                        $propertyType = $property->getType();
 
-            $properties[$property->getName()] = new Property(
-                $this->hintTypeDocumentor->document($propertyType),
-                deprecated: AttributeHelper::hasAttribute($property, DocDeprecated::class),
+                        if ($propertyType === null) {
+                            throw new RuntimeException("{$property->getName()} misses type information");
+                        }
+
+                        $properties[$property->getName()] = new Property(
+                            $this->hintTypeDocumentor->document($propertyType),
+                            deprecated: AttributeHelper::hasAttribute($property, DocDeprecated::class),
+                        );
+                    }
+
+                    return new CompositeTypeDocument($properties, reference: $class);
+                },
             );
-        }
-
-        return new CompositeTypeDocument($properties, reference: $class);
     }
 }

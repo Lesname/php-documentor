@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace LesDocumentor\Type;
 
 use Override;
+use ReflectionClass;
 use ReflectionParameter;
 use LesDocumentor\Helper\AttributeHelper;
 use LesDocumentor\Type\Exception\UnexpectedInput;
@@ -39,13 +40,18 @@ final class MethodParametersTypeDocumentor implements TypeDocumentor
             throw new UnexpectedInput(ReflectionMethod::class, $input);
         }
 
-        $parameters = [];
+        return (new ReflectionClass(CompositeTypeDocument::class))
+            ->newLazyProxy(
+                function () use ($input) {
+                    $parameters = [];
 
-        foreach ($input->getParameters() as $parameter) {
-            $parameters[$parameter->getName()] = $this->documentParameter($parameter);
-        }
+                    foreach ($input->getParameters() as $parameter) {
+                        $parameters[$parameter->getName()] = $this->documentParameter($parameter);
+                    }
 
-        return new CompositeTypeDocument($parameters);
+                    return new CompositeTypeDocument($parameters);
+                },
+            );
     }
 
     /**
