@@ -25,6 +25,9 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
     /**
      * @param array<mixed> $route
      *
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
      * @throws MissingAttribute
      * @throws ReflectionException
      */
