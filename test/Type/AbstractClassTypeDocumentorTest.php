@@ -7,7 +7,6 @@ use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\AbstractClassTypeDocumentor;
-use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\EnumTypeDocument;
 use LesDocumentor\Type\Document\NumberTypeDocument;
@@ -173,7 +172,9 @@ final class AbstractClassTypeDocumentorTest extends TestCase
 
         $item = $document->item;
 
-        self::assertInstanceOf(ReferenceTypeDocument::class, $item);
-        self::assertSame(RecursiveCollectionValueObject::class, $item->getReference());
+        self::assertInstanceOf(CollectionTypeDocument::class, $item);
+
+        self::assertSame(0, $item->size->minimal);
+        self::assertSame(9, $item->size->maximal);
     }
 }
