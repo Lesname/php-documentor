@@ -6,6 +6,7 @@ namespace LesDocumentorTest\Type\Document\Wrapper;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 use PHPUnit\Framework\TestCase;
 
@@ -23,6 +24,6 @@ final class ResultTypeDocumentWrapperTest extends TestCase
         $result = $wrapper->wrap($doc);
 
         self::assertInstanceOf(CompositeTypeDocument::class, $result);
-        self::assertEquals(['result' => new Property($doc)], $result->properties);
+        self::assertEquals([new Property(new ExactKey('result'), $doc)], $result->properties);
     }
 }

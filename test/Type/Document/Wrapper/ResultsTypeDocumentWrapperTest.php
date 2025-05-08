@@ -8,6 +8,7 @@ use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\Number\Range;
 use LesDocumentor\Type\Document\NumberTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Type\Document\Wrapper\ResultsTypeDocumentWrapper;
 use PHPUnit\Framework\TestCase;
 
@@ -27,11 +28,13 @@ final class ResultsTypeDocumentWrapperTest extends TestCase
         self::assertInstanceOf(CompositeTypeDocument::class, $result);
         self::assertEquals(
             [
-                'results' => new Property($doc),
-                'meta' => new Property(
+                new Property(new ExactKey('results'), $doc),
+                new Property(
+                    new ExactKey('meta'),
                     new CompositeTypeDocument(
                         [
-                            'total' => new Property(
+                            new Property(
+                                new ExactKey('total'),
                                 new NumberTypeDocument(
                                     new Range(0, PHP_INT_MAX),
                                     1,

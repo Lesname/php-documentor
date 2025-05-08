@@ -29,6 +29,7 @@ use LesValueObject\String\Format\Resource\Identifier;
 use LesValueObject\String\Format\Resource\Type;
 use PHPUnit\Framework\TestCase;
 use Throwable;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
 #[CoversClass(LesRouteDocumentor::class)]
 final class LesRouteDocumentorTest extends TestCase
@@ -62,7 +63,12 @@ final class LesRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
+                [
+                    new Property(
+                        new ExactKey('type'),
+                        (new ClassParametersTypeDocumentor())->document(Type::class),
+                    ),
+                ],
             ),
             $document->input,
         );
@@ -108,7 +114,12 @@ final class LesRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
+                [
+                    new Property(
+                        new ExactKey('type'),
+                        (new ClassParametersTypeDocumentor())->document(Type::class),
+                    ),
+                ],
             ),
             $document->input,
         );
@@ -227,7 +238,12 @@ final class LesRouteDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class))],
+                [
+                    new Property(
+                        new ExactKey('page'),
+                        (new ClassParametersTypeDocumentor())->document(Page::class),
+                    )
+                ],
             ),
             $document->input,
         );

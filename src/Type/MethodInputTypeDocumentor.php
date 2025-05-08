@@ -13,6 +13,7 @@ use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionMethod;
 use RuntimeException;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
 /**
  * @deprecated use MethodParametersTypeDocumentor
@@ -45,7 +46,7 @@ final class MethodInputTypeDocumentor implements TypeDocumentor
         $parameters = [];
 
         foreach ($input->getParameters() as $parameter) {
-            $parameters[$parameter->getName()] = $this->documentParameter($parameter);
+            $parameters[] = $this->documentParameter($parameter);
         }
 
         return new CompositeTypeDocument($parameters);
@@ -73,6 +74,12 @@ final class MethodInputTypeDocumentor implements TypeDocumentor
 
         $isDeprecated = AttributeHelper::hasAttribute($parameter, DocDeprecated::class);
 
-        return new Property($paramTypeDocument, $required, $default, $isDeprecated);
+        return new Property(
+            new ExactKey($parameter->getName()),
+            $paramTypeDocument,
+            $required,
+            $default,
+            $isDeprecated
+        );
     }
 }

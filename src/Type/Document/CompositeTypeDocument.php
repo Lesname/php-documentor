@@ -9,7 +9,7 @@ namespace LesDocumentor\Type\Document;
 final class CompositeTypeDocument extends AbstractTypeDocument
 {
     /**
-     * @param array<string, Composite\Property> $properties
+     * @param array<Composite\Property> $properties
      */
     public function __construct(
         public readonly array $properties,

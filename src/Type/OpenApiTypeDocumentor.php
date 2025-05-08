@@ -23,6 +23,7 @@ use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use RuntimeException;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
 final class OpenApiTypeDocumentor implements TypeDocumentor
 {
@@ -253,7 +254,8 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
                     ? $propSchema['default']
                     : null;
 
-                $properties[$key] = new Property(
+                $properties[] = new Property(
+                    new ExactKey($key),
                     $this->document($propSchema),
                     in_array($key, $required),
                     $default,

@@ -16,6 +16,7 @@ use LesDocumentor\Type\Document\String\Length;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\OpenApiTypeDocumentor;
 use PHPUnit\Framework\TestCase;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
 /**
  * @covers \LesDocumentor\Type\OpenApiTypeDocumentor
@@ -98,7 +99,8 @@ final class OpenApiTypeDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 [
-                    'role' => new Property(
+                    new Property(
+                        new ExactKey('role'),
                         new EnumTypeDocument(
                             [
                                 'developer',
@@ -106,15 +108,18 @@ final class OpenApiTypeDocumentorTest extends TestCase
                             ],
                         ),
                     ),
-                    'emailAddress' => new Property(
+                    new Property(
+                        new ExactKey('emailAddress'),
                         new ReferenceTypeDocument(
                             '#/components/schemas/EmailAddress',
                         ),
                     ),
-                    'security' => new Property(
+                    new Property(
+                        new ExactKey('security'),
                         (new CompositeTypeDocument(
                             [
-                                'verification' => new Property(
+                                new Property(
+                                    new ExactKey('verification'),
                                     new EnumTypeDocument(['none']),
                                     false,
                                 ),
@@ -123,13 +128,15 @@ final class OpenApiTypeDocumentorTest extends TestCase
                         ))->withNullable(),
                         deprecated: true,
                     ),
-                    'foo' => new Property(
+                    new Property(
+                        new ExactKey('foo'),
                         (new ReferenceTypeDocument("#/components/schemas/Occurred"))
                             ->withNullable(),
                         false,
                         deprecated: true,
                     ),
-                    'fiz' => new Property(
+                    new Property(
+                        new ExactKey('fiz'),
                         new NumberTypeDocument(
                             new Range(-321, 123),
                             1,
@@ -137,14 +144,16 @@ final class OpenApiTypeDocumentorTest extends TestCase
                         false,
                         deprecated: true,
                     ),
-                    'bar' => new Property(
+                    new Property(
+                        new ExactKey('bar'),
                         new StringTypeDocument(
                             new Length(3, 30),
                             pattern: new Pattern('/^.{1,30}$/'),
                         ),
                         false,
                     ),
-                    'biz' => new Property(
+                    new Property(
+                        new ExactKey('biz'),
                         new CollectionTypeDocument(
                             new NumberTypeDocument(
                                 new Range(

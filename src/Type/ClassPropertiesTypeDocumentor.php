@@ -12,6 +12,7 @@ use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Attribute\DocDeprecated;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
 final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
 {
@@ -42,7 +43,8 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
                             throw new RuntimeException("{$property->getName()} misses type information");
                         }
 
-                        $properties[$property->getName()] = new Property(
+                        $properties[] = new Property(
+                            new ExactKey($property->getName()),
                             $this->hintTypeDocumentor->document($propertyType),
                             deprecated: AttributeHelper::hasAttribute($property, DocDeprecated::class),
                         );

@@ -33,19 +33,22 @@ final class ClassParametersTypeDocumentorTest extends TestCase
 
         self::assertSame(3, count($document->properties));
 
-        $perPage = $document->properties['perPage'];
+        $perPage = $document->properties[0];
+        self::assertTrue($perPage->key->matches('perPage'));
         self::assertInstanceOf(NumberTypeDocument::class, $perPage->type);
         self::assertSame(0, $perPage->type->range->minimal);
         self::assertSame(100, $perPage->type->range->maximal);
         self::assertSame(PerPage::class, $perPage->type->getReference());
         self::assertNull($perPage->type->getDescription());
 
-        $stub = $document->properties['stub'];
+        $stub = $document->properties[1];
+        self::assertTrue($stub->key->matches('stub'));
         self::assertSame(['foo', 'fiz'], $stub->type->cases);
         self::assertSame(EnumStub::class, $stub->type->getReference());
         self::assertNull($stub->type->getDescription());
 
-        $biz = $document->properties['biz'];
+        $biz = $document->properties[2];
+        self::assertTrue($biz->key->matches('biz'));
         self::assertInstanceOf(BoolTypeDocument::class, $biz->type);
         self::assertTrue($biz->default);
     }

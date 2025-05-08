@@ -8,6 +8,7 @@ use LesDocumentor\Route\Attribute\DocHttpResponse;
 use LesDocumentor\Route\Attribute\DocInput;
 use LesDocumentor\Route\Attribute\DocInputProvided;
 use LesDocumentor\Type\ClassParametersTypeDocumentor;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
@@ -49,8 +50,8 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 [
-                    'perPage' => new Property((new ClassParametersTypeDocumentor())->document(PerPage::class)),
-                    'page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class)),
+                    new Property(new ExactKey('perPage'), (new ClassParametersTypeDocumentor())->document(PerPage::class)),
+                    new Property(new ExactKey('page'), (new ClassParametersTypeDocumentor())->document(Page::class)),
                 ],
             ),
             $input,
@@ -77,7 +78,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
+                [new Property(new ExactKey('type'), (new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $input,
         );
@@ -104,7 +105,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
+                [new Property(new ExactKey('type'), (new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $input,
         );
@@ -142,7 +143,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class))],
+                [new Property(new ExactKey('page'), (new ClassParametersTypeDocumentor())->document(Page::class))],
             ),
             $input,
         );
