@@ -24,6 +24,7 @@ use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use RuntimeException;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
+use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
 final class OpenApiTypeDocumentor implements TypeDocumentor
 {
@@ -244,23 +245,29 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         }
 
         $properties = [];
+        $propertyKeys = [
+            'properties' => ExactKey::class,
+            'patternProperties' => RegexKey::class,
+        ];
 
-        if (isset($schema['properties']) && is_array($schema['properties'])) {
-            foreach ($schema['properties'] as $key => $propSchema) {
-                assert(is_string($key));
-                assert(is_array($propSchema));
+        foreach ($propertyKeys as $propertyKey => $propertyKeyClass) {
+            if (isset($schema[$propertyKey]) && is_array($schema[$propertyKey])) {
+                foreach ($schema[$propertyKey] as $key => $propSchema) {
+                    assert(is_string($key));
+                    assert(is_array($propSchema));
 
-                $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
-                    ? $propSchema['default']
-                    : null;
+                    $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
+                        ? $propSchema['default']
+                        : null;
 
-                $properties[] = new Property(
-                    new ExactKey($key),
-                    $this->document($propSchema),
-                    in_array($key, $required),
-                    $default,
-                    isset($propSchema['deprecated']) && $propSchema['deprecated'],
-                );
+                    $properties[] = new Property(
+                        new $propertyKeyClass($key),
+                        $this->document($propSchema),
+                        in_array($key, $required) && $propertyKey === 'properties',
+                        $default,
+                        isset($propSchema['deprecated']) && $propSchema['deprecated'],
+                    );
+                }
             }
         }
 

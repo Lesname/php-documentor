@@ -17,6 +17,7 @@ use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\OpenApiTypeDocumentor;
 use PHPUnit\Framework\TestCase;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
+use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
 /**
  * @covers \LesDocumentor\Type\OpenApiTypeDocumentor
@@ -29,31 +30,8 @@ final class OpenApiTypeDocumentorTest extends TestCase
             'type' => 'object',
             'additionalProperties' => false,
             'properties' => [
-                'role' => [
-                    'type' => 'string',
-                    'enum' => [
-                        'developer',
-                        'customer',
-                    ],
-                ],
                 'emailAddress' => [
                     '$ref' => '#/components/schemas/EmailAddress',
-                ],
-                'security' => [
-                    'type' => [
-                        'object',
-                        'null'
-                    ],
-                    'deprecated' => true,
-                    'additionalProperties' => true,
-                    'properties' => [
-                        'verification' => [
-                            'type' => 'string',
-                            'enum' => [
-                                'none'
-                            ],
-                        ],
-                    ],
                 ],
                 'foo' => [
                     'deprecated' => true,
@@ -87,6 +65,15 @@ final class OpenApiTypeDocumentorTest extends TestCase
                     ],
                 ],
             ],
+            'patternProperties' => [
+                '^S_' => [
+                    'type' => 'string',
+                    'enum' => [
+                        's',
+                        'S',
+                    ],
+                ],
+            ],
             'required' => [
                 'role',
                 'emailAddress',
@@ -100,33 +87,10 @@ final class OpenApiTypeDocumentorTest extends TestCase
             new CompositeTypeDocument(
                 [
                     new Property(
-                        new ExactKey('role'),
-                        new EnumTypeDocument(
-                            [
-                                'developer',
-                                'customer',
-                            ],
-                        ),
-                    ),
-                    new Property(
                         new ExactKey('emailAddress'),
                         new ReferenceTypeDocument(
                             '#/components/schemas/EmailAddress',
                         ),
-                    ),
-                    new Property(
-                        new ExactKey('security'),
-                        (new CompositeTypeDocument(
-                            [
-                                new Property(
-                                    new ExactKey('verification'),
-                                    new EnumTypeDocument(['none']),
-                                    false,
-                                ),
-                            ],
-                            true,
-                        ))->withNullable(),
-                        deprecated: true,
                     ),
                     new Property(
                         new ExactKey('foo'),
@@ -166,6 +130,16 @@ final class OpenApiTypeDocumentorTest extends TestCase
                         ),
                         false,
                     ),
+                    new Property(
+                        new RegexKey('^S_'),
+                        new EnumTypeDocument(
+                            [
+                                's',
+                                'S',
+                            ],
+                        ),
+                        required: false,
+                    )
                 ],
             ),
             $documentor->document($schema),
