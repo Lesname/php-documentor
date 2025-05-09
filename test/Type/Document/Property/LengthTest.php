@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Type\Document\Property;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\String\Length;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Type\Document\String\Length
- */
+#[CoversClass(\LesDocumentor\Type\Document\String\Length::class)]
 final class LengthTest extends TestCase
 {
     public function testSetup(): void

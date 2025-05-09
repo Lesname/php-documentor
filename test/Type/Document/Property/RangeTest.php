@@ -5,10 +5,9 @@ namespace LesDocumentorTest\Type\Document\Property;
 
 use LesDocumentor\Type\Document\Number\Range;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 
-/**
- * @covers \LesDocumentor\Type\Document\Number\Range
- */
+#[CoversClass(\LesDocumentor\Type\Document\Number\Range::class)]
 final class RangeTest extends TestCase
 {
     public function testSetup(): void

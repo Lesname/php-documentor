@@ -3,16 +3,14 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Type;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\ClassPropertiesTypeDocumentor;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
-use LesDocumentor\Type\ObjectOutputTypeDocumentor;
 use LesValueObject\Number\Int\Paginate\PerPage;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Type\ObjectOutputTypeDocumentor
- */
+#[CoversClass(\LesDocumentor\Type\ObjectOutputTypeDocumentor::class)]
 final class ObjectOutputTypeDocumentorTest extends TestCase
 {
     public function testObject(): void

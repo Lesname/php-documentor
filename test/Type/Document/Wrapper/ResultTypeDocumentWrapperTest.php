@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Type\Document\Wrapper;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
@@ -10,9 +11,7 @@ use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper
- */
+#[CoversClass(\LesDocumentor\Type\Document\Wrapper\ResultTypeDocumentWrapper::class)]
 final class ResultTypeDocumentWrapperTest extends TestCase
 {
     public function testWrap(): void

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Route\Document\Property\Method;
 use LesDocumentor\Route\Document\Property\Category;
@@ -18,9 +19,7 @@ use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use PHPUnit\Framework\TestCase;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
-/**
- * @covers \LesDocumentor\Route\OpenApiRouteDocumentor
- */
+#[CoversClass(\LesDocumentor\Route\OpenApiRouteDocumentor::class)]
 final class OpenApiRouteDocumentorTest extends TestCase
 {
     public function testDocument(): void

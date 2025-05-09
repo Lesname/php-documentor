@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Type;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\String\Pattern;
 use LesDocumentor\Type\Document\Collection\Size;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
@@ -19,9 +20,7 @@ use PHPUnit\Framework\TestCase;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
-/**
- * @covers \LesDocumentor\Type\OpenApiTypeDocumentor
- */
+#[CoversClass(\LesDocumentor\Type\OpenApiTypeDocumentor::class)]
 final class OpenApiTypeDocumentorTest extends TestCase
 {
     public function testDocument(): void

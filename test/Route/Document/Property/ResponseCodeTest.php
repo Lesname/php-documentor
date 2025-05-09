@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Document\Property;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Document\Property\ResponseCode;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Route\Document\Property\ResponseCode
- */
+#[CoversClass(\LesDocumentor\Route\Document\Property\ResponseCode::class)]
 final class ResponseCodeTest extends TestCase
 {
     public function testInformational(): void
