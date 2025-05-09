@@ -11,12 +11,26 @@ use PHPUnit\Framework\TestCase;
  */
 final class ResponseCodeTest extends TestCase
 {
+    public function testInformational(): void
+    {
+        $value = 100;
+
+        self::assertTrue((new ResponseCode($value))->isInformational());
+
+        self::assertFalse((new ResponseCode($value))->isSuccess());
+        self::assertFalse((new ResponseCode($value))->isRedirection());
+        self::assertFalse((new ResponseCode($value))->isError());
+        self::assertFalse((new ResponseCode($value))->isErrorClient());
+        self::assertFalse((new ResponseCode($value))->isErrorServer());
+    }
+
     public function testSuccess(): void
     {
         $value = 200;
 
         self::assertTrue((new ResponseCode($value))->isSuccess());
 
+        self::assertFalse((new ResponseCode($value))->isInformational());
         self::assertFalse((new ResponseCode($value))->isRedirection());
         self::assertFalse((new ResponseCode($value))->isError());
         self::assertFalse((new ResponseCode($value))->isErrorClient());
@@ -29,6 +43,7 @@ final class ResponseCodeTest extends TestCase
 
         self::assertTrue((new ResponseCode($value))->isRedirection());
 
+        self::assertFalse((new ResponseCode($value))->isInformational());
         self::assertFalse((new ResponseCode($value))->isSuccess());
         self::assertFalse((new ResponseCode($value))->isError());
         self::assertFalse((new ResponseCode($value))->isErrorClient());
@@ -42,6 +57,7 @@ final class ResponseCodeTest extends TestCase
         self::assertTrue((new ResponseCode($value))->isError());
         self::assertTrue((new ResponseCode($value))->isErrorClient());
 
+        self::assertFalse((new ResponseCode($value))->isInformational());
         self::assertFalse((new ResponseCode($value))->isSuccess());
         self::assertFalse((new ResponseCode($value))->isRedirection());
         self::assertFalse((new ResponseCode($value))->isErrorServer());
@@ -54,6 +70,7 @@ final class ResponseCodeTest extends TestCase
         self::assertTrue((new ResponseCode($value))->isError());
         self::assertTrue((new ResponseCode($value))->isErrorServer());
 
+        self::assertFalse((new ResponseCode($value))->isInformational());
         self::assertFalse((new ResponseCode($value))->isSuccess());
         self::assertFalse((new ResponseCode($value))->isRedirection());
         self::assertFalse((new ResponseCode($value))->isErrorClient());
