@@ -10,7 +10,7 @@ use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesValueObject\Number\Int\Paginate\PerPage;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(\LesDocumentor\Type\ObjectOutputTypeDocumentor::class)]
+#[CoversClass(\LesDocumentor\Type\ClassPropertiesTypeDocumentor::class)]
 final class ObjectOutputTypeDocumentorTest extends TestCase
 {
     public function testObject(): void

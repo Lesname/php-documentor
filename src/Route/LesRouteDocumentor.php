@@ -11,6 +11,8 @@ use LesValueObject\String\Exception\TooShort;
 use LesDocumentor\Route\Attribute\DocHttpProxy;
 use LesValueObject\Number\Int\Paginate\PerPage;
 use LesDocumentor\Route\Document\Property\Method;
+use LesDocumentor\Route\Exception\UnknownBuiltin;
+use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Route\Attribute\DocHttpResponse;
 use LesDocumentor\Route\Attribute\DocResource;
 use LesDocumentor\Route\Document\Property\Category;
@@ -38,6 +40,7 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use RuntimeException;
 use Traversable;
+use LesDocumentor\Route\Document\Property\Exception\InvalidResponseCode;
 
 final class LesRouteDocumentor implements RouteDocumentor
 {
@@ -95,8 +98,13 @@ final class LesRouteDocumentor implements RouteDocumentor
      *
      * @return array<int, Response>
      *
-     * @throws MissingAttribute
      * @throws ReflectionException
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnknownBuiltin
+     * @throws UnexpectedInput
+     * @throws InvalidResponseCode
+     * @throws MissingAttribute
      */
     private function documentResponses(array $route): array
     {
@@ -170,7 +178,7 @@ final class LesRouteDocumentor implements RouteDocumentor
                         'int' => new NumberTypeDocument(null, 1),
                         'mixed' => new AnyTypeDocument(),
                         'string' => new StringTypeDocument(null),
-                        default => throw new RuntimeException("Unknown type '{$returns}'"),
+                        default => throw new UnknownBuiltin($returns),
                     };
                 }
             }

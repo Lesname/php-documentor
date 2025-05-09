@@ -10,6 +10,6 @@ use Exception;
  *
  * @psalm-suppress MutableDependency
  */
-abstract class AbstractException extends Exception
+abstract class AbstractException extends Exception implements DocumentorException
 {
 }

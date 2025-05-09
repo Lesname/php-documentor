@@ -5,10 +5,10 @@ namespace LesDocumentor\Type;
 
 use Override;
 use ReflectionClass;
-use RuntimeException;
 use ReflectionProperty;
 use LesDocumentor\Helper\AttributeHelper;
 use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Exception\UnknownPropertyType;
 use LesDocumentor\Type\Attribute\DocDeprecated;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
@@ -32,7 +32,6 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
         return (new ReflectionClass(CompositeTypeDocument::class))
             ->newLazyProxy(
                 function () use ($class) {
-
                     $classReflection = new ReflectionClass($class);
                     $properties = [];
 
@@ -40,7 +39,7 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
                         $propertyType = $property->getType();
 
                         if ($propertyType === null) {
-                            throw new RuntimeException("{$property->getName()} misses type information");
+                            throw new UnknownPropertyType($property->getName());
                         }
 
                         $properties[] = new Property(

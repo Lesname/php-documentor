@@ -11,6 +11,7 @@ use ReflectionNamedType;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Type\Document\UnionTypeDocument;
+use LesDocumentor\Type\Exception\ReflectionTypeNotSupported;
 
 final class HintTypeDocumentor implements TypeDocumentor
 {
@@ -32,6 +33,10 @@ final class HintTypeDocumentor implements TypeDocumentor
         return $input instanceof ReflectionUnionType || $input instanceof ReflectionNamedType;
     }
 
+    /**
+     * @throws ReflectionTypeNotSupported
+     * @throws UnexpectedInput
+     */
     #[Override]
     public function document(mixed $input): TypeDocument
     {
@@ -42,16 +47,12 @@ final class HintTypeDocumentor implements TypeDocumentor
         return match (true) {
             $input instanceof ReflectionUnionType => $this->documentUnion($input),
             $input instanceof ReflectionNamedType => $this->documentNamed($input),
-            default => throw new RuntimeException(
-                sprintf(
-                    "Unsupported reflection type, got '%s'",
-                    get_debug_type($input),
-                ),
-            ),
+            default => throw new ReflectionTypeNotSupported(get_debug_type($input)),
         };
     }
 
     /**
+     * @throws ReflectionTypeNotSupported
      * @throws UnexpectedInput
      */
     private function documentUnion(ReflectionUnionType $union): TypeDocument
