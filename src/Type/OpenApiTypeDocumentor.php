@@ -6,11 +6,14 @@ namespace LesDocumentor\Type;
 use Override;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
+use LesDocumentor\Type\Exception\UnknownType;
+use LesDocumentor\Type\Exception\TypeRequired;
 use LesDocumentor\Type\Document\String\Pattern;
 use LesDocumentor\Type\Document\AnyTypeDocument;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\Document\Collection\Size;
 use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Exception\UnsupportedBehaviour;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
@@ -23,6 +26,8 @@ use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use RuntimeException;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
+use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
 final class OpenApiTypeDocumentor implements TypeDocumentor
 {
@@ -70,6 +75,8 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
      * @psalm-suppress MixedArgument
      * @psalm-suppress MixedArgumentTypeCoercion
      *
+     * @throws TypeRequired
+     * @throws UnsupportedBehaviour
      * @throws TooLong
      * @throws TooShort
      */
@@ -97,7 +104,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
             assert(is_array($schema['allOf']));
 
             if (count($schema['allOf']) !== 1) {
-                throw new RuntimeException('Currently allOf only supports a single type');
+                throw new UnsupportedBehaviour();
             }
 
             $subSchema = array_pop($schema['allOf']);
@@ -109,7 +116,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         $nullable = false;
 
         if (!isset($schema['type'])) {
-            throw new RuntimeException('Type required');
+            throw new TypeRequired();
         } elseif (is_string($schema['type'])) {
             $type = $schema['type'];
         } elseif (is_array($schema['type'])) {
@@ -125,10 +132,10 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
                 $type = $types[0];
                 assert(is_string($type));
             } else {
-                throw new RuntimeException('Types "' . implode(', ', $types) . '"');
+                throw new UnsupportedBehaviour();
             }
         } else {
-            throw new RuntimeException('Type can only be a string or array');
+            throw new UnsupportedBehaviour();
         }
 
         $document = match ($type) {
@@ -138,7 +145,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
             'number' => $this->documentNumber($schema),
             'object' => $this->documentObject($schema),
             'string' => $this->documentString($schema),
-            default => throw new RuntimeException("Type '{$type}' not supported"),
+            default => throw new UnknownType($type),
         };
 
         return $nullable
@@ -150,6 +157,12 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
      * @param array<mixed> $subs
      *
      * @psalm-suppress MixedAssignment
+     *
+     * @throws UnexpectedInput
+     * @throws UnknownType
+     * @throws UnsupportedBehaviour
+     * @throws TooLong
+     * @throws TooShort
      */
     private function documentUnion(array $subs): TypeDocument
     {
@@ -171,7 +184,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
                             'boolean' => self::TYPE_BOOL,
                             'object' => self::TYPE_OBJECT,
                             'array' => self::TYPE_ARRAY,
-                            default => throw new RuntimeException("Type '{$item['type']}' unknown"),
+                            default => throw new UnknownType($item['type']),
                         };
                     }
 
@@ -189,7 +202,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         if (count($toDocTypes) === 1) {
             $document = $this->document($toDocTypes[0]);
         } elseif (count($toDocTypes) === 0) {
-            throw new RuntimeException();
+            throw new UnsupportedBehaviour();
         } else {
             $document = new UnionTypeDocument(
                 array_map(
@@ -243,22 +256,29 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         }
 
         $properties = [];
+        $propertyKeys = [
+            'properties' => ExactKey::class,
+            'patternProperties' => RegexKey::class,
+        ];
 
-        if (isset($schema['properties']) && is_array($schema['properties'])) {
-            foreach ($schema['properties'] as $key => $propSchema) {
-                assert(is_string($key));
-                assert(is_array($propSchema));
+        foreach ($propertyKeys as $propertyKey => $propertyKeyClass) {
+            if (isset($schema[$propertyKey]) && is_array($schema[$propertyKey])) {
+                foreach ($schema[$propertyKey] as $key => $propSchema) {
+                    assert(is_string($key));
+                    assert(is_array($propSchema));
 
-                $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
-                    ? $propSchema['default']
-                    : null;
+                    $default = isset($propSchema['default']) && (is_scalar($propSchema['default']) || is_array($propSchema['default']))
+                        ? $propSchema['default']
+                        : null;
 
-                $properties[$key] = new Property(
-                    $this->document($propSchema),
-                    in_array($key, $required),
-                    $default,
-                    isset($propSchema['deprecated']) && $propSchema['deprecated'],
-                );
+                    $properties[] = new Property(
+                        new $propertyKeyClass($key),
+                        $this->document($propSchema),
+                        in_array($key, $required) && $propertyKey === 'properties',
+                        $default,
+                        isset($propSchema['deprecated']) && $propSchema['deprecated'],
+                    );
+                }
             }
         }
 

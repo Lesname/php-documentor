@@ -69,8 +69,14 @@ final class MezzioRouteInputDocumentor implements RouteInputDocumentor
             $attribute = AttributeHelper::getAttribute($handler, DocInputProvided::class);
 
             foreach ($attribute->keys as $key) {
-                unset($properties[$key]);
+                foreach ($properties as $index => $property) {
+                    if ($property->key->matches($key)) {
+                        unset($properties[$index]);
+                    }
+                }
             }
+
+            $properties = array_values($properties);
         }
 
         // array values required to "reset" all keys

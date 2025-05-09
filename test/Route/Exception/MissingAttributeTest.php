@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Exception;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Exception\MissingAttribute;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Route\Exception\MissingAttribute
- */
+#[CoversClass(\LesDocumentor\Route\Exception\MissingAttribute::class)]
 final class MissingAttributeTest extends TestCase
 {
     public function testConstruct(): void

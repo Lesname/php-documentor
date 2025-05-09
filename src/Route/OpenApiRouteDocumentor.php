@@ -8,21 +8,26 @@ use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesDocumentor\Route\Document\Property\Method;
 use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Route\Exception\CategoryMissing;
 use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Document\Property\Resource;
+use LesDocumentor\Route\Exception\CannotHandleRoute;
 use LesDocumentor\Route\Document\Property\Deprecated;
 use LesDocumentor\Route\Document\Property\Path;
 use LesDocumentor\Route\Document\Property\Response;
 use LesDocumentor\Route\Document\Property\ResponseCode;
 use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Type\OpenApiTypeDocumentor;
-use RuntimeException;
+use LesDocumentor\Route\Document\Property\Exception\InvalidResponseCode;
 
 final class OpenApiRouteDocumentor implements RouteDocumentor
 {
     /**
      * @param array<mixed> $route
      *
+     * @throws CategoryMissing
+     * @throws CannotHandleRoute
+     * @throws InvalidResponseCode
      * @throws UnexpectedInput
      * @throws TooLong
      * @throws TooShort
@@ -31,7 +36,7 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
     public function document(array $route): RouteDocument
     {
         if (count($route) !== 1) {
-            throw new RuntimeException();
+            throw CannotHandleRoute::noBaseRoute($route);
         }
 
         $path = array_key_first($route);
@@ -42,7 +47,7 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
         assert(is_array($sub));
 
         if (count($sub) !== 1) {
-            throw new RuntimeException();
+            throw CannotHandleRoute::noSub($route);
         }
 
         $method = array_key_first($sub);
@@ -68,7 +73,7 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
         }
 
         if (!isset($category)) {
-            throw new RuntimeException();
+            throw new CategoryMissing($schema['tags']);
         }
 
         $position = strrpos($path, '/');

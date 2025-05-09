@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Route\Document\Property\Method;
 use LesDocumentor\Route\Document\Property\Category;
@@ -16,10 +17,9 @@ use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\EnumTypeDocument;
 use LesDocumentor\Type\Document\ReferenceTypeDocument;
 use PHPUnit\Framework\TestCase;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
-/**
- * @covers \LesDocumentor\Route\OpenApiRouteDocumentor
- */
+#[CoversClass(\LesDocumentor\Route\OpenApiRouteDocumentor::class)]
 final class OpenApiRouteDocumentorTest extends TestCase
 {
     public function testDocument(): void
@@ -87,7 +87,8 @@ final class OpenApiRouteDocumentorTest extends TestCase
                 null,
                 new CompositeTypeDocument(
                     [
-                        'fiz' => new Property(
+                        new Property(
+                            new ExactKey('fiz'),
                             new EnumTypeDocument(
                                 [
                                     'foo',
@@ -107,7 +108,8 @@ final class OpenApiRouteDocumentorTest extends TestCase
                         new ResponseCode(201),
                         new CompositeTypeDocument(
                             [
-                                'id' => new Property(
+                                new Property(
+                                    new ExactKey('id'),
                                     new ReferenceTypeDocument('#/components/schemas/Identifier'),
                                     false,
                                 ),

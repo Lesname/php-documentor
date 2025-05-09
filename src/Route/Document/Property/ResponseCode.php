@@ -3,18 +3,26 @@ declare(strict_types=1);
 
 namespace LesDocumentor\Route\Document\Property;
 
-use RuntimeException;
+use LesDocumentor\Route\Document\Property\Exception\InvalidResponseCode;
 
 /**
  * @psalm-immutable
  */
 final class ResponseCode
 {
+    /**
+     * @throws InvalidResponseCode
+     */
     public function __construct(public readonly int $value)
     {
-        if ($value < 200 || $value >= 600) {
-            throw new RuntimeException();
+        if ($value < 100 || $value >= 600) {
+            throw new InvalidResponseCode($value);
         }
+    }
+
+    public function isInformational(): bool
+    {
+        return $this->value >= 100 && $this->value <= 199;
     }
 
     public function isSuccess(): bool

@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Document\Property;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Document\Property\Path;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Route\Document\Property\Path
- */
+#[CoversClass(\LesDocumentor\Route\Document\Property\Path::class)]
 final class PathTest extends TestCase
 {
     public function testGetResource(): void

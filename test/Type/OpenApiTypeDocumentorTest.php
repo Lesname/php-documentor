@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Type;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\String\Pattern;
 use LesDocumentor\Type\Document\Collection\Size;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
@@ -16,10 +17,10 @@ use LesDocumentor\Type\Document\String\Length;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\OpenApiTypeDocumentor;
 use PHPUnit\Framework\TestCase;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
+use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
-/**
- * @covers \LesDocumentor\Type\OpenApiTypeDocumentor
- */
+#[CoversClass(\LesDocumentor\Type\OpenApiTypeDocumentor::class)]
 final class OpenApiTypeDocumentorTest extends TestCase
 {
     public function testDocument(): void
@@ -28,31 +29,8 @@ final class OpenApiTypeDocumentorTest extends TestCase
             'type' => 'object',
             'additionalProperties' => false,
             'properties' => [
-                'role' => [
-                    'type' => 'string',
-                    'enum' => [
-                        'developer',
-                        'customer',
-                    ],
-                ],
                 'emailAddress' => [
                     '$ref' => '#/components/schemas/EmailAddress',
-                ],
-                'security' => [
-                    'type' => [
-                        'object',
-                        'null'
-                    ],
-                    'deprecated' => true,
-                    'additionalProperties' => true,
-                    'properties' => [
-                        'verification' => [
-                            'type' => 'string',
-                            'enum' => [
-                                'none'
-                            ],
-                        ],
-                    ],
                 ],
                 'foo' => [
                     'deprecated' => true,
@@ -86,6 +64,15 @@ final class OpenApiTypeDocumentorTest extends TestCase
                     ],
                 ],
             ],
+            'patternProperties' => [
+                '^S_' => [
+                    'type' => 'string',
+                    'enum' => [
+                        's',
+                        'S',
+                    ],
+                ],
+            ],
             'required' => [
                 'role',
                 'emailAddress',
@@ -98,38 +85,21 @@ final class OpenApiTypeDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 [
-                    'role' => new Property(
-                        new EnumTypeDocument(
-                            [
-                                'developer',
-                                'customer',
-                            ],
-                        ),
-                    ),
-                    'emailAddress' => new Property(
+                    new Property(
+                        new ExactKey('emailAddress'),
                         new ReferenceTypeDocument(
                             '#/components/schemas/EmailAddress',
                         ),
                     ),
-                    'security' => new Property(
-                        (new CompositeTypeDocument(
-                            [
-                                'verification' => new Property(
-                                    new EnumTypeDocument(['none']),
-                                    false,
-                                ),
-                            ],
-                            true,
-                        ))->withNullable(),
-                        deprecated: true,
-                    ),
-                    'foo' => new Property(
+                    new Property(
+                        new ExactKey('foo'),
                         (new ReferenceTypeDocument("#/components/schemas/Occurred"))
                             ->withNullable(),
                         false,
                         deprecated: true,
                     ),
-                    'fiz' => new Property(
+                    new Property(
+                        new ExactKey('fiz'),
                         new NumberTypeDocument(
                             new Range(-321, 123),
                             1,
@@ -137,14 +107,16 @@ final class OpenApiTypeDocumentorTest extends TestCase
                         false,
                         deprecated: true,
                     ),
-                    'bar' => new Property(
+                    new Property(
+                        new ExactKey('bar'),
                         new StringTypeDocument(
                             new Length(3, 30),
                             pattern: new Pattern('/^.{1,30}$/'),
                         ),
                         false,
                     ),
-                    'biz' => new Property(
+                    new Property(
+                        new ExactKey('biz'),
                         new CollectionTypeDocument(
                             new NumberTypeDocument(
                                 new Range(
@@ -157,6 +129,16 @@ final class OpenApiTypeDocumentorTest extends TestCase
                         ),
                         false,
                     ),
+                    new Property(
+                        new RegexKey('^S_'),
+                        new EnumTypeDocument(
+                            [
+                                's',
+                                'S',
+                            ],
+                        ),
+                        required: false,
+                    )
                 ],
             ),
             $documentor->document($schema),

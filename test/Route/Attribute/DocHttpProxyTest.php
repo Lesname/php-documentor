@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Attribute;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Attribute\DocHttpProxy;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Route\Attribute\DocHttpProxy
- */
+#[CoversClass(\LesDocumentor\Route\Attribute\DocHttpProxy::class)]
 final class DocHttpProxyTest extends TestCase
 {
     public function testSetup(): void

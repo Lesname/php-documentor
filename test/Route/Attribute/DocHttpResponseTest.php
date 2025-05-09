@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Attribute;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Attribute\DocHttpResponse;
 use LesValueObject\ValueObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Route\Attribute\DocHttpResponse
- */
+#[CoversClass(\LesDocumentor\Route\Attribute\DocHttpResponse::class)]
 final class DocHttpResponseTest extends TestCase
 {
     public function testWithOutput(): void

@@ -9,12 +9,11 @@ use LesDocumentor\Type\TypeDocumentor;
 use LesDocumentor\Type\HintTypeDocumentor;
 use PHPUnit\Framework\TestCase;
 use LesDocumentor\Type\Document\TypeDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 
-/**
- * @covers \LesDocumentor\Type\HintTypeDocumentor
- */
+#[CoversClass(\LesDocumentor\Type\HintTypeDocumentor::class)]
 class HintTypeDocumentorTest extends TestCase
 {
     public function testNonSupported(): void

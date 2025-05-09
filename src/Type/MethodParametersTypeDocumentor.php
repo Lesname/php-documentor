@@ -14,6 +14,8 @@ use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionMethod;
 use RuntimeException;
+use LesDocumentor\Type\Exception\UnknownParameterType;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
 final class MethodParametersTypeDocumentor implements TypeDocumentor
 {
@@ -46,7 +48,7 @@ final class MethodParametersTypeDocumentor implements TypeDocumentor
                     $parameters = [];
 
                     foreach ($input->getParameters() as $parameter) {
-                        $parameters[$parameter->getName()] = $this->documentParameter($parameter);
+                        $parameters[] = $this->documentParameter($parameter);
                     }
 
                     return new CompositeTypeDocument($parameters);
@@ -55,14 +57,16 @@ final class MethodParametersTypeDocumentor implements TypeDocumentor
     }
 
     /**
+     * @throws Exception\ReflectionTypeNotSupported
      * @throws UnexpectedInput
+     * @throws UnknownParameterType
      */
     private function documentParameter(ReflectionParameter $parameter): Property
     {
         $type = $parameter->getType();
 
         if ($type === null) {
-            throw new RuntimeException("Missing type for '{$parameter->getName()}'");
+            throw new UnknownParameterType($parameter->getName());
         }
 
         $required = $type->allowsNull() === false && $parameter->isDefaultValueAvailable() === false;
@@ -76,6 +80,12 @@ final class MethodParametersTypeDocumentor implements TypeDocumentor
 
         $isDeprecated = AttributeHelper::hasAttribute($parameter, DocDeprecated::class);
 
-        return new Property($paramTypeDocument, $required, $default, $isDeprecated);
+        return new Property(
+            new ExactKey($parameter->getName()),
+            $paramTypeDocument,
+            $required,
+            $default,
+            $isDeprecated,
+        );
     }
 }

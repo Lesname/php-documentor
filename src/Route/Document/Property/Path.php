@@ -4,8 +4,10 @@ declare(strict_types=1);
 namespace LesDocumentor\Route\Document\Property;
 
 use Override;
-use RuntimeException;
+use LesValueObject\String\Exception\TooLong;
+use LesValueObject\String\Exception\TooShort;
 use LesValueObject\String\AbstractStringValueObject;
+use LesDocumentor\Route\Document\Property\Exception\UnprocessableFilename;
 
 /**
  * @psalm-immutable
@@ -20,21 +22,21 @@ final class Path extends AbstractStringValueObject
     {
         parent::__construct($string);
 
-        $parts = explode('/', $string);
-        $lastPart = $parts[count($parts) - 1];
+        $pathParts = explode('/', $string);
+        $filename = $pathParts[array_key_last($pathParts)];
 
-        $parts = explode('.', $lastPart);
+        $fileParts = explode('.', $filename);
 
-        if (count($parts) < 2) {
-            throw new RuntimeException("$string");
+        if (count($fileParts) < 2) {
+            throw new UnprocessableFilename($filename);
         }
 
-        $lastKey = count($parts) - 1;
-        $action = $parts[$lastKey];
-        unset($parts[$lastKey]);
+        $lastKey = array_key_last($fileParts);
+        $action = $fileParts[$lastKey];
+        unset($fileParts[$lastKey]);
 
         $this->action = $action;
-        $this->resource = implode('.', $parts);
+        $this->resource = implode('.', $fileParts);
     }
 
     /**

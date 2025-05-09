@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace LesDocumentor\Type;
 
 use Override;
-use RuntimeException;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\Number\Range;
 use LesDocumentor\Type\Document\AnyTypeDocument;
+use LesDocumentor\Type\Exception\UnknownBuiltin;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\Document\NullTypeDocument;
@@ -41,7 +41,7 @@ final class BuiltinTypeDocumentor implements TypeDocumentor
             'int' => new NumberTypeDocument(new Range(PHP_INT_MIN, PHP_INT_MAX), 1),
             'mixed' => new AnyTypeDocument(),
             'string' => new StringTypeDocument(null),
-            default => throw new RuntimeException("Builtin type '{$input}' not supported"),
+            default => throw new UnknownBuiltin($input),
         };
     }
 }

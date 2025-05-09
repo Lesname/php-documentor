@@ -3,15 +3,16 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Input;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Attribute\DocHttpProxy;
 use LesDocumentor\Route\Attribute\DocHttpResponse;
 use LesDocumentor\Route\Attribute\DocInput;
 use LesDocumentor\Route\Attribute\DocInputProvided;
 use LesDocumentor\Type\ClassParametersTypeDocumentor;
+use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
-use LesDocumentor\Type\ObjectInputTypeDocumentor;
 use LesDocumentorTest\Route\Stub\ClassProxyStub;
 use LesValueObject\Composite\Content;
 use LesValueObject\Composite\Paginate;
@@ -23,9 +24,7 @@ use LesValueObject\String\Format\Resource\Type;
 use PHPUnit\Framework\TestCase;
 use Throwable;
 
-/**
- * @covers \LesDocumentor\Route\Input\MezzioRouteInputDocumentor
- */
+#[CoversClass(\LesDocumentor\Route\Input\MezzioRouteInputDocumentor::class)]
 final class MezzioRouteInputDocumentorTest extends TestCase
 {
     public function testInputAttr(): void
@@ -49,8 +48,8 @@ final class MezzioRouteInputDocumentorTest extends TestCase
         self::assertEquals(
             new CompositeTypeDocument(
                 [
-                    'perPage' => new Property((new ClassParametersTypeDocumentor())->document(PerPage::class)),
-                    'page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class)),
+                    new Property(new ExactKey('perPage'), (new ClassParametersTypeDocumentor())->document(PerPage::class)),
+                    new Property(new ExactKey('page'), (new ClassParametersTypeDocumentor())->document(Page::class)),
                 ],
             ),
             $input,
@@ -77,7 +76,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
+                [new Property(new ExactKey('type'), (new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $input,
         );
@@ -104,7 +103,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['type' => new Property((new ClassParametersTypeDocumentor())->document(Type::class))],
+                [new Property(new ExactKey('type'), (new ClassParametersTypeDocumentor())->document(Type::class))],
             ),
             $input,
         );
@@ -142,7 +141,7 @@ final class MezzioRouteInputDocumentorTest extends TestCase
 
         self::assertEquals(
             new CompositeTypeDocument(
-                ['page' => new Property((new ClassParametersTypeDocumentor())->document(Page::class))],
+                [new Property(new ExactKey('page'), (new ClassParametersTypeDocumentor())->document(Page::class))],
             ),
             $input,
         );

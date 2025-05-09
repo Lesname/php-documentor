@@ -3,12 +3,11 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Route\Document\Property;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Document\Property\Deprecated;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \LesDocumentor\Route\Document\Property\Deprecated
- */
+#[CoversClass(\LesDocumentor\Route\Document\Property\Deprecated::class)]
 final class DeprecatedTest extends TestCase
 {
     public function testSetup(): void

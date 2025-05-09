@@ -4,14 +4,13 @@ declare(strict_types=1);
 namespace LesDocumentorTest\Helper;
 
 use LesDocumentor\Helper\AttributeHelper;
+use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Exception\MissingAttribute;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use stdClass;
 
-/**
- * @covers \LesDocumentor\Helper\AttributeHelper
- */
+#[CoversClass(\LesDocumentor\Helper\AttributeHelper::class)]
 final class AttributeHelperTest extends TestCase
 {
     public function testGetAttributes(): void

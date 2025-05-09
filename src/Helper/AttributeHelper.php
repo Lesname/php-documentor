@@ -15,9 +15,6 @@ use ReflectionProperty;
  */
 final class AttributeHelper
 {
-    private function __construct()
-    {}
-
     /**
      * @param ReflectionClass<covariant object>|ReflectionProperty|ReflectionParameter|ReflectionMethod $reflector
      * @param class-string<T> $nameAttribute
