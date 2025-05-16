@@ -4,8 +4,7 @@ declare(strict_types=1);
 namespace LesDocumentor\Route\Document\Property;
 
 use Override;
-use LesValueObject\String\Exception\TooLong;
-use LesValueObject\String\Exception\TooShort;
+use RuntimeException;
 use LesValueObject\String\AbstractStringValueObject;
 use LesDocumentor\Route\Document\Property\Exception\UnprocessableFilename;
 
@@ -14,8 +13,9 @@ use LesDocumentor\Route\Document\Property\Exception\UnprocessableFilename;
  */
 final class Path extends AbstractStringValueObject
 {
+    /** @var non-empty-string */
     private readonly string $resource;
-
+    /** @var non-empty-string */
     private readonly string $action;
 
     public function __construct(string $string)
@@ -35,8 +35,19 @@ final class Path extends AbstractStringValueObject
         $action = $fileParts[$lastKey];
         unset($fileParts[$lastKey]);
 
+        if ($action === '') {
+            throw new RuntimeException();
+        }
+
         $this->action = $action;
-        $this->resource = implode('.', $fileParts);
+
+        $resource = implode('.', $fileParts);
+
+        if ($resource === '') {
+            throw new RuntimeException();
+        }
+
+        $this->resource = $resource;
     }
 
     /**
@@ -57,11 +68,17 @@ final class Path extends AbstractStringValueObject
         return 255;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getResource(): string
     {
         return $this->resource;
     }
 
+    /**
+     * @return non-empty-string
+     */
     public function getAction(): string
     {
         return $this->action;
