@@ -22,4 +22,5 @@ enum Method: string implements EnumValueObject
     case Post = 'post';
     case Put = 'put';
     case Trace = 'trace';
+    case Query = 'query';
 }
