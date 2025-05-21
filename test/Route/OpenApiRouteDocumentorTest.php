@@ -6,7 +6,6 @@ namespace LesDocumentorTest\Route;
 use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Route\Document\Property\Method;
-use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Document\Property\Path;
 use LesDocumentor\Route\Document\Property\Response;
 use LesDocumentor\Route\Document\Property\Resource;
@@ -81,7 +80,6 @@ final class OpenApiRouteDocumentorTest extends TestCase
         self::assertEquals(
             new RouteDocument(
                 Method::Post,
-                Category::Command,
                 new Path('/foo.bar'),
                 new Resource('foo'),
                 null,
