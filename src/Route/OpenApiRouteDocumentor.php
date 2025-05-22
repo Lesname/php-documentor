@@ -9,7 +9,6 @@ use LesValueObject\String\Exception\TooShort;
 use LesDocumentor\Route\Document\Property\Method;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Route\Exception\CategoryMissing;
-use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Document\Property\Resource;
 use LesDocumentor\Route\Exception\CannotHandleRoute;
 use LesDocumentor\Route\Document\Property\Deprecated;
@@ -60,22 +59,6 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
 
         assert(is_array($schema['tags']));
 
-        $category = null;
-
-        foreach ($schema['tags'] as $tag) {
-            assert(is_string($tag));
-
-            $category = Category::tryFrom($tag);
-
-            if ($category) {
-                break;
-            }
-        }
-
-        if (!isset($category)) {
-            throw new CategoryMissing($schema['tags']);
-        }
-
         $position = strrpos($path, '/');
         $resource = is_int($position)
             ? substr($path, $position + 1)
@@ -125,7 +108,6 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
 
         return new RouteDocument(
             Method::Post,
-            $category,
             new Path($path),
             new Resource($resource),
             $deprecated,

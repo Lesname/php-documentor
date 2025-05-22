@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Route\Attribute\DocHttpProxy;
 use LesDocumentor\Route\Attribute\DocHttpResponse;
 use LesDocumentor\Route\Attribute\DocInputProvided;
-use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Document\Property\Resource;
 use LesDocumentor\Route\Document\Property\Deprecated;
 use LesDocumentor\Route\Document\Property\Method;
@@ -47,7 +46,6 @@ final class LesRouteDocumentorTest extends TestCase
             [
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
-                'category' => Category::Query,
                 'middleware' => $handler::class,
                 'deprecated' => 'test',
             ],
@@ -94,7 +92,6 @@ final class LesRouteDocumentorTest extends TestCase
             [
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
-                'category' => Category::Query,
                 'middleware' => $handler::class,
                 'proxy' => [
                     'class' => ClassProxyStub::class,
@@ -144,7 +141,6 @@ final class LesRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'proxy' => [
@@ -174,7 +170,6 @@ final class LesRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'proxy' => [
@@ -224,7 +219,6 @@ final class LesRouteDocumentorTest extends TestCase
         $document = $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'input' => $event::class,
@@ -270,7 +264,6 @@ final class LesRouteDocumentorTest extends TestCase
         $documentor->document(
             [
                 'path' => '/fiz/bar.foo',
-                'category' => Category::Query,
                 'resource' => 'bar',
                 'middleware' => $handler::class,
             ],

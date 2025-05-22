@@ -15,7 +15,6 @@ use LesDocumentor\Route\Exception\UnknownBuiltin;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Route\Attribute\DocHttpResponse;
 use LesDocumentor\Route\Attribute\DocResource;
-use LesDocumentor\Route\Document\Property\Category;
 use LesDocumentor\Route\Document\Property\Resource;
 use LesDocumentor\Route\Document\Property\Deprecated;
 use LesDocumentor\Route\Document\Property\Path;
@@ -38,7 +37,6 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
 use ReflectionNamedType;
-use RuntimeException;
 use Traversable;
 use LesDocumentor\Route\Document\Property\Exception\InvalidResponseCode;
 
@@ -60,7 +58,6 @@ final class LesRouteDocumentor implements RouteDocumentor
     {
         assert(isset($route['path']) && is_string($route['path']));
         assert(isset($route['resource']) && is_string($route['resource']));
-        assert($route['category'] instanceof Category);
 
         $deprecated = null;
 
@@ -76,7 +73,6 @@ final class LesRouteDocumentor implements RouteDocumentor
 
         return new RouteDocument(
             Method::Post,
-            $route['category'],
             new Path($route['path']),
             new Resource($route['resource']),
             $deprecated,
