@@ -48,6 +48,7 @@ final class LesRouteDocumentorTest extends TestCase
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'deprecated' => 'test',
+                'method' => 'POST',
             ],
         );
 
@@ -98,6 +99,7 @@ final class LesRouteDocumentorTest extends TestCase
                     'method' => 'foo',
                 ],
                 'alternate' => 'test',
+                'method' => 'POST',
             ],
         );
 
@@ -147,6 +149,7 @@ final class LesRouteDocumentorTest extends TestCase
                     'class' => ClassProxyStub::class,
                     'method' => 'bar',
                 ],
+                'method' => 'POST',
             ],
         );
 
@@ -176,6 +179,7 @@ final class LesRouteDocumentorTest extends TestCase
                     'class' => ClassProxyStub::class,
                     'method' => 'biz',
                 ],
+                'method' => 'POST',
             ],
         );
 
@@ -222,6 +226,7 @@ final class LesRouteDocumentorTest extends TestCase
                 'resource' => 'bar',
                 'middleware' => $handler::class,
                 'input' => $event::class,
+                'method' => 'POST',
             ],
         );
 
@@ -266,6 +271,7 @@ final class LesRouteDocumentorTest extends TestCase
                 'path' => '/fiz/bar.foo',
                 'resource' => 'bar',
                 'middleware' => $handler::class,
+                'method' => 'POST',
             ],
         );
     }
