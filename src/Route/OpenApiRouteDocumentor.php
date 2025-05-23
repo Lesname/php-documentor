@@ -8,7 +8,6 @@ use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\Exception\TooShort;
 use LesDocumentor\Route\Document\Property\Method;
 use LesDocumentor\Type\Exception\UnexpectedInput;
-use LesDocumentor\Route\Exception\CategoryMissing;
 use LesDocumentor\Route\Document\Property\Resource;
 use LesDocumentor\Route\Exception\CannotHandleRoute;
 use LesDocumentor\Route\Document\Property\Deprecated;
@@ -24,7 +23,6 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
     /**
      * @param array<mixed> $route
      *
-     * @throws CategoryMissing
      * @throws CannotHandleRoute
      * @throws InvalidResponseCode
      * @throws UnexpectedInput
@@ -38,10 +36,16 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
             throw CannotHandleRoute::noBaseRoute($route);
         }
 
-        $path = array_key_first($route);
+        $method = array_key_first($route);
+        assert(is_string($method));
+
+        assert(is_array($route[$method]));
+        assert(count($route[$method]) === 1);
+
+        $path = array_key_first($route[$method]);
         assert(is_string($path));
 
-        $sub = $route[$path];
+        $sub = $route[$method][$path];
 
         assert(is_array($sub));
 
@@ -107,7 +111,7 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
         }
 
         return new RouteDocument(
-            Method::Post,
+            Method::from($method),
             new Path($path),
             new Resource($resource),
             $deprecated,

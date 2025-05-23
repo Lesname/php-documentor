@@ -58,6 +58,7 @@ final class LesRouteDocumentor implements RouteDocumentor
     {
         assert(isset($route['path']) && is_string($route['path']));
         assert(isset($route['resource']) && is_string($route['resource']));
+        assert(isset($route['method']) && is_string($route['method']));
 
         $deprecated = null;
 
@@ -72,7 +73,7 @@ final class LesRouteDocumentor implements RouteDocumentor
         }
 
         return new RouteDocument(
-            Method::Post,
+            Method::from(strtolower($route['method'])),
             new Path($route['path']),
             new Resource($route['resource']),
             $deprecated,
