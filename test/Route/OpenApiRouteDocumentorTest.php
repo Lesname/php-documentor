@@ -24,48 +24,46 @@ final class OpenApiRouteDocumentorTest extends TestCase
     public function testDocument(): void
     {
         $route = [
-            'post' => [
-                '/foo.bar' => [
-                    'post' => [
-                        'tags' => [
-                            'bar',
-                            'command',
-                        ],
-                        'deprecated' => false,
-                        'requestBody' => [
-                            'required' => true,
-                            'content' => [
-                                'application/json' => [
-                                    'schema' => [
-                                        'type' => 'object',
-                                        'additionalProperties' => false,
-                                        'properties' => [
-                                            'fiz' => [
-                                                'type' => 'string',
-                                                'enum' => [
-                                                    'foo',
-                                                    'bar',
-                                                ],
+            '/foo.bar' => [
+                'post' => [
+                    'tags' => [
+                        'bar',
+                        'command',
+                    ],
+                    'deprecated' => false,
+                    'requestBody' => [
+                        'required' => true,
+                        'content' => [
+                            'application/json' => [
+                                'schema' => [
+                                    'type' => 'object',
+                                    'additionalProperties' => false,
+                                    'properties' => [
+                                        'fiz' => [
+                                            'type' => 'string',
+                                            'enum' => [
+                                                'foo',
+                                                'bar',
                                             ],
                                         ],
                                     ],
                                 ],
                             ],
                         ],
-                        'responses' => [
-                            '204' => [
-                                'description' => 'Call successfull, nothing to output',
-                            ],
-                            '201' => [
-                                'content' => [
-                                    'application/json' => [
-                                        'schema' => [
-                                            'type' => 'object',
-                                            'additionalProperties' => false,
-                                            'properties' => [
-                                                'id' => [
-                                                    '$ref' => '#/components/schemas/Identifier',
-                                                ],
+                    ],
+                    'responses' => [
+                        '204' => [
+                            'description' => 'Call successfull, nothing to output',
+                        ],
+                        '201' => [
+                            'content' => [
+                                'application/json' => [
+                                    'schema' => [
+                                        'type' => 'object',
+                                        'additionalProperties' => false,
+                                        'properties' => [
+                                            'id' => [
+                                                '$ref' => '#/components/schemas/Identifier',
                                             ],
                                         ],
                                     ],
