@@ -33,35 +33,24 @@ final class OpenApiRouteDocumentor implements RouteDocumentor
     public function document(array $route): RouteDocument
     {
         if (count($route) !== 1) {
-            throw CannotHandleRoute::noBaseRoute($route);
+            throw new CannotHandleRoute($route);
         }
 
-        $method = array_key_first($route);
-        assert(is_string($method));
-
-        assert(is_array($route[$method]));
-        assert(count($route[$method]) === 1);
-
-        $path = array_key_first($route[$method]);
+        $path = array_key_first($route);
         assert(is_string($path));
 
-        $sub = $route[$method][$path];
+        assert(is_array($route[$path]));
+        assert(count($route[$path]) === 1);
 
-        assert(is_array($sub));
+        $method = array_key_first($route[$path]);
+        assert(is_string($method));
 
-        if (count($sub) !== 1) {
-            throw CannotHandleRoute::noSub($route);
-        }
-
-        $method = array_key_first($sub);
-        $schema = $sub[$method];
+        $schema = $route[$path][$method];
         assert(is_array($schema));
 
         $deprecated = isset($schema['deprecated']) && $schema['deprecated']
             ? new Deprecated('', '')
             : null;
-
-        assert(is_array($schema['tags']));
 
         $position = strrpos($path, '/');
         $resource = is_int($position)
