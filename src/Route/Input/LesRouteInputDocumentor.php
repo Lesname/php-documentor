@@ -20,10 +20,7 @@ use ReflectionMethod;
 use LesDocumentor\Type\ClassParametersTypeDocumentor;
 use LesDocumentor\Type\MethodParametersTypeDocumentor;
 
-/**
- * @deprecated use LesRouteInputDocumentor
- */
-final class MezzioRouteInputDocumentor implements RouteInputDocumentor
+final class LesRouteInputDocumentor implements RouteInputDocumentor
 {
     /**
      * @param array<mixed> $route
