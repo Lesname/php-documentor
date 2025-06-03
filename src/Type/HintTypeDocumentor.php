@@ -5,7 +5,6 @@ namespace LesDocumentor\Type;
 
 use Override;
 use ReflectionType;
-use RuntimeException;
 use ReflectionUnionType;
 use ReflectionNamedType;
 use LesDocumentor\Type\Document\TypeDocument;
@@ -16,6 +15,9 @@ use LesDocumentor\Type\Exception\ReflectionTypeNotSupported;
 final class HintTypeDocumentor implements TypeDocumentor
 {
     private readonly TypeDocumentor $builtinTypeDocumentor;
+
+    /** @var array<string, TypeDocument> */
+    private array $cache = [];
 
     public function __construct(
         private readonly TypeDocumentor $classDocumentor,
@@ -70,7 +72,7 @@ final class HintTypeDocumentor implements TypeDocumentor
      */
     protected function documentNamed(ReflectionNamedType $named): TypeDocument
     {
-        $typeDocument = $named->isBuiltin()
+        $typeDocument = $this->cache[(string)$named] ??= $named->isBuiltin()
             ? $this->builtinTypeDocumentor->document($named->getName())
             : $this->classDocumentor->document($named->getName());
 
