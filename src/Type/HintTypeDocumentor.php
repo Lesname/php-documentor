@@ -16,9 +16,6 @@ final class HintTypeDocumentor implements TypeDocumentor
 {
     private readonly TypeDocumentor $builtinTypeDocumentor;
 
-    /** @var array<string, TypeDocument> */
-    private array $cache = [];
-
     public function __construct(
         private readonly TypeDocumentor $classDocumentor,
         ?TypeDocumentor $builtinTypeDocumentor = null,
@@ -72,7 +69,7 @@ final class HintTypeDocumentor implements TypeDocumentor
      */
     protected function documentNamed(ReflectionNamedType $named): TypeDocument
     {
-        $typeDocument = $this->cache[(string)$named] ??= $named->isBuiltin()
+        $typeDocument = $named->isBuiltin()
             ? $this->builtinTypeDocumentor->document($named->getName())
             : $this->classDocumentor->document($named->getName());
 
