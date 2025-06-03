@@ -13,7 +13,6 @@ use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionMethod;
-use RuntimeException;
 use LesDocumentor\Type\Exception\UnknownParameterType;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 
