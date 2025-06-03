@@ -9,6 +9,7 @@ use ReflectionUnionType;
 use ReflectionNamedType;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesDocumentor\Type\Exception\ReflectionTypeNotSupported;
 
@@ -73,8 +74,16 @@ final class HintTypeDocumentor implements TypeDocumentor
             ? $this->builtinTypeDocumentor->document($named->getName())
             : $this->classDocumentor->document($named->getName());
 
-        return $named->allowsNull()
-            ? $typeDocument->withNullable()
-            : $typeDocument;
+        // Added so nested type's with nullable dont trigger an initialize endless
+        if ($named->allowsNull()) {
+            return new UnionTypeDocument(
+                [
+                    $typeDocument,
+                    new NullTypeDocument(),
+                ],
+            );
+        }
+
+        return $typeDocument;
     }
 }
