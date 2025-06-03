@@ -20,10 +20,10 @@ use LesDocumentor\Route\Document\Property\Deprecated;
 use LesDocumentor\Route\Document\Property\Path;
 use LesDocumentor\Route\Document\Property\Response;
 use LesDocumentor\Type\ClassPropertiesTypeDocumentor;
+use LesDocumentor\Route\Input\LesRouteInputDocumentor;
 use LesDocumentor\Route\Document\Property\ResponseCode;
 use LesDocumentor\Route\Document\RouteDocument;
 use LesDocumentor\Route\Exception\MissingAttribute;
-use LesDocumentor\Route\Input\MezzioRouteInputDocumentor;
 use LesDocumentor\Route\Input\RouteInputDocumentor;
 use LesDocumentor\Type\Document\AnyTypeDocument;
 use LesDocumentor\Type\Document\BoolTypeDocument;
@@ -87,7 +87,7 @@ final class LesRouteDocumentor implements RouteDocumentor
      */
     public function getRouteInputDocumentor(): RouteInputDocumentor
     {
-        return $this->routeInputDocumentor ??= new MezzioRouteInputDocumentor();
+        return $this->routeInputDocumentor ??= new LesRouteInputDocumentor();
     }
 
     /**

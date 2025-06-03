@@ -88,10 +88,12 @@ class HintTypeDocumentorTest extends TestCase
         $builintTypeDocumentSecond = $this->createMock(TypeDocument::class);
 
         $builtinFirst = $this->createMock(ReflectionNamedType::class);
+        $builtinFirst->method('__toString')->willReturn('fiz');
         $builtinFirst->method('isBuiltin')->willReturn(true);
         $builtinFirst->method('getName')->willReturn('fiz');
 
         $builtinSecond = $this->createMock(ReflectionNamedType::class);
+        $builtinSecond->method('__toString')->willReturn('sec');
         $builtinSecond->method('isBuiltin')->willReturn(true);
         $builtinSecond->method('getName')->willReturn('sec');
 
