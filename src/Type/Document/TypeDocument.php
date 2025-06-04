@@ -12,8 +12,14 @@ interface TypeDocument
 
     public function getReference(): ?string;
 
+    /**
+     * @deprecated use UnionTypeDocument with NullTypeDocument
+     */
     public function withNullable(bool $nullable = true): TypeDocument;
 
+    /**
+     * @deprecated
+     */
     public function isNullable(): bool;
 
     public function withDescription(string $description): TypeDocument;

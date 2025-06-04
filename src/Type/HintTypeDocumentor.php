@@ -9,15 +9,13 @@ use ReflectionUnionType;
 use ReflectionNamedType;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesDocumentor\Type\Exception\ReflectionTypeNotSupported;
 
 final class HintTypeDocumentor implements TypeDocumentor
 {
     private readonly TypeDocumentor $builtinTypeDocumentor;
-
-    /** @var array<string, TypeDocument> */
-    private array $cache = [];
 
     public function __construct(
         private readonly TypeDocumentor $classDocumentor,
@@ -72,12 +70,15 @@ final class HintTypeDocumentor implements TypeDocumentor
      */
     protected function documentNamed(ReflectionNamedType $named): TypeDocument
     {
-        $typeDocument = $this->cache[(string)$named] ??= $named->isBuiltin()
+        $typeDocument = $named->isBuiltin()
             ? $this->builtinTypeDocumentor->document($named->getName())
             : $this->classDocumentor->document($named->getName());
 
-        return $named->allowsNull()
-            ? $typeDocument->withNullable()
-            : $typeDocument;
+        // Added so nested type's with nullable dont trigger an initialize endless
+        if ($named->allowsNull()) {
+            return UnionTypeDocument::nullable($typeDocument);
+        }
+
+        return $typeDocument;
     }
 }
