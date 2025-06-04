@@ -76,12 +76,7 @@ final class HintTypeDocumentor implements TypeDocumentor
 
         // Added so nested type's with nullable dont trigger an initialize endless
         if ($named->allowsNull()) {
-            return new UnionTypeDocument(
-                [
-                    $typeDocument,
-                    new NullTypeDocument(),
-                ],
-            );
+            return UnionTypeDocument::nullable($typeDocument);
         }
 
         return $typeDocument;
