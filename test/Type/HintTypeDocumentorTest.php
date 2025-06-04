@@ -65,7 +65,6 @@ class HintTypeDocumentorTest extends TestCase
     public function testNullable(): void
     {
         $expected = $this->createMock(TypeDocument::class);
-        $expected->expects(self::once())->method('withNullable')->willReturn($expected);
 
         $type = $this->createMock(ReflectionNamedType::class);
         $type->method('isBuiltin')->willReturn(false);
@@ -77,7 +76,10 @@ class HintTypeDocumentorTest extends TestCase
 
         $documentor = new HintTypeDocumentor($classDocumentor);
 
-        self::assertSame($expected, $documentor->document($type));
+        self::assertEquals(
+            UnionTypeDocument::nullable($expected),
+            $documentor->document($type),
+        );
     }
 
     public function testUnionBuiltinPass(): void
