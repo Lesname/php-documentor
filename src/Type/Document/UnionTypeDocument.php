@@ -10,15 +10,30 @@ use Override;
  */
 final class UnionTypeDocument extends AbstractTypeDocument
 {
+    /** @var array<TypeDocument> */
+    public array $subTypes;
+
     /**
      * @param array<TypeDocument> $subTypes
      */
     public function __construct(
-        public array $subTypes,
+        array $subTypes,
         ?string $reference = null,
         ?string $description = null,
     ) {
         parent::__construct($reference, $description);
+
+        $normalizedSubTypes = [];
+
+        foreach ($subTypes as $subType) {
+            if ($subType instanceof UnionTypeDocument) {
+                $normalizedSubTypes = [...$normalizedSubTypes, ...$subType->subTypes];
+            } else {
+                $normalizedSubTypes[] = $subType;
+            }
+        }
+
+        $this->subTypes = $normalizedSubTypes;
     }
 
     #[Override]
@@ -29,5 +44,16 @@ final class UnionTypeDocument extends AbstractTypeDocument
         }
 
         return parent::isNullable();
+    }
+
+    public static function nullable(TypeDocument $document, TypeDocument ...$orDocument): self
+    {
+        return new self(
+            [
+                new NullTypeDocument(),
+                $document,
+                ...$orDocument,
+            ],
+        );
     }
 }
