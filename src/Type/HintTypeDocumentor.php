@@ -9,7 +9,6 @@ use ReflectionUnionType;
 use ReflectionNamedType;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Exception\UnexpectedInput;
-use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesDocumentor\Type\Exception\ReflectionTypeNotSupported;
 
