@@ -8,21 +8,21 @@ namespace LesDocumentor\Type\Document;
  */
 interface TypeDocument
 {
-    public function withReference(string $reference): TypeDocument;
+    public function withReference(string $reference): static;
 
     public function getReference(): ?string;
 
     /**
      * @deprecated use UnionTypeDocument with NullTypeDocument
      */
-    public function withNullable(bool $nullable = true): TypeDocument;
+    public function withNullable(bool $nullable = true): static;
 
     /**
      * @deprecated
      */
     public function isNullable(): bool;
 
-    public function withDescription(string $description): TypeDocument;
+    public function withDescription(string $description): static;
 
     public function getDescription(): ?string;
 }

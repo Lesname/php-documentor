@@ -6,7 +6,7 @@ namespace LesDocumentor\Type\Document;
 /**
  * @psalm-immutable
  */
-final class CollectionTypeDocument extends AbstractTypeDocument
+final class CollectionTypeDocument extends AbstractNestedTypeDocument
 {
     public function __construct(
         public readonly TypeDocument $item,

@@ -230,7 +230,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         $maxItems = $schema['maxItems'] ?? null;
         assert(is_int($maxItems) || $maxItems === null);
 
-        return new CollectionTypeDocument(
+        $document = new CollectionTypeDocument(
             isset($schema['items']) && is_array($schema['items'])
                 ? $this->document($schema['items'])
                 : new AnyTypeDocument(),
@@ -238,6 +238,12 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
                 ? new Size($minItems, $maxItems)
                 : null,
         );
+
+        if (isset($schema['x-les-maxDepth']) && is_int($schema['x-les-maxDepth'])) {
+            return $document->withMaxDepth($schema['x-les-maxDepth']);
+        }
+
+        return $document;
     }
 
     /**
@@ -282,10 +288,16 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
             }
         }
 
-        return new CompositeTypeDocument(
+        $typeDocument = new CompositeTypeDocument(
             $properties,
             $extraProperties,
         );
+
+        if (isset($schema['x-les-maxDepth']) && is_int($schema['x-les-maxDepth'])) {
+            return $typeDocument->withMaxDepth($schema['x-les-maxDepth']);
+        }
+
+        return $typeDocument;
     }
 
     /**
