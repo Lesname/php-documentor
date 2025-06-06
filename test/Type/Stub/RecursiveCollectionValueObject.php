@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace LesDocumentorTest\Type\Stub;
 
+use LesDocumentor\Type\Attribute\DocMaxDepth;
 use LesValueObject\Collection\AbstractCollectionValueObject;
 
 /**
@@ -10,6 +11,7 @@ use LesValueObject\Collection\AbstractCollectionValueObject;
  *
  * @extends AbstractCollectionValueObject<RecursiveCollectionValueObject>
  */
+#[DocMaxDepth(5)]
 final class RecursiveCollectionValueObject extends AbstractCollectionValueObject
 {
     /**

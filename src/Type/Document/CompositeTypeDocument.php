@@ -6,7 +6,7 @@ namespace LesDocumentor\Type\Document;
 /**
  * @psalm-immutable
  */
-final class CompositeTypeDocument extends AbstractTypeDocument
+final class CompositeTypeDocument extends AbstractNestedTypeDocument
 {
     /**
      * @param array<Composite\Property> $properties

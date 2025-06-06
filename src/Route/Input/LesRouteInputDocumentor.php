@@ -76,10 +76,10 @@ final class LesRouteInputDocumentor implements RouteInputDocumentor
                 }
             }
 
+            // array values required to "reset" all keys
             $properties = array_values($properties);
         }
 
-        // array values required to "reset" all keys
         return new CompositeTypeDocument($properties);
     }
 

@@ -8,6 +8,7 @@ use ReflectionClass;
 use ReflectionProperty;
 use LesDocumentor\Helper\AttributeHelper;
 use LesDocumentor\Type\Document\TypeDocument;
+use LesDocumentor\Type\Attribute\DocMaxDepth;
 use LesDocumentor\Type\Exception\UnknownPropertyType;
 use LesDocumentor\Type\Attribute\DocDeprecated;
 use LesDocumentor\Type\Document\Composite\Property;
@@ -49,7 +50,16 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
                         );
                     }
 
-                    return new CompositeTypeDocument($properties, reference: $class);
+                    $typeDocument = new CompositeTypeDocument($properties, reference: $class);
+                    $reflector = new ReflectionClass($class);
+
+                    if (AttributeHelper::hasAttribute($reflector, DocMaxDepth::class)) {
+                        $attribute = AttributeHelper::getAttribute($reflector, DocMaxDepth::class);
+
+                        return $typeDocument->withMaxDepth($attribute->maxDepth);
+                    }
+
+                    return $typeDocument;
                 },
             );
     }

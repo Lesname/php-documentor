@@ -17,7 +17,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     ) {}
 
     #[Override]
-    public function withReference(string $reference): TypeDocument
+    public function withReference(string $reference): static
     {
         $clone = clone $this;
         // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
@@ -33,7 +33,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     }
 
     #[Override]
-    public function withNullable(bool $nullable = true): TypeDocument
+    public function withNullable(bool $nullable = true): static
     {
         $clone = clone $this;
         // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
@@ -49,7 +49,7 @@ abstract class AbstractTypeDocument implements TypeDocument
     }
 
     #[Override]
-    public function withDescription(string $description): TypeDocument
+    public function withDescription(string $description): static
     {
         $clone = clone $this;
         // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor

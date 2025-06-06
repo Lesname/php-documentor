@@ -16,6 +16,7 @@ use LesValueObject\Number\NumberValueObject;
 use LesValueObject\String\Exception\TooShort;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\Number\Range;
+use LesDocumentor\Type\Attribute\DocMaxDepth;
 use LesDocumentor\Type\Document\String\Length;
 use LesDocumentor\Type\Document\String\Pattern;
 use LesDocumentor\Type\Document\Collection\Size;
@@ -78,7 +79,7 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
         return (new ReflectionClass(CollectionTypeDocument::class))
             ->newLazyProxy(
                 function () use ($class) {
-                    return new CollectionTypeDocument(
+                    $typeDocument = new CollectionTypeDocument(
                         $this->document($class::getItemType()),
                         new Size(
                             $class::getMinimumSize(),
@@ -86,6 +87,16 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
                         ),
                         $class,
                     );
+
+                    $reflector = new  ReflectionClass($class);
+
+                    if (AttributeHelper::hasAttribute($reflector, DocMaxDepth::class)) {
+                        $attribute = AttributeHelper::getAttribute($reflector, DocMaxDepth::class);
+
+                        return $typeDocument->withMaxDepth($attribute->maxDepth);
+                    }
+
+                    return $typeDocument;
                 },
             );
     }

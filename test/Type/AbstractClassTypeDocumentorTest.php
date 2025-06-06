@@ -167,6 +167,7 @@ final class AbstractClassTypeDocumentorTest extends TestCase
 
         self::assertSame(0, $document->size->minimal);
         self::assertSame(9, $document->size->maximal);
+        self::assertSame(5, $document->getMaxDepth());
 
         self::assertSame(RecursiveCollectionValueObject::class, $document->getReference());
 
