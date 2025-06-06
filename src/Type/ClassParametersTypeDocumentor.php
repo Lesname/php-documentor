@@ -4,11 +4,15 @@ declare(strict_types=1);
 namespace LesDocumentor\Type;
 
 use Override;
+use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Type\Attribute\DocMaxDepth;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Type\Document\TypeDocument;
 use ReflectionClass;
 use ReflectionException;
 use ReflectionMethod;
+use LesDocumentor\Type\Document\NestedTypeDocument;
+use LesDocumentor\Route\Exception\MissingAttribute;
 
 final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
 {
@@ -22,6 +26,7 @@ final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
     /**
      * @param class-string $class
      *
+     * @throws MissingAttribute
      * @throws UnexpectedInput
      * @throws ReflectionException
      */
@@ -32,9 +37,17 @@ final class ClassParametersTypeDocumentor extends AbstractClassTypeDocumentor
         $constructor = $classReflected->getConstructor();
         assert($constructor instanceof ReflectionMethod);
 
-        return $this
+        $typeDocument = $this
             ->methodInputTypeDocumentor
             ->document($constructor)
             ->withReference($class);
+
+        if ($typeDocument instanceof NestedTypeDocument && AttributeHelper::hasAttribute($classReflected, DocMaxDepth::class)) {
+            $attribute = AttributeHelper::getAttribute($classReflected, DocMaxDepth::class);
+
+            return $typeDocument->withMaxDepth($attribute->maxDepth);
+        }
+
+        return $typeDocument;
     }
 }
