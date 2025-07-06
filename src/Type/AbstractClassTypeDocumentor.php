@@ -175,7 +175,7 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
     }
 
     /**
-     * @param class-string<SignatureCompositeValueObject> $class
+     * @param class-string<SignatureCompositeValueObject<ValueObject>> $class
      *
      * @throws TooLong
      * @throws TooShort
