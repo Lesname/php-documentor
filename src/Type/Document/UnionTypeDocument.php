@@ -36,6 +36,9 @@ final class UnionTypeDocument extends AbstractTypeDocument
         $this->subTypes = $normalizedSubTypes;
     }
 
+    /**
+     * @deprecated use containsNull
+     */
     #[Override]
     public function isNullable(): bool
     {
@@ -44,6 +47,11 @@ final class UnionTypeDocument extends AbstractTypeDocument
         }
 
         return parent::isNullable();
+    }
+
+    public function containsNull(): bool
+    {
+        return array_any($this->subTypes, fn($subType) => $subType instanceof NullTypeDocument);
     }
 
     public static function nullable(TypeDocument $document, TypeDocument ...$orDocument): self

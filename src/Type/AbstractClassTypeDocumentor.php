@@ -25,10 +25,13 @@ use LesDocumentor\Type\Document\EnumTypeDocument;
 use LesDocumentor\Route\Exception\MissingAttribute;
 use LesDocumentor\Type\Document\NumberTypeDocument;
 use LesDocumentor\Type\Document\StringTypeDocument;
+use LesDocumentor\Type\Document\Composite\Property;
 use LesValueObject\Collection\CollectionValueObject;
+use LesDocumentor\Type\Document\Composite\Key\AnyKey;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesValueObject\Composite\DynamicCompositeValueObject;
+use LesValueObject\Composite\Signature\SignatureCompositeValueObject;
 use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
 
 abstract class AbstractClassTypeDocumentor implements TypeDocumentor
@@ -65,6 +68,7 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
             is_subclass_of($input, NumberValueObject::class) => $this->documentNumberValueObject($input),
             is_subclass_of($input, CollectionValueObject::class) => $this->documentCollectionValueObject($input),
             is_subclass_of($input, BackedEnum::class) => $this->documentEnum($input),
+            is_subclass_of($input, SignatureCompositeValueObject::class) => $this->documentSignatureValueValueObject($input),
             default => $this->documentClass($input),
         };
     }
@@ -143,7 +147,6 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
     /**
      * @param class-string<StringValueObject> $class
      *
-     * @return TypeDocument
      * @throws TooLong
      * @throws TooShort
      * @throws MissingAttribute
@@ -168,6 +171,28 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
             $format,
             $pattern,
             $class,
+        );
+    }
+
+    /**
+     * @param class-string<SignatureCompositeValueObject<ValueObject>> $class
+     *
+     * @throws TooLong
+     * @throws TooShort
+     * @throws UnexpectedInput
+     * @throws MissingAttribute
+     * @throws ReflectionException
+     */
+    protected function documentSignatureValueValueObject(string $class): TypeDocument
+    {
+        return new CompositeTypeDocument(
+            [
+                new Property(
+                    new AnyKey(),
+                    $this->document($class::getSignature()),
+                ),
+            ],
+            reference: $class
         );
     }
 
