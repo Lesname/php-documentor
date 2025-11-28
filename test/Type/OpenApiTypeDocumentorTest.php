@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentorTest\Type;
@@ -6,6 +7,7 @@ namespace LesDocumentorTest\Type;
 use PHPUnit\Framework\Attributes\CoversClass;
 use LesDocumentor\Type\Document\String\Pattern;
 use LesDocumentor\Type\Document\Collection\Size;
+use LesDocumentor\Type\Document\UnionTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\Composite\Property;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
@@ -93,8 +95,7 @@ final class OpenApiTypeDocumentorTest extends TestCase
                     ),
                     new Property(
                         new ExactKey('foo'),
-                        (new ReferenceTypeDocument("#/components/schemas/Occurred"))
-                            ->withNullable(),
+                        UnionTypeDocument::nullable(new ReferenceTypeDocument("#/components/schemas/Occurred")),
                         false,
                         deprecated: true,
                     ),

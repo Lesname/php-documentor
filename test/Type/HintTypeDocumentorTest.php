@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentorTest\Type;
@@ -31,7 +32,6 @@ class HintTypeDocumentorTest extends TestCase
         $classDocumentor = $this->createMock(TypeDocumentor::class);
 
         $expected = $this->createMock(TypeDocument::class);
-        $expected->expects(self::never())->method('withNullable');
 
         $builtin = $this->createMock(ReflectionNamedType::class);
         $builtin->method('isBuiltin')->willReturn(true);
@@ -48,7 +48,6 @@ class HintTypeDocumentorTest extends TestCase
     public function testClassPass(): void
     {
         $expected = $this->createMock(TypeDocument::class);
-        $expected->expects(self::never())->method('withNullable');
 
         $type = $this->createMock(ReflectionNamedType::class);
         $type->method('isBuiltin')->willReturn(false);

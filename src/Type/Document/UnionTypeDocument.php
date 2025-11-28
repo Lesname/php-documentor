@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentor\Type\Document;
@@ -34,19 +35,6 @@ final class UnionTypeDocument extends AbstractTypeDocument
         }
 
         $this->subTypes = $normalizedSubTypes;
-    }
-
-    /**
-     * @deprecated use containsNull
-     */
-    #[Override]
-    public function isNullable(): bool
-    {
-        if (array_any($this->subTypes, fn($subType) => $subType->isNullable())) {
-            return true;
-        }
-
-        return parent::isNullable();
     }
 
     public function containsNull(): bool

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentor\Type\Document;
@@ -12,9 +13,9 @@ abstract class AbstractNestedTypeDocument extends AbstractTypeDocument implement
 {
     protected ?int $maxDepth;
 
-    public function __construct(?string $reference = null, ?string $description = null, bool $nullable = false)
+    public function __construct(?string $reference = null, ?string $description = null)
     {
-        parent::__construct($reference, $description, $nullable);
+        parent::__construct($reference, $description);
 
         $this->maxDepth = null;
     }

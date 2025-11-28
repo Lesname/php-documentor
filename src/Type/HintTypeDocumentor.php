@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentor\Type;
@@ -73,7 +74,6 @@ final class HintTypeDocumentor implements TypeDocumentor
             ? $this->builtinTypeDocumentor->document($named->getName())
             : $this->classDocumentor->document($named->getName());
 
-        // Added so nested type's with nullable dont trigger an initialize endless
         if ($named->allowsNull()) {
             return UnionTypeDocument::nullable($typeDocument);
         }

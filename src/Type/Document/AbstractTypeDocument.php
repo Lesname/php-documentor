@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentor\Type\Document;
@@ -13,7 +14,6 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function __construct(
         protected ?string $reference = null,
         protected ?string $description = null,
-        protected bool $nullable = false,
     ) {}
 
     #[Override]
@@ -30,22 +30,6 @@ abstract class AbstractTypeDocument implements TypeDocument
     public function getReference(): ?string
     {
         return $this->reference;
-    }
-
-    #[Override]
-    public function withNullable(bool $nullable = true): static
-    {
-        $clone = clone $this;
-        // @phpstan-ignore property.readOnlyByPhpDocAssignNotInConstructor
-        $clone->nullable = $nullable;
-
-        return $clone;
-    }
-
-    #[Override]
-    public function isNullable(): bool
-    {
-        return $this->nullable;
     }
 
     #[Override]
