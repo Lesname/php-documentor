@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentorTest\Type;
@@ -63,12 +64,12 @@ final class AbstractClassTypeDocumentorTest extends TestCase
                 return .001;
             }
 
-            public static function getMinimumValue(): float|int
+            public static function getMinimumValue(): float
             {
-                return 1;
+                return 1.0;
             }
 
-            public static function getMaximumValue(): float|int
+            public static function getMaximumValue(): float
             {
                 return 5.43;
             }
@@ -86,7 +87,7 @@ final class AbstractClassTypeDocumentorTest extends TestCase
 
         self::assertInstanceOf(NumberTypeDocument::class, $document);
 
-        self::assertSame(1, $document->range->minimal);
+        self::assertSame(1.0, $document->range->minimal);
         self::assertSame(5.43, $document->range->maximal);
         self::assertEquals(.001, $document->multipleOf);
         self::assertSame($valueObject::class, $document->getReference());

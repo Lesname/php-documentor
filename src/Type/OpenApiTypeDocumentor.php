@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentor\Type;
@@ -13,6 +14,7 @@ use LesDocumentor\Type\Document\AnyTypeDocument;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\Document\Collection\Size;
 use LesDocumentor\Type\Exception\UnexpectedInput;
+use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Exception\UnsupportedBehaviour;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\Composite\Property;
@@ -149,7 +151,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         };
 
         return $nullable
-            ? $document->withNullable()
+            ? UnionTypeDocument::nullable($document)
             : $document;
     }
 
@@ -215,7 +217,7 @@ final class OpenApiTypeDocumentor implements TypeDocumentor
         }
 
         return ($bitTypes & self::TYPE_NULL) === self::TYPE_NULL
-            ? $document->withNullable()
+            ? UnionTypeDocument::nullable($document)
             : $document;
     }
 

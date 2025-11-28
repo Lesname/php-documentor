@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace LesDocumentor\Route\Document\Property;
 
 use Override;
+use Stringable;
 use RuntimeException;
 use LesValueObject\String\AbstractStringValueObject;
 use LesDocumentor\Route\Document\Property\Exception\UnprocessableFilename;
@@ -18,8 +20,10 @@ final class Path extends AbstractStringValueObject
     /** @var non-empty-string */
     private readonly string $action;
 
-    public function __construct(string $string)
+    #[Override]
+    public function __construct(Stringable|string $string)
     {
+        $string = (string) $string;
         parent::__construct($string);
 
         $pathParts = explode('/', $string);
