@@ -48,11 +48,11 @@ final class ClassParametersTypeDocumentorTest extends TestCase
         $stub = $document->properties[1];
         self::assertTrue($stub->key->matches('stub'));
         self::assertInstanceOf(UnionTypeDocument::class, $stub->type);
-        self::assertInstanceOf(NullTypeDocument::class, $stub->type->subTypes[0]);
-        self::assertInstanceOf(EnumTypeDocument::class, $stub->type->subTypes[1]);
-        self::assertSame(['foo', 'fiz'], $stub->type->subTypes[1]->cases);
-        self::assertSame(EnumStub::class, $stub->type->subTypes[1]->getReference());
-        self::assertNull($stub->type->subTypes[1]->getDescription());
+        self::assertInstanceOf(EnumTypeDocument::class, $stub->type->subTypes[0]);
+        self::assertSame(['foo', 'fiz'], $stub->type->subTypes[0]->cases);
+        self::assertSame(EnumStub::class, $stub->type->subTypes[0]->getReference());
+        self::assertNull($stub->type->subTypes[0]->getDescription());
+        self::assertInstanceOf(NullTypeDocument::class, $stub->type->subTypes[1]);
 
         $biz = $document->properties[2];
         self::assertTrue($biz->key->matches('biz'));
