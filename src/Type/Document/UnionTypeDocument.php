@@ -46,9 +46,9 @@ final class UnionTypeDocument extends AbstractTypeDocument
     {
         return new self(
             [
-                new NullTypeDocument(),
                 $document,
                 ...$orDocument,
+                new NullTypeDocument(),
             ],
         );
     }
