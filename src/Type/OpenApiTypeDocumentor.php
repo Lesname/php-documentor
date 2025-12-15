@@ -14,7 +14,6 @@ use LesDocumentor\Type\Document\AnyTypeDocument;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\Document\Collection\Size;
 use LesDocumentor\Type\Exception\UnexpectedInput;
-use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Exception\UnsupportedBehaviour;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\Composite\Property;
