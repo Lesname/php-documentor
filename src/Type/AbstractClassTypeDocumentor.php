@@ -224,7 +224,10 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
         $discriminator = new Discriminator(
             $class::getDiscriminatingField(),
             $class::getDiscriminatingProperty(),
-            $class::getDiscriminatingMapping(),
+            array_map(
+                fn (string $class) => $this->documentClass($class),
+                $class::getDiscriminatingMapping(),
+            ),
         );
 
         return $document->withDiscriminator($discriminator);
