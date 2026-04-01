@@ -34,10 +34,11 @@ use LesValueObject\Collection\CollectionValueObject;
 use LesDocumentor\Type\Document\Composite\Key\AnyKey;
 use LesDocumentor\Type\Document\CompositeTypeDocument;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
+use LesDocumentor\Type\Document\Composite\Discriminator;
 use LesValueObject\Composite\DynamicCompositeValueObject;
 use LesValueObject\Composite\Signature\SignatureCompositeValueObject;
 use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
-use function PHPUnit\Framework\assertSame;
+use LesValueObject\Composite\AbstractDiscriminatorCompositeValueObject;
 
 abstract class AbstractClassTypeDocumentor implements TypeDocumentor
 {
@@ -74,6 +75,7 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
             is_subclass_of($input, CollectionValueObject::class) => $this->documentCollectionValueObject($input),
             is_subclass_of($input, BackedEnum::class) => $this->documentEnum($input),
             is_subclass_of($input, SignatureCompositeValueObject::class) => $this->documentSignatureValueValueObject($input),
+            is_subclass_of($input, AbstractDiscriminatorCompositeValueObject::class) => $this->documentDiscriminatorComposite($input),
             default => $this->documentClass($input),
         };
     }
@@ -209,6 +211,23 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
             ],
             reference: $class
         );
+    }
+
+    /**
+     * @param class-string<AbstractDiscriminatorCompositeValueObject> $class
+     */
+    protected function documentDiscriminatorComposite(string $class): TypeDocument
+    {
+        $document = $this->documentClass($class);
+        assert($document instanceof CompositeTypeDocument);
+
+        $discriminator = new Discriminator(
+            $class::getDiscriminatingField(),
+            $class::getDiscriminatingProperty(),
+            $class::getDiscriminatingMapping(),
+        );
+
+        return $document->withDiscriminator($discriminator);
     }
 
     /**

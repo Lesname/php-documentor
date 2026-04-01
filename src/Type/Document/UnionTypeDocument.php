@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace LesDocumentor\Type\Document;
 
-use Override;
-
 /**
  * @psalm-immutable
  */
