@@ -9,7 +9,7 @@ use Attribute;
 /**
  * @psalm-immutable
  */
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER)]
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_PARAMETER | Attribute::TARGET_CLASS_CONSTANT)]
 final class DocSkip
 {
 }

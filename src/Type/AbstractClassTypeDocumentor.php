@@ -7,9 +7,12 @@ namespace LesDocumentor\Type;
 use Override;
 use BackedEnum;
 use ReflectionClass;
+use RuntimeException;
 use ReflectionException;
+use ReflectionEnumBackedCase;
 use LesValueObject\ValueObject;
 use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Type\Attribute\DocSkip;
 use LesDocumentor\Type\Attribute\DocFormat;
 use LesValueObject\String\Exception\TooLong;
 use LesValueObject\String\StringValueObject;
@@ -34,6 +37,7 @@ use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesValueObject\Composite\DynamicCompositeValueObject;
 use LesValueObject\Composite\Signature\SignatureCompositeValueObject;
 use LesValueObject\String\Format\AbstractRegexStringFormatValueObject;
+use function PHPUnit\Framework\assertSame;
 
 abstract class AbstractClassTypeDocumentor implements TypeDocumentor
 {
@@ -111,13 +115,23 @@ abstract class AbstractClassTypeDocumentor implements TypeDocumentor
      */
     protected function documentEnum(string $class): TypeDocument
     {
-        return new EnumTypeDocument(
-            array_map(
-                static fn (BackedEnum $enum): string => (string)$enum->value,
-                $class::cases(),
-            ),
-            $class,
-        );
+        $cases = [];
+
+        foreach ($class::cases() as $case) {
+            $ref = new ReflectionEnumBackedCase($case::class, $case->name);
+
+            if (AttributeHelper::hasAttribute($ref, DocSkip::class)) {
+                continue;
+            }
+
+            if (!is_string($case->value)) {
+                throw new RuntimeException('No support for non-string enum cases');
+            }
+
+            $cases[] = $case->value;
+        }
+
+        return new EnumTypeDocument($cases, $class);
     }
 
     /**
