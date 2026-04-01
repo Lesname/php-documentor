@@ -8,6 +8,7 @@ use Override;
 use ReflectionClass;
 use ReflectionParameter;
 use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Type\Attribute\DocSkip;
 use LesDocumentor\Type\Exception\UnexpectedInput;
 use LesDocumentor\Type\Attribute\DocDeprecated;
 use LesDocumentor\Type\Document\Composite\Property;
@@ -48,6 +49,10 @@ final class MethodParametersTypeDocumentor implements TypeDocumentor
                     $parameters = [];
 
                     foreach ($input->getParameters() as $parameter) {
+                        if (AttributeHelper::hasAttribute($parameter, DocSkip::class)) {
+                            continue;
+                        }
+
                         $parameters[] = $this->documentParameter($parameter);
                     }
 
