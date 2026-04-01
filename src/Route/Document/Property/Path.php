@@ -44,12 +44,7 @@ final class Path extends AbstractStringValueObject
         }
 
         $this->action = $action;
-
         $resource = implode('.', $fileParts);
-
-        if ($resource === '') {
-            throw new RuntimeException();
-        }
 
         $this->resource = $resource;
     }
