@@ -8,6 +8,7 @@ use Override;
 use ReflectionClass;
 use ReflectionProperty;
 use LesDocumentor\Helper\AttributeHelper;
+use LesDocumentor\Type\Attribute\DocSkip;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Attribute\DocMaxDepth;
 use LesDocumentor\Type\Exception\UnknownPropertyType;
@@ -38,6 +39,10 @@ final class ClassPropertiesTypeDocumentor extends AbstractClassTypeDocumentor
                     $properties = [];
 
                     foreach ($classReflection->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+                        if (AttributeHelper::hasAttribute($property, DocSkip::class)) {
+                            continue;
+                        }
+
                         $propertyType = $property->getType();
 
                         if ($propertyType === null) {

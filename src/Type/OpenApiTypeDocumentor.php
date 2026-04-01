@@ -14,7 +14,6 @@ use LesDocumentor\Type\Document\AnyTypeDocument;
 use LesDocumentor\Type\Document\BoolTypeDocument;
 use LesDocumentor\Type\Document\Collection\Size;
 use LesDocumentor\Type\Exception\UnexpectedInput;
-use LesDocumentor\Type\Document\NullTypeDocument;
 use LesDocumentor\Type\Exception\UnsupportedBehaviour;
 use LesDocumentor\Type\Document\CollectionTypeDocument;
 use LesDocumentor\Type\Document\Composite\Property;
@@ -27,7 +26,6 @@ use LesDocumentor\Type\Document\String\Length;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
-use RuntimeException;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
