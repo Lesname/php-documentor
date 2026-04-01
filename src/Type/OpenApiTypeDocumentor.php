@@ -26,7 +26,6 @@ use LesDocumentor\Type\Document\String\Length;
 use LesDocumentor\Type\Document\StringTypeDocument;
 use LesDocumentor\Type\Document\TypeDocument;
 use LesDocumentor\Type\Document\UnionTypeDocument;
-use RuntimeException;
 use LesDocumentor\Type\Document\Composite\Key\ExactKey;
 use LesDocumentor\Type\Document\Composite\Key\RegexKey;
 
